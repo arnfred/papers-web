@@ -1,0 +1,23 @@
+{
+"nodes":[
+  {"title":"Network Control: A Rate-Distortion Perspective",
+   "authors":"J. Jose, S. Vishwanath",
+   "url":"data/282.txt"},
+  {"title":"A new eigen-direction alignment algorithm for physical-layer network coding in MIMO two-way relay channels",
+   "authors":"T. Yang, X. Yuan, L. Ping, I. B. Collings, J. Yuan",
+   "url":"data/302.txt"},
+  {"title":"Interference Mitigation in Femto-Macro Coexistence with Two-Way Relay Channel",
+   "authors":"K. T. Gowda, D. Gesbert, E. Yilmaz",
+   "url":"data/137.txt"},
+  {"title":"Interference Focusing for Simplified Optical Fiber Models with Dispersion",
+   "authors":"H. Ghozlan, G. Kramer",
+   "url":"data/503.txt"}
+],
+"links":[
+  {"source":0,"target":2,"value":22},
+  {"source":0,"target":1,"value":75},
+  {"source":1,"target":2,"value":97},
+  {"source":1,"target":3,"value":04},
+  {"source":2,"target":3,"value":46}
+]
+}

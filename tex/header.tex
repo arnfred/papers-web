@@ -1,0 +1,53 @@
+\documentclass[a5paper,twoside]{article}
+\usepackage{graphicx}
+% \textheight=177mm
+\topmargin=-10mm
+% \oddsidemargin=-6.4mm\evensidemargin\oddsidemargin
+\evensidemargin=+10mm
+\oddsidemargin=+0mm
+% \textwidth=110.65mm
+\usepackage{times,mathptm}
+\parindent=0pt
+\parskip=0pt
+\def\thepage{{\sf\arabic{page}}}
+\def\period#1{\flushleft{\large\bfseries #1}\markboth{\sf #1}{\sf #1}}
+\def\sesstitle#1{\vspace{.45\bigskipamount}\par{\bfseries #1}\par}
+\def\sesschair#1{{\bfseries Chair: #1}\par\vspace{.65\medskipamount}}
+\def\papertime#1{\makebox(0,0)[rb]{{\scriptsize #1}\hspace{.5em}}}
+\def\paperroom#1{\makebox(-10,0)[rb]{{\scriptsize #1}\hspace{.5em}}}
+\def\papertitle#1{#1\hfil\break}
+\def\paperauthors#1{{\itshape#1}\hfil\break}
+\def\paperroom#1{#1\par\filbreak\vspace{1.05\medskipamount}}
+\def\plenaryspeaker#1{{\itshape #1}\par\filbreak\vspace{\medskipamount}}
+\sloppy
+\pagestyle{myheadings}
+\newcommand{\mytitle}[1]{\Large \LARGE #1\par}
+\newcommand{\mysubtitle}[1]{\large #1\par}
+\newcommand{\mydate}[1]{\small #1\par}
+\begin{document}
+\begin{center}
+
+\noindent%
+\begin{minipage}[t]{.25\textwidth}
+\vspace{0pt}\includegraphics[width=2cm]{img/logo/logo.png}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+\vspace{16pt}
+\vfill
+\mytitle{Trailhead}
+\mysubtitle{ISIT 2011}
+\mydate{St. Petersbourg}
+\end{minipage}
+
+\Large
+\vfill
+Your program for the\\
+2011 ISIT\\
+July 3th - 8th\\
+\vfill
+\vfill
+\small {\itshape Generated on}\\
+\small \today
+\end{center}
+% \clearpage
+\thispagestyle{empty}\null\clearpage\setcounter{page}{1}

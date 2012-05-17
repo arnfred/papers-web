@@ -1,0 +1,20 @@
+.asmContainer {
+	/* container that surrounds entire asmSelect widget */
+}
+
+.asmSelect {
+	/* the newly created regular 'select' */
+	display: inline; 
+}
+
+.asmOptionDisabled {
+	/* disabled options in new select */
+	color: #999; 
+}
+
+.asmHighlight {
+	/* the highlight span */
+	padding: 0;
+	margin: 0 0 0 1em;
+}
+
