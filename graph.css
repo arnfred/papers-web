@@ -67,11 +67,19 @@ div#info					{ background: rgb(72, 72, 72); background: rgba(72, 72, 72, 0.9);}
 div#info					{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8666666, endColorstr=#C8666666); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
 
 /* The box that appears when you click on a paper */
-div#clickwrap				{ position:absolute; z-index:30; left:200px; top:300px; }
-div#clickbox				{ height:22px;}
-div#clickbox				{ background: rgb(72, 72, 72); background: rgba(72, 72, 72, 0.9);}
-div#clickbox				{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8666666, endColorstr=#C8666666); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
-div.click					{ width:25px; height:25px; position:relative; float:left; border: solid 1px #999; margin-left:-1px; }
+div#clickwrap				{ position:absolute; z-index:2; left:200px; top:300px; background: url(img/pointer6.png) no-repeat left top; padding:7px 0; margin-left:-7px; margin-top:12px; }
+div#clickbox				{ height:28px;}
+div#clickbox				{ background: rgb(240, 240, 240); background: rgba(240, 240, 240, 0.8); margin-left:-6px; }
+div#clickbox				{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8eeeeee, endColorstr=#C0eeeeee); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
+div.click					{ width:28px; height:25px; position:relative; float:left; border: solid 1px #555; margin-left:-1px; }
+div.click:hover				{ background: rgb(250, 250, 250); background: rgba(220, 220, 220, 0.9); cursor:pointer; }
+div.click img				{ margin-top:4px; }
+p.ii						{ text-align:left; }
+p#infoTitle					{ font-size: 1.1em; }
+p#infoAuthors				{ font-style: italic; }
+p#infoTime					{ float:right; font-style:italic; }
+p#infoRoom					{ float:right; font-style:italic; }
+p#infoAbstract				{ margin-top:3px; }
 
 /* List */
 div#list					{ position:absolute; right:10px; top:40px; z-index:1; float:left; width:293px; margin:10px 0; text-align: left; }

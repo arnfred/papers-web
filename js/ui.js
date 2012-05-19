@@ -21,6 +21,9 @@ $(document).ready(function() {
 	// Selects all results of a particular search
 	$("#selectAll").click(function () { vis.selectAll("circle.search").each( function (d,i) { select(d.index) }); });
 
+	// Make clickbox buttons work
+	setupClickBox();
+
 });
 
 function showInfo(menuitem) {
@@ -117,16 +120,15 @@ function expand(index) {
 	var talk	= span.clone().addClass("talk");
 
 	var title	= li.clone().append(img.clone().append(title_img))
-							//.append(label.clone().append("Title"))
 							.append(info.clone().append(data.title));
+
 	var authors	= li.clone().append(img.clone().append(authors_img))
-							//.append(label.clone().append("Authors"))
 							.append(info.clone().append(data.authors));
+
 	var talk	= li.clone().append(img.clone().append(talk_img))
-							//.append(label.clone().append("Presentation"))
 							.append(info.clone().append(date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy")));
+
 	var url		= li.clone().append(img.clone().append(link_img))
-							//.append(label.clone().append("Download"))
 							.append(info.clone().append($("<a></a>").attr("href",data.pdf).append("Full Article")));
 
 	var list	= ul.append(title).append(authors).append(talk).append(url).append(li).hide();
@@ -191,6 +193,105 @@ function loadSelected() {
 }
 
 
+// What happens when we click on a node
+function nodeClick(data) {
+
+	// Get index and node
+	var index = data.index;
+	var node = getNodeFromIndex(index);
+
+	// Set abstract to loading
+	$("#clickwrap").attr("abstract", "Loading abstract ...");
+
+	// Read abstract from server and save it
+	$.get("ajax.php",{ task: "abstract", id: index }, function (data) { 
+		node.attr("abstract", data); });
+
+	// Set current index in clickwrap (stupid html javascript content swapping)
+	$("#clickwrap").attr("index",index);
+
+	// If node is selected, change image to Remove
+	setClickBoxImage(index);
+
+	// Set download link
+	node.each(function (d) { $("#download a").attr("href", d.pdf); });
+		
+	// Change position of and fade in
+	$("#clickwrap")
+		.css("left",data.x)
+		.css("top", data.y)
+		.stop(true, true)
+		.fadeIn().delay(3000).fadeOut();
+
+}
+
+function setClickBoxImage(index) {
+	// Get node
+	var node = getNodeFromIndex(index);
+
+	// Check if node is selected
+	if (!node.classed("selected"))
+		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
+	else
+		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
+}
+
+
+function setupClickBox() {
+
+	// Make sure box doesn't dissappear before the mouse leaves
+	$("#clickwrap").hover(function () { $(this).stop(true,true); }, function () { $(this).stop(true,true).delay(500).fadeOut(); })
+
+	// Set up select
+	$("#select").click(function () { 
+		// Get index
+		var index = $(this).parent().parent().attr("index");
+
+		// Select or deselect paper
+		selectToggle(index); 
+
+		// Change image
+		setClickBoxImage(index);
+	});
+
+	// Set up abstract (when I get home)
+	$("#abstract").click(function () {
+
+		// Get index and node
+		var index	= $("#clickwrap").attr("index");
+		var node	= getNodeFromIndex(index);
+
+		// Check if abstract is cached, if not, get it
+		if (node.attr("abstract") == null) {
+			$.get("ajax.php", { task: "abstract", id: index }, function (data) { setAbstract(node, data); });
+		}
+
+		// If abstract is cached, just set it
+		else setAbstract(node, node.attr("abstract"))
+	})
+}
+
+function setAbstract(node, abstract) {
+	
+	// get time, date and room
+	node.each(function (d) {
+		var date		= new Date(parseInt(d.date));
+		var time		= date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy");
+		var room		= "&nbsp;Room " + d.room + "";
+		var title		= d.title;
+		var authors		= "By " + d.authors;
+
+		var html		= "<p class=\"ii\" id=\"infoTitle\">" + title + "</p>";
+		html		   += "<p class=\"ii\" id=\"infoAuthors\">" + authors + "</p>";
+		html		   += "<p class=\"ii\" id=\"infoAbstract\">" + abstract + "</p>";
+		html		   += "<p class=\"ii\" id=\"infoRoom\">" + room + "</p>";
+		html		   += "<p class=\"ii\" id=\"infoTime\">" + time + ", </p>";
+		html		   += "<br class=\"clear\"/>";
+
+		// Append html
+		$("#info").stop(true,true).fadeIn().html(html);
+	})
+}
 
 
 

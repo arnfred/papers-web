@@ -138,6 +138,17 @@ function getDataFromIndex(index) {
 	return data;
 }
 
+function selectToggle(index) {
+	// Get node
+	var currentNode	= getNodeFromIndex(index);
+
+	// check if node is selected
+	if (currentNode.classed("selected")) return deselect(index);
+	else return select(index);
+
+
+}
+
 
 // Select a particular node
 function select(index) {
@@ -228,14 +239,11 @@ function nodeHover(d) {
 	var node = getNodeFromIndex(index);
 
 	// Get description
-	d3.select("#info p").text(d.authors + ": " + d.title);
+	d3.select("#info").text(d.authors + ": " + d.title);
 	$("#info").stop(true,true).fadeIn("fast");
 
 	// Make node red
 	node.classed("current", true);
-
-	// Make node bigger
-	// d3.select(this).transition().attr("r",nodeSizeBig);
 
 	// Find all edges belinging to current node and update them
 	vis.selectAll("line.link")
@@ -243,20 +251,6 @@ function nodeHover(d) {
 		.classed("current", true);
 }
 
-// What happens when we click on a node
-function nodeClick(data, true_if_deselect) {
-
-	if (true_if_deselect===undefined) true_if_deselect = true;
-
-	var index = data.index;
-	var node = getNodeFromIndex(index)[0][0];
-
-	// If node is selected then deselect it
-	//if (d3.select(node).classed("current") && true_if_deselect) deselect(index);
-
-	// else select it
-	select(index);
-}
 
 
 function searchPaper(term) {
