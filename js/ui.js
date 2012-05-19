@@ -254,7 +254,7 @@ function setupClickBox() {
 		setClickBoxImage(index);
 	});
 
-	// Set up abstract (when I get home)
+	// Set up abstract
 	$("#abstract").click(function () {
 
 		// Get index and node

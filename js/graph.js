@@ -213,7 +213,7 @@ function imFeelingLucky() {
 	return false;
 }
 
-// What happens when we hober over a node
+// What happens when we hover over a node
 function nodeHoverOut(d) {
 	// Get index and node
 	var index = d.index;
@@ -222,16 +222,16 @@ function nodeHoverOut(d) {
 	// Fade out description
 	$("#info").stop(true, true).delay(3000).fadeOut();
 
-	// Make node not red
-	node.classed("current", false);
-	
-	// Find all edges belinging to current node and update them
-	vis.selectAll("line.link")
-		.filter(function (d) { return (d.source.index == index || d.target.index == index); })
-		.classed("current", false);
+	//// Make node not red
+	//node.classed("current", false);
+	//
+	//// Find all edges belonging to current node and update them
+	//vis.selectAll("line.link")
+	//	.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+	//	.classed("current", false);
 }
 
-// What happens when we hober over a node
+// What happens when we hover over a node
 function nodeHover(d) {
 
 	// Get index and node
@@ -241,6 +241,16 @@ function nodeHover(d) {
 	// Get description
 	d3.select("#info").text(d.authors + ": " + d.title);
 	$("#info").stop(true,true).fadeIn("fast");
+
+	// Make previous node not red
+	last_cur = d3.selectAll(".current");
+	last_ind = last_cur.property("__data__");
+	last_cur.classed("current",false);
+
+	// Find all edges belonging to old current node and update them
+	vis.selectAll("line.link")
+		.filter(function (d) { return (d.source.index == last_ind || d.target.index == last_ind); })
+		.classed("current", false);
 
 	// Make node red
 	node.classed("current", true);

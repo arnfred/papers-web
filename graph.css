@@ -67,7 +67,7 @@ div#info					{ background: rgb(72, 72, 72); background: rgba(72, 72, 72, 0.9);}
 div#info					{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8666666, endColorstr=#C8666666); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
 
 /* The box that appears when you click on a paper */
-div#clickwrap				{ position:absolute; z-index:2; left:200px; top:300px; background: url(img/pointer6.png) no-repeat left top; padding:7px 0; margin-left:-7px; margin-top:12px; }
+div#clickwrap				{ display:none; position:absolute; z-index:2; left:200px; top:300px; background: url(img/pointer6.png) no-repeat left top; padding:7px 0; margin-left:-7px; margin-top:12px; }
 div#clickbox				{ height:28px;}
 div#clickbox				{ background: rgb(240, 240, 240); background: rgba(240, 240, 240, 0.8); margin-left:-6px; }
 div#clickbox				{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8eeeeee, endColorstr=#C0eeeeee); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
