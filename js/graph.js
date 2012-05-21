@@ -244,11 +244,14 @@ function setCurrent(index) {
 	// Make previous node not red
 	d3.selectAll(".current").classed("current", false);
 
+	// Update list
+	$("li[rel=" + index + "]").addClass("current");
+
 	// Make node red
 	node.classed("current", true);
 
 	// Find all edges belonging to old current node and update them
-	vis.selectAll("line.link.current")
+	vis.selectAll("line.link")
 		.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
 		.classed("current", false);
 
