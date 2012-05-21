@@ -116,8 +116,6 @@ d3.json(data, function(json) {
 
 function strokeWidth(d, weight) { 
 	if (weight == undefined) weight = 0.1;
-	console.log(weight)
-
 	return Math.log(d.value*weight); 
 }
 
@@ -168,21 +166,17 @@ function select(index) {
 
 	// Add paper to list of selected and make current item current
 	addListItem(index);
+	setCurrent(index);
 
-	// Add which element is current
+	// Add which element is current in the list
 	$("li.current").removeClass("current");
 	$("li[rel=" + index + "]").addClass("current");
 
-	// Change the prior current node and edges back
-	lastEdges.classed("current", false);
-	lastNode.classed("current", false);
-
-	// Update the new current node
-	currentNode.classed("current", true);
+	// Update the new current node to selected
 	currentNode.classed("selected", true);
 
 	// Find all edges belinging to current node and update them
-	vis.selectAll("line.link")
+	vis.selectAll("line.link.current")
 		.filter(function (d) { return (d.source.index == index || d.target.index == index); })
 		.classed("selected", true);
 
@@ -193,16 +187,22 @@ function select(index) {
 
 // Deselect a particular node
 function deselect(index) {
-	var lastEdges	= d3.selectAll("line.current");
-	var currentNode	= getNodeFromIndex(index);
+	//var lastEdges	= d3.selectAll("line.current");
+	var currentNode = getNodeFromIndex(index);
 
 	// Remove it from list
 	dropListItem(index);
 
 	// Deselect it
-	if (currentNode.classed("current")) lastEdges.classed("current", false);
-	currentNode.classed("current", false);
+	//if (currentNode.classed("current")) lastEdges.classed("current", false);
+	//currentNode.classed("current", false);
 	currentNode.classed("selected", false);
+
+	// Go through all selected edges and deselect all that aren't connect to another selected node
+	vis.selectAll("line.link.selected")
+		.filter(function (d) { return ((d.source.index == index && !getNodeFromIndex(d.target.index).classed("selected")) 
+									|| (d.target.index == index && !getNodeFromIndex(d.source.index).classed("selected"))); })
+		.classed("selected", false);
 
 	// Save the rest of the selected nodes to a cookie
 	saveSelected();
@@ -234,6 +234,31 @@ function nodeHoverOut(d) {
 
 }
 
+
+// Sets the node as the current node
+function setCurrent(index) {
+
+	// Gode node
+	var node = getNodeFromIndex(index);
+
+	// Make previous node not red
+	d3.selectAll(".current").classed("current", false);
+
+	// Make node red
+	node.classed("current", true);
+
+	// Find all edges belonging to old current node and update them
+	vis.selectAll("line.link.current")
+		.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
+		.classed("current", false);
+
+	// Find all edges belinging to current node and update them
+	vis.selectAll("line.link")
+		.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+		.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
+		.classed("current", true);
+}
+
 // What happens when we hover over a node
 function nodeHover(d) {
 
@@ -245,24 +270,9 @@ function nodeHover(d) {
 	d3.select("#info").text(d.authors + ": " + d.title);
 	$("#info").stop(true,true).fadeIn("fast");
 
-	// Make previous node not red
-	last_cur = d3.selectAll(".current");
-	last_ind = last_cur.property("__data__");
-	last_cur.classed("current",false);
+	// Set node as current
+	setCurrent(index);
 
-	// Find all edges belonging to old current node and update them
-	vis.selectAll("line.link.current")
-		.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
-		.classed("current", false);
-
-	// Make node red
-	node.classed("current", true);
-
-	// Find all edges belinging to current node and update them
-	vis.selectAll("line.link")
-		.filter(function (d) { return (d.source.index == index || d.target.index == index); })
-		.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
-		.classed("current", true);
 }
 
 
