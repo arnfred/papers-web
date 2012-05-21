@@ -26,7 +26,10 @@ var w = getWidth() - 250;
 
 	// SVG stats
 	nodeSize	= 6.4,
-	nodeSizeBig	= 11;
+	nodeSizeBig	= 11,
+	edgeSize	= 0.1,
+	edgeSizeCur	= 0.2,
+	edgeSizeBig	= 0.3;
 	
 
 
@@ -65,7 +68,7 @@ d3.json(data, function(json) {
       .data(json.links)
       .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.log(d.value/10); })
+      .style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
@@ -110,6 +113,13 @@ d3.json(data, function(json) {
 //               Functions					//
 //											//
 //////////////////////////////////////////////
+
+function strokeWidth(d, weight) { 
+	if (weight == undefined) weight = 0.1;
+	console.log(weight)
+
+	return Math.log(d.value*weight); 
+}
 
 function stopGraph(f) { f.stop(); }
 
@@ -222,13 +232,6 @@ function nodeHoverOut(d) {
 	// Fade out description
 	$("#info").stop(true, true).delay(3000).fadeOut();
 
-	//// Make node not red
-	//node.classed("current", false);
-	//
-	//// Find all edges belonging to current node and update them
-	//vis.selectAll("line.link")
-	//	.filter(function (d) { return (d.source.index == index || d.target.index == index); })
-	//	.classed("current", false);
 }
 
 // What happens when we hover over a node
@@ -248,8 +251,8 @@ function nodeHover(d) {
 	last_cur.classed("current",false);
 
 	// Find all edges belonging to old current node and update them
-	vis.selectAll("line.link")
-		.filter(function (d) { return (d.source.index == last_ind || d.target.index == last_ind); })
+	vis.selectAll("line.link.current")
+		.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
 		.classed("current", false);
 
 	// Make node red
@@ -258,6 +261,7 @@ function nodeHover(d) {
 	// Find all edges belinging to current node and update them
 	vis.selectAll("line.link")
 		.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+		.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
 		.classed("current", true);
 }
 
