@@ -25,11 +25,11 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.0724445"
-     inkscape:cx="231.24741"
+     inkscape:cx="90.447583"
      inkscape:cy="896.19717"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1280"
      inkscape:window-height="776"
      inkscape:window-x="0"
@@ -271,5 +271,13 @@
        inkscape:export-filename="/var/www/papers/img/searchresult.png"
        inkscape:export-xdpi="8.9816065"
        inkscape:export-ydpi="8.9816065" />
+    <path
+       style="fill:#484848;stroke:none;stroke-width:1.39999999999999991;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.90196078999999996;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:0.90196079"
+       d="m 40,62.362183 20,-20 20,20 z"
+       id="path3147"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/var/www/papers/img/pointer6.png"
+       inkscape:export-xdpi="36"
+       inkscape:export-ydpi="36" />
   </g>
 </svg>

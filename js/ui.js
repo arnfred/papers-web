@@ -217,10 +217,11 @@ function nodeClick(data) {
 	node.each(function (d) { $("#download a").attr("href", d.pdf); });
 		
 	// Change position of and fade in
+	pos = $(node[0][0]).position();
 	$("#clickwrap")
-		.css("left",data.x)
-		.css("top", data.y)
 		.stop(true, true)
+		.css("left",pos.left + 5 + "px")
+		.css("top", pos.top + 6 + "px")
 		.fadeIn().delay(3000).fadeOut();
 
 }
