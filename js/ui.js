@@ -201,11 +201,10 @@ function nodeClick(data) {
 	var node = getNodeFromIndex(index);
 
 	// Set abstract to loading
-	$("#clickwrap").attr("abstract", "Loading abstract ...");
+	setAbstract(node, "<img src=\"img/ajax-loader_dark.gif\"/> Loading Abstract ...");
 
-	// Read abstract from server and save it
-	$.get("ajax.php",{ task: "abstract", id: index }, function (data) { 
-		node.attr("abstract", data); });
+	// Fetch Abstract
+	$.get("ajax.php", { task: "abstract", id: index }, function (data) { setAbstract(node, data); });
 
 	// Set current index in clickwrap (stupid html javascript content swapping)
 	$("#clickwrap").attr("index",index);
@@ -255,21 +254,6 @@ function setupClickBox() {
 		setClickBoxImage(index);
 	});
 
-	// Set up abstract
-	$("#abstract").click(function () {
-
-		// Get index and node
-		var index	= $("#clickwrap").attr("index");
-		var node	= getNodeFromIndex(index);
-
-		// Check if abstract is cached, if not, get it
-		if (node.attr("abstract") == null) {
-			$.get("ajax.php", { task: "abstract", id: index }, function (data) { setAbstract(node, data); });
-		}
-
-		// If abstract is cached, just set it
-		else setAbstract(node, node.attr("abstract"))
-	})
 }
 
 function setAbstract(node, abstract) {
