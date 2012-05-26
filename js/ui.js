@@ -94,71 +94,72 @@ function selectInit(nodes) {
 	loadSelected();
 }
 
+function expand() {} // Nothing here
 
-// Expand a section to show more information
-function expand(index) {
+// // Expand a section to show more information
+// function expand(index) {
 
-	// Get data in question and list item
-	var data = getDataFromIndex(index);
-	var item = $("li[rel=" + index + "]");
-	var date = new Date(parseInt(data.date));
+// 	// Get data in question and list item
+// 	var data = getDataFromIndex(index);
+// 	var item = $("li[rel=" + index + "]");
+// 	var date = new Date(parseInt(data.date));
 
-	// Pictures
-	var span
-	var title_img	= $("<img />").attr("src", "img/icons/title3.png").attr("alt","Title").addClass("imgtitle")
-	var authors_img	= $("<img />").attr("src", "img/icons/authors.png").attr("alt","Authors").addClass("imgauthors")
-	var link_img	= $("<img />").attr("src", "img/icons/download.png").attr("alt","Download").addClass("imgdownload")
-	var talk_img	= $("<img />").attr("src", "img/icons/talk.png").attr("alt","Presentation").addClass("imgpresentation")
+// 	// Pictures
+// 	var span
+// 	var title_img	= $("<img />").attr("src", "img/icons/title3.png").attr("alt","Title").addClass("imgtitle")
+// 	var authors_img	= $("<img />").attr("src", "img/icons/authors.png").attr("alt","Authors").addClass("imgauthors")
+// 	var link_img	= $("<img />").attr("src", "img/icons/download.png").attr("alt","Download").addClass("imgdownload")
+// 	var talk_img	= $("<img />").attr("src", "img/icons/talk.png").attr("alt","Presentation").addClass("imgpresentation")
 
-	// Prepare html
-	var ul		= $("<ul></ul>").addClass("infoList");
-	var li 		= $("<li></li>").addClass("infoItem");
-	var span	= $("<span></span>")
-	var img		= span.clone().addClass("img");
-	var label	= span.clone().addClass("label");
-	var info	= span.clone().addClass("info");
-	var talk	= span.clone().addClass("talk");
+// 	// Prepare html
+// 	var ul		= $("<ul></ul>").addClass("infoList");
+// 	var li 		= $("<li></li>").addClass("infoItem");
+// 	var span	= $("<span></span>")
+// 	var img		= span.clone().addClass("img");
+// 	var label	= span.clone().addClass("label");
+// 	var info	= span.clone().addClass("info");
+// 	var talk	= span.clone().addClass("talk");
 
-	var title	= li.clone().append(img.clone().append(title_img))
-							.append(info.clone().append(data.title));
+// 	var title	= li.clone().append(img.clone().append(title_img))
+// 							.append(info.clone().append(data.title));
 
-	var authors	= li.clone().append(img.clone().append(authors_img))
-							.append(info.clone().append(data.authors));
+// 	var authors	= li.clone().append(img.clone().append(authors_img))
+// 							.append(info.clone().append(data.authors));
 
-	var talk	= li.clone().append(img.clone().append(talk_img))
-							.append(info.clone().append(date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy")));
+// 	var talk	= li.clone().append(img.clone().append(talk_img))
+// 							.append(info.clone().append(date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy")));
 
-	var url		= li.clone().append(img.clone().append(link_img))
-							.append(info.clone().append($("<a></a>").attr("href",data.pdf).append("Full Article")));
+// 	var url		= li.clone().append(img.clone().append(link_img))
+// 							.append(info.clone().append($("<a></a>").attr("href",data.pdf).append("Full Article")));
 
-	var list	= ul.append(title).append(authors).append(talk).append(url).append(li).hide();
+// 	var list	= ul.append(title).append(authors).append(talk).append(url).append(li).hide();
 
-	// Add html to element
-	item.append(list);
+// 	// Add html to element
+// 	item.append(list);
 
-	// Show list
-	list.slideDown(function () {
-		// swap icons
-		item.children(".expandArrow").hide();
-		item.children(".contractArrow").show();
-	});
+// 	// Show list
+// 	list.slideDown(function () {
+// 		// swap icons
+// 		item.children(".expandArrow").hide();
+// 		item.children(".contractArrow").show();
+// 	});
 
-}
+// }
 
-// Contract a section to show less information
-function contract(index) {
-	// Get element
-	var item = $("li[rel=" + index + "]");
+// // Contract a section to show less information
+// function contract(index) {
+// 	// Get element
+// 	var item = $("li[rel=" + index + "]");
 
-	// Hide info
-	item.children("ul").slideUp(function () {
-		// swap icons
-		item.children(".contractArrow").hide();
-		item.children(".expandArrow").show();
-		item.children("ul").remove();
-	});
+// 	// Hide info
+// 	item.children("ul").slideUp(function () {
+// 		// swap icons
+// 		item.children(".contractArrow").hide();
+// 		item.children(".expandArrow").show();
+// 		item.children("ul").remove();
+// 	});
 
-}
+// }
 
 // Saves the selected papers
 function saveSelected() {

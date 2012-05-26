@@ -140,10 +140,7 @@ function getNodeFromIndex(index) {
 
 // Returns the data of a node if you have the index of the node
 function getDataFromIndex(index) {
-	var data;
-	// this is ugly as hell
-	getNodeFromIndex(index).attr("", function(d) { data = d; });
-	return data;
+	return getNodeFromIndex(index).property("__data__");
 }
 
 function selectToggle(index) {
