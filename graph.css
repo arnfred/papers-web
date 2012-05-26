@@ -4,6 +4,8 @@ br.clear					{ clear:both; }
 .leftMargin					{ padding-left: 230px; }
 .leftCol					{ width: 38%; min-width: 200px; position: relative; float: left; }
 .rightCol					{ width: 33%; min-width: 380px; position: relative; float: left; }
+.loading					{ float:left; padding:3px; }
+.loading-text				{ padding:7px; margin-top:3px; margin-left: 20px; display:block; }
 
 /* Links */
 a:link						{ text-decoration: none; color:#711; }
@@ -106,7 +108,7 @@ img.imgtitle				{ padding-top: 6px; padding-left:2px; }
 img.imgauthors				{ padding-left:2px; }
 img.imgdownload				{ padding-left:2px; }
 img.imgpresentation			{ padding-top:2px; }
-span.asmListItemLabel p		{ position:relative; float: left; width:200px; }
+span.asmListItemLabel p		{ position:relative; float: left; width:230px; }
 a.asmListItemRemove			{ position: absolute; right: 0; top: 6px; padding: 5px; }
 a.asmListItemExpand			{ position: absolute; right: 22px; top: 5px; padding: 5px; }
 ul.infoList					{ position: relative; display: block; padding-left:0; margin: 10px 0 10px 10px; list-style: none; }

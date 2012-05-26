@@ -84,7 +84,7 @@ function selectInit(nodes) {
 	var select 	= $("#papers");
 	var img		= "<img src=\"img/icons/paper.png\" />";
 	$(nodes).each(function (i) { // construct an option field
-		select.prepend("<option value=\"" + i + "\" id=\"" + i + "\">" + truncate(this.authors + ": " + this.title,50) + "</option>"); 
+		select.prepend("<option value=\"" + i + "\" id=\"" + i + "\">" + truncate(this.authors + ": " + this.title,65) + "</option>"); 
 	});
 
 	// Create selectbox
@@ -201,11 +201,13 @@ function nodeClick(data) {
 	var index = data.index;
 	var node = getNodeFromIndex(index);
 
-	// Set abstract to loading
-	setAbstract(node, "<img src=\"img/ajax-loader_dark.gif\"/> Loading Abstract ...");
+	setAbstract(node)
 
-	// Fetch Abstract
-	$.get("ajax.php", { task: "abstract", id: index }, function (data) { setAbstract(node, data); });
+	// Set abstract to loading
+	// setAbstract(node, "<img src=\"img/ajax-loader_dark.gif\"/> Loading Abstract ...");
+
+	// // Fetch Abstract
+	// $.get("ajax.php", { task: "abstract", id: index }, function (data) { setAbstract(node, data); });
 
 	// Set current index in clickwrap (stupid html javascript content swapping)
 	$("#clickwrap").attr("index",index);
@@ -257,10 +259,25 @@ function setupClickBox() {
 
 }
 
-function setAbstract(node, abstract) {
+function setAbstract(node) {
+	
+	// Default abstract
+	var abstr		= node.attr("abstract");
 	
 	// get time, date and room
 	node.each(function (d) {
+
+		// If the abstract isn't catched, fetch it
+		if (abstr == null) {
+			// Fetch Abstract
+			$.get("ajax.php", { task: "abstract", id: d.index }, function (data) { 
+				$("#infoAbstract").html(data); 
+				node.attr("abstract",data);
+			});
+			abstr = "<img class=\"loading\" src=\"img/ajax-loader_dark.gif\" style=\"margin:3px 0\"/><span class=\"loading-text\">Loading Abstract...</span>";
+		}
+
+		// Prepare other variables
 		var date		= new Date(parseInt(d.date));
 		var time		= date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy");
 		var room		= "&nbsp;Room " + d.room + "";
@@ -269,12 +286,15 @@ function setAbstract(node, abstract) {
 
 		var html		= "<p class=\"ii\" id=\"infoTitle\">" + title + "</p>";
 		html		   += "<p class=\"ii\" id=\"infoAuthors\">" + authors + "</p>";
-		html		   += "<p class=\"ii\" id=\"infoAbstract\">" + abstract + "</p>";
+		html		   += "<p class=\"ii\" id=\"infoAbstract\">" + abstr + "</p>";
 		html		   += "<p class=\"ii\" id=\"infoRoom\">" + room + "</p>";
 		html		   += "<p class=\"ii\" id=\"infoTime\">" + time + ", </p>";
 		html		   += "<br class=\"clear\"/>";
 
+
 		// Append html
 		$("#info").stop(true,true).fadeIn().html(html);
 	})
+
+	
 }
