@@ -13,10 +13,12 @@ $papers	= get_papers($json->nodes, $selected);
 // Dividing to get seconds in place of milliseconds
 foreach ($papers as $p) $p->date = $p->date/1000;
 
-// Get Temporary file
+// Get Temporary directory
 $postfix		= substr(md5(time().rand()),0,7);
-$temp_content	= create_schedule($papers, $postfix);
-$temp_output	= "tex/temp/output_$postfix";
+$directory		= "tex/temp/".$postfix;
+mkdir($directory);
+$temp_content	= create_schedule($papers, $directory);
+$temp_output	= "$directory/isit_schedule";
 
 // Create system call for generating pdf
 $call	 = "cat tex/header.tex ";
@@ -42,23 +44,16 @@ function get_papers($json, $selected) {
 	$result = array();
 	foreach ($selected as $id) {
 		$result[$id] = $json[$id];
+		$result[$id]->index = $id;
 	}
 	return $result;
 }
 
 
 /**
- * Create Random File name
- */
-function random_name($dir,$prefix) {
-	return $dir.'/'.$prefix.'_'.md5(time().rand());
-}
-
-
-/**
  * Creates the content part of the schedule file
  */
-function create_schedule($papers, $postfix) {
+function create_schedule($papers, $directory) {
 
 	// Sorts papers by date
 	uasort($papers, "sort_by_date");
@@ -83,7 +78,7 @@ function create_schedule($papers, $postfix) {
 	}
 
 	// Save schedule to file
-	$file = "tex/temp/content_$postfix.tex";
+	$file = "$directory/content.tex";
 	file_put_contents($file, $schedule);
 
 	return $file;
@@ -104,14 +99,31 @@ function add_schedule_day($date) {
  * Constructs the latex code for a single paper in the schedule
  */
 function add_schedule_point($p, $time) {
+	$index	 = get_index($p->index);
+	$abstr	 = "";
+	if ($_POST["abstract"] == 1) {
+		$abstr	= file_get_contents("data/".$index.".abstract.txt");
+		$abstr  = latexSpecialChars(substr($abstr,9,-1));
+		$abstr	= "\\paperauthors{".$abstr."}";
+	}
 	$title	 = latexSpecialChars( $p->title, "\\'\"&\n\r{}[]" );
-	$room	 = $p->room;
+	$room	 = get_index($p->room);
 	$point	 = "\\papertime{".$time."}";
 	$point	.= "\\papertitle{".$title."}";
+	$point  .= $abstr;
 	//$point	.= "\\papertime{Room $room}";
 	$point	.= "\\paperauthors{".$p->authors."}";
-	$point	.= "\\paperroom{Room 00".$room."}";
+	$point	.= "\\paperroom{Presentation in Room ".$room."}";
 	return $point;
+}
+
+
+/**
+ * Returns the 3 digit index of a paper
+ */
+function get_index($n) {
+	$i = intval($n);
+	return str_repeat("0",3 - strlen($i)) . $i;
 }
 
 
