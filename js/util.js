@@ -59,8 +59,6 @@ function getRandomDate(from, to) {
 }
 
 
-/*** SHOULD BE MOVED TO SOME KIND OF UTIL FILE ****/
-
 /*
  * Date Format 1.2.3
  * (c) 2007-2009 Steven Levithan <stevenlevithan.com>

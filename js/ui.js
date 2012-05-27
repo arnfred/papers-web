@@ -9,22 +9,112 @@ $(document).ready(function() {
 	// Make Surprise Me work
 	$("#surprise").click(function () { return imFeelingLucky(); });
 
-	// Make remove button work
-	$(".removeall").click(function () { 
-		$("li.asmListItem").map(function () { deselect($(this).attr("rel")); });
-		return false;
-	});
-
-	// Make generate schedule button work
-	$(".downpdf").click(function () { document.schedule.submit(); return false; });
 
 	// Selects all results of a particular search
 	$("#selectAll").click(function () { vis.selectAll("circle.search").each( function (d,i) { select(d.index) }); });
+
+	// Make the buttons on top of the schedule work
+	setupScheduleMenu();
 
 	// Make clickbox buttons work
 	setupClickBox();
 
 });
+
+
+function setupScheduleMenu() {
+
+	// Dropdown box
+	var box		= $("<div>").addClass("scheduleSelect");
+
+	// Contents for Download
+	var hidden	= $("<input>").attr("type","hidden").attr("name","abstract").attr("value",0)
+	var content	= $("<p>").html("Include Abstract?").after($("<p>").addClass("click").attr("id","getLarge").html("Yes")).after($("<p>").html("/")).after($("<p>").addClass("click").attr("id","getSmall").html("No"))
+	var dl		= box.clone().append(content).append(hidden).attr("id","downloadType");
+
+	// Contents for Remove
+	var yesno	= $("<p>").addClass("click").attr("id","sureYes").html("Yes").after($("<p>").html("/")).after($("<p>").addClass("click").attr("id","sureNo").html("No"));
+	var sure	= $("<p>").html("Are you sure?").after(yesno);
+	var rem		= box.clone().append(sure).attr("id","sure")
+
+	// Make remove button work
+	$(".removeall").one("click", function () { 
+
+		// Hide downloadType if open
+		$("#downloadType").hide();
+
+		// Append box
+		$(".info").after(rem);
+
+		// Fade in
+		$("#sure").slideToggle("fast");
+
+		// Rebind click event
+		$(".removeall").click(function () { $("#downloadType").hide(); $("#sure").slideToggle("fast"); });
+		
+		// Bind sureYes link to the deletion of all the articles
+		$("#sureYes").click(function () { 
+			$(".scheduleSelect").hide();
+			$("li.asmListItem").map(function () { deselect($(this).attr("rel")); });
+			return false;
+		})
+
+		// Close on click
+		$("#sureNo").click(function () { $("#sure").slideToggle("fast"); });
+
+	});
+
+	// Make generate schedule button work
+	$(".downpdf").one("click", function () { 
+
+		// Hide sure if open
+		$("#sure").hide();
+
+		// Append box
+		$(".info").after(dl);
+
+		// Fade in
+		$("#downloadType").slideToggle("fast");
+
+		// Rebind click event
+		$(".downpdf").click(function () { $("#sure").hide(); $("#downloadType").slideToggle("fast"); });
+
+		// Bind getSmall link to fetching articles without abstract
+		$("#getSmall").click(function () { 
+			console.log("here2")
+			
+			// Update hidden field
+			$("input[name=abstract]").attr("value",0);
+
+			// Submit form
+			document.schedule.submit(); 
+			return false;
+
+			// Scroll up
+			$("#downloadType").slideToggle("fast");
+		})
+		
+		// Bind getLarge link to fetching articles with abstract
+		$("#getLarge").click(function () { 
+			console.log("here")
+			
+			// Update hidden field
+			$("input[name=abstract]").attr("value",1);
+
+			// Submit form
+			document.schedule.submit(); 
+			return false;
+
+			// Scroll up
+			$("#downloadType").slideToggle("fast");
+		});
+
+		// Close on click
+		$("#getLarge, #getSmall").click(function () { $(".scheduleSelect").slideToggle("fast"); });
+
+	});
+	
+}
 
 function showInfo(menuitem) {
 
