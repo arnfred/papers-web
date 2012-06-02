@@ -167,7 +167,7 @@ function select(index) {
 
 	// Add which element is current in the list
 	$("li.current").removeClass("current");
-	$("li[rel=" + index + "]").addClass("current");
+	$("li[rel=" + index + "]").addClass("current").click(function() { window.open(currentNode.property("__data__").pdf); });
 
 	// Update the new current node to selected
 	currentNode.classed("selected", true);

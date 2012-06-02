@@ -28,7 +28,8 @@
 </head>
 
 <body>
-<form action="schedule.php" name="schedule" method="post" onSubmit="return false;">
+<form action="schedule.php" target="_blank" name="schedule" method="post" 
+	onSubmit="return false;">
 
 	<div id="content">
 
@@ -50,10 +51,15 @@
 				<li class="knowmore"><a class="menuLink" href="#">How it Works</a></li>
 			</ul>
 			<div id="searchitem" class="rightCol">
-				<li id="surprise"><a class="menuLink" href="#">Surprise Me</a></li>
-				<label for="name">Search</label>
+				<li id="surprise"><a class="menuLink" 
+						title="Add a random article to your schedule" 
+						href="#">Surprise Me</a></li>
+				<label for="name"><a href="#" class="menulink" 
+						title="Search for an Article">Search</a></label>
 				<input type="text" name="search" onFocus="$('#selectAll').fadeIn()" value="" id="searchField" class="search"/>
-				<a href="#" class="menulink"><span id="selectAll">Select All</span></a>
+				<a href="#" title="Add all search results to your schedule" 
+					class="menulink"><span id="selectAll">Add to 
+						Schedule</span></a>
 			</div>
 		</div>
 	</div>
@@ -95,18 +101,24 @@
 				<ul class="legend navigation">
 					<li class="legend move">Move by dragging the graph with your mouse</li>
 					<li class="legend zoom">Zoom by scrolling in or out</li>
-					<li class="legend add">Click on an article to add it to your schedule</li>
-					<li class="legend remove">Click on a selected article to remove it from your schedule</li>
+					<li class="legend add">Add an article to your 
+						schedule</li>
+					<li class="legend remove">Remove an article from your 
+						schedule</li>
 				</ul>
 			</div>
 	
 			<div class="legend">
 				<h2 class="legend">Schedule</h2>
 				<ul class="legend schedule">
-					<li class="legend create">Create your schedule by selecting an Article and adding it</li>
-					<li class="legend expand">Click expand to see more information about an article</li>
-					<li class="legend download">Click 'Download PDF' to get your schedule as a PDF</li>
-					<li class="legend remove">Click 'Remove All' to remove all articles from your schedule</li>
+					<li class="legend create">Begin by clicking on an article 
+						in the graph and add it to your schedule</li>
+					<!-- <li class="legend expand">Click expand to see more 
+						information about an article</li> -->
+					<li class="legend download">Download your schedule as a PDF 
+						ready to print</li>
+					<li class="legend remove">Remove all articles from your 			
+						schedule</li>
 				</ul>
 			</div>
 
@@ -134,7 +146,7 @@
 	<div id="graph" class="graph"></div>
 	<div id="infowrap"><div id="info"><p></p></div></div>
 	<div id="clickwrap"><div id="clickbox">
-			<div class="click" id="select"><img alt="Add to Schedule" src="img/icons/calendar.png"/></div>
+			<div class="click" id="select"><a href="#" title="Add to schedule"><img alt="Add to Schedule" src="img/icons/calendar.png"/></a></div>
 			<!-- <div class="click" id="abstract"><img alt="Show Info" src="img/icons/info.png"/></div> -->
 			<div class="click" id="download"><a href="#" title="Download"><img alt="Download Paper" src="img/icons/download.png"/></a></div>
 	</div></div>
@@ -144,8 +156,8 @@
 		<div class="move">&nbsp;</div>
 		<div class="info">
 			<h2>Your Schedule</h2>
-			<a href="#"><span class="downpdf">Download as PDF</span></a>
-			<a href="#"><span class="removeall">Remove All</span></a>
+			<a href="#"><span class="downpdf"><img alt="Download Paper" src="img/icons/download.png"/>Download</span></a>
+			<a href="#"><span class="removeall"><img alt="Download Paper" src="img/icons/remove.png"/>Remove All</span></a>
 		</div>
 				
 		<select multiple="multiple" id="papers" name="papers[]" 

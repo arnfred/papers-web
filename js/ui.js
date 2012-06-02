@@ -174,7 +174,7 @@ function selectInit(nodes) {
 	var select 	= $("#papers");
 	var img		= "<img src=\"img/icons/paper.png\" />";
 	$(nodes).each(function (i) { // construct an option field
-		select.prepend("<option value=\"" + i + "\" id=\"" + i + "\">" + truncate(this.authors + ": " + this.title,65) + "</option>"); 
+		select.prepend("<option value=\"" + i + "\" id=\"" + i + "\">" + truncate(this.authors + ": " + this.title,60) + "</option>"); 
 	});
 
 	// Create selectbox
@@ -323,10 +323,14 @@ function setClickBoxImage(index) {
 	var node = getNodeFromIndex(index);
 
 	// Check if node is selected
-	if (!node.classed("selected"))
+	if (!node.classed("selected")) {
 		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
-	else
+		$("#select a").attr("title","Add to Schedule");
+	}
+	else {
 		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
+		$("#select a").attr("title","Remove from Schedule");
+	}
 }
 
 

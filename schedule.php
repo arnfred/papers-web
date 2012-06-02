@@ -28,6 +28,7 @@ $call	.= "| pdflatex --jobname ".$temp_output;
 
 // Make system call
 $ret = exec($call);
+//$ret = system($call);
 
 // Create temporary page "your download should appear in a moment. If not click here"
 echo page_output($temp_output);
@@ -62,13 +63,23 @@ function create_schedule($papers, $directory) {
 	$schedule	= "";
 	$date		= "";
 	$time		= "";
+	$first		 = true;
 
 	// Now for each paper, write it out
 	foreach ($papers as $p) {
 		// Check if the date is the same as before
 		$newDate 	 = date('l \t\h\e jS \of F Y', $p->date);
 		$newTime 	 = date('h:i A', $p->date);
-		if ($newDate != $date) $schedule .= add_schedule_day($newDate);
+
+		// Add day
+		if ($newDate != $date) {
+			if (!$first) $schedule .= end_list();
+			$schedule .= add_schedule_day($newDate);
+			$schedule .= start_list();
+			$first	   = false;
+		}
+
+		// Add schedule point
 		if ($newTime == $time) $schedule .= add_schedule_point($p,"");
 		else				   $schedule .= add_schedule_point($p,$newTime);
 
@@ -85,13 +96,21 @@ function create_schedule($papers, $directory) {
 
 }
 
+function start_list() {
+	return "%\n%\n\\begin{enumerate}[leftmargin=3cm, labelsep=0.3cm, rightmargin=0cm, align=right, itemsep=0ex, style=multiline]\n%\n";
+}
+
+function end_list() {
+	return "\\end{enumerate}\n%\n";
+}
+
 /**
  * Constructs the latex code for a page dedicated to a certain day
  */
 function add_schedule_day($date) {
 	$page	 = "\\clearpage";
 	$page	.= "\\period{".$date."}";
-	$page	.= "\\hfil\\break\\\\";
+	$page	.= "\\hfil\\break \\\\ \n";
 	return $page;
 }
 
@@ -99,22 +118,28 @@ function add_schedule_day($date) {
  * Constructs the latex code for a single paper in the schedule
  */
 function add_schedule_point($p, $time) {
+	
+	// Get abstract
 	$index	 = get_index($p->index);
 	$abstr	 = "";
 	if ($_POST["abstract"] == 1) {
 		$abstr	= file_get_contents("data/".$index.".abstract.txt");
 		$abstr  = latexSpecialChars(substr($abstr,9,-1));
-		$abstr	= "\\paperauthors{".$abstr."}";
+		$abstr	= "{\\small ".$abstr."} \n";
 	}
+
+	// Get title
 	$title	 = latexSpecialChars( $p->title, "\\'\"&\n\r{}[]" );
-	$room	 = get_index($p->room);
-	$point	 = "\\papertime{".$time."}";
-	$point	.= "\\papertitle{".$title."}";
-	$point  .= $abstr;
-	//$point	.= "\\papertime{Room $room}";
-	$point	.= "\\paperauthors{".$p->authors."}";
-	$point	.= "\\paperroom{Presentation in Room ".$room."}";
-	return $point;
+	$title	 = "{\\it ".$title."} \\\\ \n";
+
+	// Get time and place
+	if ($time == "") $point = "\\item[{\\hfill Room ".get_index($p->room)."}]\n";
+	else			 $point = "\\item[{\\hfill \bf ".$time."} \\\\ {\\hfill Room ".get_index($p->room)."}]\n";
+
+	// Get authors
+	$authors = "{".$p->authors."} \\\\ \n";
+
+	return $point.$title.$authors.$abstr."\n";
 }
 
 
