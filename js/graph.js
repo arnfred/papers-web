@@ -51,21 +51,21 @@ var vis = d3.select("#graph").append("svg")
 $('svg').svgPan('viewPort');
 
 // Import data to graph
-d3.json(data, function(json) {
+d3.json(data, function(graph) {
   var force = d3.layout.force()
       .charge(-90)
       .linkDistance(70)
 	  .friction(0.5)
 	  .theta(0.4)
-      .nodes(json.nodes)
-      .links(json.links)
+      .nodes(graph.nodes)
+      .links(graph.links.slice(1))
       .size([w, h])
 	  .linkStrength( function(d, i) { return Math.log(d.value)/10; })
       .start(0.1);
 
   // Import links
   var link = vis.selectAll("line.link")
-      .data(json.links)
+      .data(graph.links)
       .enter().append("line")
       .attr("class", "link")
       .style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
@@ -76,7 +76,7 @@ d3.json(data, function(json) {
 
   // Import Nodes
   var node = vis.selectAll("circle.node")
-      .data(json.nodes)
+      .data(graph.nodes)
       .enter().append("circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
@@ -92,7 +92,7 @@ d3.json(data, function(json) {
   //     .text(function(d) { return d.title + " (" + d.authors + ")"; });
 
   // Add nodes to hidden selectbox
-  selectInit(json.nodes);
+  selectInit(graph.nodes);
 
   node.on("click.node", nodeClick);
 
@@ -135,7 +135,7 @@ d3.select(".searchField").on("click", function () {
 
 // Returns a node if you have the index of the node
 function getNodeFromIndex(index) {
-	return d3.select(d3.selectAll("circle.node")[0][index]);
+	return d3.selectAll("circle.node").filter(function (d) { return (d.index == index); });
 }
 
 // Returns the data of a node if you have the index of the node
@@ -290,6 +290,20 @@ function searchPaper(term) {
 
 // Preliminary search
 function searchFilter(term, d) {
-	return ((d.title.toLowerCase().indexOf(term) > -1) || (d.authors.toLowerCase().indexOf(term) > -1));
+	var t = term.toLowerCase();
+	var title = d.title.toLowerCase();
+	var authors = d.authors.replace(',','').toLowerCase();
+
+	// Return if term is part of either title or authors
+	if ((title.indexOf(t) > -1) || (authors.indexOf(t) > -1)) return true
+
+	// Return if term has levenshtein distance 1 or less to any word or name
+	else {
+		var distAuthors = authors.split(' ').map(function (w) { return levenshtein(w,t); })
+		var distTitle = title.split(' ').map(function (w) { return levenshtein(w,t); })
+		var minDistAuthors = Math.min.apply(null,distAuthors);
+		var minDistTitle = Math.min.apply(null,distTitle);
+		return (Math.min(minDistAuthors,minDistTitle) <= 1)
+	}
 }
 

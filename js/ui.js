@@ -81,7 +81,6 @@ function setupScheduleMenu() {
 
 		// Bind getSmall link to fetching articles without abstract
 		$("#getSmall").click(function () { 
-			console.log("here2")
 			
 			// Update hidden field
 			$("input[name=abstract]").attr("value",0);
@@ -96,7 +95,6 @@ function setupScheduleMenu() {
 		
 		// Bind getLarge link to fetching articles with abstract
 		$("#getLarge").click(function () { 
-			console.log("here")
 			
 			// Update hidden field
 			$("input[name=abstract]").attr("value",1);
@@ -293,20 +291,15 @@ function nodeClick(data) {
 
 	setAbstract(node)
 
-	// Set abstract to loading
-	// setAbstract(node, "<img src=\"img/ajax-loader_dark.gif\"/> Loading Abstract ...");
-
-	// // Fetch Abstract
-	// $.get("ajax.php", { task: "abstract", id: index }, function (data) { setAbstract(node, data); });
-
-	// Set current index in clickwrap (stupid html javascript content swapping)
+	// Set current index in clickwrap (stupid html javascript content 
+	// swapping)
 	$("#clickwrap").attr("index",index);
 
 	// If node is selected, change image to Remove
 	setClickBoxImage(index);
 
 	// Set download link
-	node.each(function (d) { $("#download a").attr("href", d.pdf); });
+	node.each(function (d) { $("#download a").attr("href", d.pdf).attr("target", "_blank"); });
 		
 	// Change position of and fade in
 	pos = $(node[0][0]).position();
@@ -315,6 +308,14 @@ function nodeClick(data) {
 		.css("left",pos.left + 5 + "px")
 		.css("top", pos.top + 6 + "px")
 		.fadeIn().delay(3000).fadeOut();
+
+	// Get a list of connected nodes
+	
+
+	// Fade out all notes that aren't connected
+	vis.selectAll("line.link.current")
+		.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+		.classed("selected", true);
 
 }
 
@@ -364,7 +365,7 @@ function setAbstract(node) {
 		// If the abstract isn't catched, fetch it
 		if (abstr == null) {
 			// Fetch Abstract
-			$.get("ajax.php", { task: "abstract", id: d.index }, function (data) { 
+			$.get("ajax.php", { task: "abstract", id: d.id }, function (data) { 
 				$("#infoAbstract").html(data); 
 				node.attr("abstract",data);
 			});
@@ -372,9 +373,10 @@ function setAbstract(node) {
 		}
 
 		// Prepare other variables
-		var date		= new Date(parseInt(d.date));
+		//
+		var date		= new Date(parseInt(d.date) + (new Date()).getTimezoneOffset()*60000)
 		var time		= date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy");
-		var room		= "&nbsp;Room " + d.room + "";
+		var room		= "&nbsp;Room: " + d.room + "";
 		var title		= d.title;
 		var authors		= "By " + d.authors;
 

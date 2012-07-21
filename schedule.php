@@ -11,6 +11,7 @@ $json	= json_decode($source);
 $papers	= get_papers($json->nodes, $selected);
 
 // Dividing to get seconds in place of milliseconds
+date_default_timezone_set ( "UTC" );
 foreach ($papers as $p) $p->date = $p->date/1000;
 
 // Get Temporary directory
@@ -97,7 +98,7 @@ function create_schedule($papers, $directory) {
 }
 
 function start_list() {
-	return "%\n%\n\\begin{enumerate}[leftmargin=3cm, labelsep=0.3cm, rightmargin=0cm, align=right, itemsep=0ex, style=multiline]\n%\n";
+	return "%\n%\n\\begin{enumerate}[leftmargin=5cm, labelsep=0.3cm, rightmargin=2cm, align=right, itemsep=1cm, style=multiline]\n%\n";
 }
 
 function end_list() {
@@ -120,10 +121,10 @@ function add_schedule_day($date) {
 function add_schedule_point($p, $time) {
 	
 	// Get abstract
-	$index	 = get_index($p->index);
+	$id	 	 = $p->id;
 	$abstr	 = "";
 	if ($_POST["abstract"] == 1) {
-		$abstr	= file_get_contents("data/".$index.".abstract.txt");
+		$abstr	= file_get_contents("data/".$id.".abstract.txt");
 		$abstr  = latexSpecialChars(substr($abstr,9,-1));
 		$abstr	= "{\\small ".$abstr."} \n";
 	}
@@ -133,24 +134,14 @@ function add_schedule_point($p, $time) {
 	$title	 = "{\\it ".$title."} \\\\ \n";
 
 	// Get time and place
-	if ($time == "") $point = "\\item[{\\hfill Room ".get_index($p->room)."}]\n";
-	else			 $point = "\\item[{\\hfill \bf ".$time."} \\\\ {\\hfill Room ".get_index($p->room)."}]\n";
+	if ($time == "") $point = "\\item[{\\hfill ".$p->room."}]\n";
+	else			 $point = "\\item[{\\hfill \bf ".$time."} \\\\ {\\hfill ".$p->room."}]\n";
 
 	// Get authors
 	$authors = "{".$p->authors."} \\\\ \n";
 
 	return $point.$title.$authors.$abstr."\n";
 }
-
-
-/**
- * Returns the 3 digit index of a paper
- */
-function get_index($n) {
-	$i = intval($n);
-	return str_repeat("0",3 - strlen($i)) . $i;
-}
-
 
 
 /**
