@@ -1,5 +1,4 @@
-// Adapted from http://mbostock.github.com/d3/ex/force.js
-
+define("graph", ["d3","util"], function(d3, util)
 
 
 //////////////////////////////////////////////
@@ -9,7 +8,7 @@
 //////////////////////////////////////////////
 
 	// Dimensions
-var w = getWidth() - 250;
+var w = getWidth() - 250,
     h = getHeight() + 300,
 
 	// Colors
@@ -30,7 +29,6 @@ var w = getWidth() - 250;
 	edgeSize	= 0.1,
 	edgeSizeCur	= 0.2,
 	edgeSizeBig	= 0.3;
-	
 
 
 
@@ -41,6 +39,7 @@ var w = getWidth() - 250;
 //////////////////////////////////////////////
 
 
+// Adapted from http://mbostock.github.com/d3/ex/force.js
 var vis = d3.select("#graph").append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
