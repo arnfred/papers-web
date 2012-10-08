@@ -19,9 +19,6 @@ define(["model", "views"], function (model, views) {
 	controller.model = model;
 	controller.views = views;
 
-	// Initialize the views and model
-	views.init(model)
-
 	// Add selected and current node(s) from last session
 	model.broadcastSelected();
 

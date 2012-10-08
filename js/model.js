@@ -26,6 +26,10 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 
 		// On node deselect, make sure the node is selected in the model
 		radio("node:deselect").subscribe(deselect);
+
+		// On node current, make sure the node is marked as current in 
+		// the model
+		radio("node:current").subscribe(setCurrent);
 	};
 
 	//////////////////////////////////////////////
@@ -48,6 +52,8 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		model.selected = session.loadSelected();
 		model.current = session.loadCurrent();
 
+		// Activate events
+		model.events();
 	}
 
 
@@ -66,11 +72,40 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		return sel;
 	}
 
+	// Broadcasts the selected nodes and the current nodes. This should 
+	// only be called in the initialization of the page, but I've put it 
+	// apart from init() since it relies on the graph being generated
 	model.broadcastSelected = function() {
 		// Broadcast session
 		model.selected.forEach(function(e) { return radio("node:select").broadcast(e); });
 		radio("node:current").broadcast(model.current);
 	}
+
+	// Finally this function is not a hack anymore. Returns the data 
+	// based on an id of a node. Look in graph.js for it's companion 
+	// 'getNodeFromId'
+	model.getDataFromId = function(id) {
+		return model.nodeMap[id];
+	}
+
+	// Fetches an abstract with an ajax call and adds it to a node if 
+	// necessary before returning it
+	model.getAbstract = function(id, callback) {
+
+		var n = model.nodeMap[id];
+
+		// If we have an abstract already, call the callback
+		if (n.abstract != undefined) callback(n.abstract)
+
+		// If not, then fetch abstract from server
+		else {
+			$.get("ajax.php", { task: "abstract", id: d.id }, function (data) { 
+				n.abstract = data;
+				if (callback != undefined) callback(data);
+			});
+		}
+	}
+	
 
 
 
@@ -83,21 +118,26 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 
 	// Adds a new node to the list of selected nodes, but only if it 
 	// isn't already in the list
-	var select = function(index) {
+	var select = function(id) {
+		console.debug(id)
 		// Get a map of all the selected nodes
 		var selMap = model.getSelected()
-		// Check if index doesn't already exist
-		if (selMap[index] != undefined) {
+		// Check if id doesn't already exist
+		if (selMap[id] == undefined) {
 			// Add new item
-			model.selected.push(index)
+			model.selected.push(id)
 			// Save changes
 			session.saveSelected(model.selected);
 		}
 	}
 
-	// Removes the index from the list of selected nodes
-	var deselect = function(index) {
-		model.selected = model.selected.filter(function(i) { return (i != index); });
+	// Removes the id from the list of selected nodes
+	var deselect = function(id) {
+		model.selected = model.selected.filter(function(i) { return (i != id); });
+	}
+
+	var setCurrent = function(id) {
+		model.current = id;
 	}
 
 	var makeNodeMap = function(nodes) {
@@ -109,11 +149,11 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 
 
 
-	// subscribe to events and initialize
+	// Initialize. The init is down here to keep the initialization on 
+	// top of the function definitions. The events has to happen after 
+	// the initialization
 	model.init();
-	model.events();
 
 	// Return object
 	return model;
-
 });

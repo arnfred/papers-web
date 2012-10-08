@@ -1,6 +1,6 @@
 //define(["graph", "sidebar", "infobox"], function(graph, sidebar, 
 //infobox) {
-define(["graph"], function(graph) {
+define(["model", "graph"], function(model, graph) {
 
 
 	//////////////////////////////////////////////
@@ -17,14 +17,12 @@ define(["graph"], function(graph) {
 	//              Initialize					//
 	//											//
 	//////////////////////////////////////////////
-	views.init = function (model) {
 
-		// Initialize graph
-		graph.init(model.nodes, model.links);
+	// Initialize graph
+	graph.init(model.nodes, model.links);
 
-		// Initialize sidebar
-		//sidebar.init(model.selected)
-	}
+	// Initialize sidebar
+	//sidebar.init(model.selected)
 
 
 	// Return views

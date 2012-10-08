@@ -23,16 +23,16 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		 */
 
 		// Broadcast when a node is clicked
-		graph.node.on("click.node", function (data) { radio("node:click").broadcast(data.index) });
+		graph.node.on("click.node", function(node) { radio("node:click").broadcast(node.id) });
 
 		// Broadcast when the mouse enters a node
-		graph.node.on("mouseover.node", function (data) { 
-			radio("node:mouseover").broadcast(data.index);
-			radio("node:current").broadcast(data.index);
+		graph.node.on("mouseover.node", function(node) { 
+			radio("node:mouseover").broadcast(node.id);
+			radio("node:current").broadcast(node.id);
 		});
 
 		// Broadcast when the mouse exits a node
-		graph.node.on("mouseout.node", function (data) { radio("node:mouseout").broadcast(data.index) });
+		graph.node.on("mouseout.node", function(node) { radio("node:mouseout").broadcast(node.id) });
 
 
 		/**
@@ -181,16 +181,19 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 	// Function that corresponds to the "surprise me" button
 	// TODO: change function call in appropriate file
+	// TODO: I don't think this function works because of the 
 	graph.selectRandom = function() {
 
 		// Get all nodes
 		var nodes = d3.selectAll("circle.node");
 
 		// Get random index
-		index = Math.ceil(Math.random()*nodes[0].length)
+		var index = Math.ceil(Math.random()*nodes[0].length)
+		var node = nodes[0][index];
+		
 
 		// Select this node
-		select(index);
+		select(node.id);
 
 		// Return false for mouseevent
 		return false;
@@ -228,47 +231,41 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	}
 
 
-	// Returns a node if you have the index of the node
-	var getNodeFromIndex = function(index) {
-		return d3.selectAll("circle.node").filter(function (d) { return (d.index == index); });
-	}
-
-
-	// Returns the data of a node if you have the index of the node
-	var getDataFromIndex = function(index) {
-		return getNodeFromIndex(index).property("__data__");
+	// Returns a node if you have the id of the node
+	var getNodeFromId = function(id) {
+		return d3.selectAll("circle.node").filter(function (d) { return (d.id == id); });
 	}
 
 
 	// Toggles a node on and off
-	var selectToggle = function(index) {
+	var selectToggle = function(id) {
 
 		// Get node
-		var currentNode	= getNodeFromIndex(index);
+		var currentNode	= getNodeFromId(id);
 
 		// check if node is selected
-		if (currentNode.classed("selected")) radio("node:deselect").broadcast(index);
-		else radio("node:select").broadcast(index);
+		if (currentNode.classed("selected")) radio("node:deselect").broadcast(id);
+		else radio("node:select").broadcast(id);
 
 		return currentNode.classed("selected");
 	}
 
 
 	// Select a particular node
-	var select = function(index) {
+	var select = function(id) {
 		var lastNode	= d3.select("circle.current");
 		var lastEdges	= d3.selectAll("line.current");
-		var currentNode	= getNodeFromIndex(index);
+		var currentNode	= getNodeFromId(id);
 
 		// Add paper to list of selected and make current item current
 		// TODO: make sure we have an event in sidebar.js for addlistitem
-		//addListItem(index);
-		setCurrent(index);
+		//addListItem(id);
+		// setCurrent(id);
 
 		// TODO: set sidebar node as current
 		// Add which element is current in the list
 		// $("li.current").removeClass("current");
-		// $("li[rel=" + index + "]").addClass("current").click(function() { 
+		// $("li[rel=" + id + "]").addClass("current").click(function() { 
 			//window.open(currentNode.property("__data__").pdf); });
 
 		// Update the new current node to selected
@@ -276,7 +273,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 		// Find all edges belinging to current node and update them
 		d3.selectAll("line.link.current")
-			.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+			.filter(function (d) { return (d.source.id == id || d.target.id == id); })
 			.classed("selected", true);
 
 		// Save selected to a cookie
@@ -285,14 +282,14 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 
 	// Deselect a particular node
-	var deselect = function(index) {
+	var deselect = function(id) {
 
 		//var lastEdges	= d3.selectAll("line.current");
-		var currentNode = getNodeFromIndex(index);
+		var currentNode = getNodeFromId(id);
 
 		// Remove it from list
 		// TODO: make sure node is dropped from list too
-		// dropListItem(index);
+		// dropListItem(id);
 
 		// Deselect it
 		//if (currentNode.classed("current")) lastEdges.classed("current", false);
@@ -301,8 +298,8 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 		// Go through all selected edges and deselect all that aren't connect to another selected node
 		d3.selectAll("line.link.selected")
-			.filter(function (d) { return ((d.source.index == index && !getNodeFromIndex(d.target.index).classed("selected")) 
-										|| (d.target.index == index && !getNodeFromIndex(d.source.index).classed("selected"))); })
+			.filter(function (d) { return ((d.source.id == id && !getNodeFromId(d.target.id).classed("selected")) 
+										|| (d.target.id == id && !getNodeFromId(d.source.id).classed("selected"))); })
 			.classed("selected", false);
 
 		// Save the rest of the selected nodes to a cookie
@@ -312,8 +309,8 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 
 	// What happens when we hover over a node
-	var hoverOut = function(index) {
-		var node = getNodeFromIndex(index);
+	var hoverOut = function(id) {
+		var node = getNodeFromId(id);
 
 		// TODO fade out infobox
 		// Fade out description
@@ -322,9 +319,9 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 
 	// What happens when we hover over a node
-	var hover = function(index) {
+	var hover = function(id) {
 
-		var node = getNodeFromIndex(index);
+		var node = getNodeFromId(id);
 
 		// TODO: add text to the infobox
 		// Get description
@@ -332,15 +329,15 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	//	$("#info").stop(true,true).fadeIn("fast");
 
 		// Set node as current
-		setCurrent(index);
+		setCurrent(id);
 	}
 
 
 	// Sets the node as the current node
-	var setCurrent = function(index) {
+	var setCurrent = function(id) {
 
 		// Get node
-		var node = getNodeFromIndex(index);
+		var node = getNodeFromId(id);
 
 		// Make previous node not red
 		d3.selectAll("circle.current").classed("current", false);
@@ -355,7 +352,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 		// Find all edges belinging to current node and update them
 		d3.selectAll("line.link")
-			.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+			.filter(function (d) { return (d.source.id == id || d.target.id == id); })
 			.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
 			.classed("current", true);
 	}

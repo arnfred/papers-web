@@ -104,45 +104,5 @@ define(["domReady!"], function () {
 
 	}
 
-	function setAbstract(node) {
-		
-		// Default abstract
-		var abstr		= node.attr("abstract");
-		
-		// get time, date and room
-		node.each(function (d) {
-
-			// If the abstract isn't catched, fetch it
-			if (abstr == null) {
-				// Fetch Abstract
-				$.get("ajax.php", { task: "abstract", id: d.id }, function (data) { 
-					$("#infoAbstract").html(data); 
-					node.attr("abstract",data);
-				});
-				abstr = "<img class=\"loading\" src=\"img/ajax-loader_dark.gif\" style=\"margin:3px 0\"/><span class=\"loading-text\">Loading Abstract...</span>";
-			}
-
-			// Prepare other variables
-			//
-			var date		= new Date(parseInt(d.date) + (new Date()).getTimezoneOffset()*60000)
-			var time		= date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy");
-			var room		= "&nbsp;Room: " + d.room + "";
-			var title		= d.title;
-			var authors		= "By " + d.authors;
-
-			var html		= "<p class=\"ii\" id=\"infoTitle\">" + title + "</p>";
-			html		   += "<p class=\"ii\" id=\"infoAuthors\">" + authors + "</p>";
-			html		   += "<p class=\"ii\" id=\"infoAbstract\">" + abstr + "</p>";
-			html		   += "<p class=\"ii\" id=\"infoRoom\">" + room + "</p>";
-			html		   += "<p class=\"ii\" id=\"infoTime\">" + time + ", </p>";
-			html		   += "<br class=\"clear\"/>";
-
-
-			// Append html
-			$("#info").stop(true,true).fadeIn().html(html);
-		})
-
-		
-	}
 
 })
