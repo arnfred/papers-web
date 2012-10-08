@@ -30,7 +30,7 @@
 <body>
 
 <!-- Loading curl -->
-<script type="text/javascript" src="lib/curl/curl.js"></script>
+<script type="text/javascript" src="js/lib/curl/curl.js"></script>
 <script>
 
 // Set up curl
@@ -40,19 +40,17 @@ curl(
 	{
 		baseUrl: 'js',
 		paths: {
-			"util": "js/util",
-			"jquery": "js/lib/jquery/jquery.min",
-			"d3": "js/lib/d3",
-			"jquery/lib": "js/lib/jquery"
+			"jquery": "lib/jquery/jquery.min",
+			"jquery/lib": "lib/jquery"
 		},
 	}, 
 
 	// Set up the required modules
-	["test"],
+	["graph"],
 
 	// The call back function
-	function(test) {
-		test();
+	function(graph) {
+		//test();
 	}
 )
 

@@ -1,4 +1,4 @@
-define("levenshtein",[], function () {
+define(function () {
 
 	// Levenshtein
 	var l = function (s1, s2) {

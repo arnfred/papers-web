@@ -1,4 +1,4 @@
-define("dateFormat", [], function () {
+define(function () {
 
 	/*
 	 * Date Format 1.2.3

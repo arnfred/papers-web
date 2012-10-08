@@ -1,7 +1,7 @@
 /**
  * Returns random date between 1970 and now
  */
-define("getRandomDate", [], function () {
+define(function () {
 	var d = function(from, to) {
 		if (!from) {
 			from = new Date(1900, 0, 1).getTime();

@@ -1,9 +1,9 @@
-define("dimensions", [], function() {
+define(function() {
 
 	/**
 	 * Get size of browser window
 	 */
-	var getWidth = function() {
+	var width = function() {
 		var myWidth = 0;
 		if( typeof( window.innerWidth ) == 'number' ) {
 			//Non-IE
@@ -18,7 +18,7 @@ define("dimensions", [], function() {
 		return myWidth;
 	}
 
-	var getHeight = function() {
+	var height = function() {
 		var myHeight = 0;
 		if( typeof( window.innerWidth ) == 'number' ) {
 			//Non-IE
@@ -34,5 +34,5 @@ define("dimensions", [], function() {
 	}
 
 	// Return this object
-	return { "getWidth" : getWidth, "getHeight" : getHeight }
+	return { "getWidth" : getWidth, "getHeight" : getHeight };
 })
