@@ -120,14 +120,10 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// Adds a new node to the list of selected nodes, but only if it 
 	// isn't already in the list
 	var select = function(id) {
-		console.debug("selecting " + id);
 		// Get a map of all the selected nodes
 		var selMap = model.getSelected();
-		console.debug("selMap: ");
-		console.debug(selMap);
 		// Check if id doesn't already exist
 		if (selMap[id] == undefined) {
-			console.debug(id + " wasn't defined in selMap so we are adding it");
 			// Add new item
 			model.selected.push(id)
 			// Save changes
