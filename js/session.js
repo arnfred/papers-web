@@ -1,4 +1,4 @@
-define(["jquery", "util/cookie", "radio"], function($, cookie, radio) {
+define(["jquery", "util/cookie", "util/array", "radio"], function($, cookie, arrr, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -7,6 +7,9 @@ define(["jquery", "util/cookie", "radio"], function($, cookie, radio) {
 	//////////////////////////////////////////////
 	var session = {}
 
+	// Initialize cookie options
+	session.options = { expires: 365, path: '/' };
+
 
 	//////////////////////////////////////////////
 	//											//
@@ -14,11 +17,6 @@ define(["jquery", "util/cookie", "radio"], function($, cookie, radio) {
 	//											//
 	//////////////////////////////////////////////
 	
-	/**
-	 * TODO:
-	 * Change this module to return a list of ints to a model that takes 
-	 * care of all the data in the background
-	 */
 
 	// Saves the selected papers
 	session.save = function() {
@@ -31,6 +29,31 @@ define(["jquery", "util/cookie", "radio"], function($, cookie, radio) {
 
 		// Save ids and current
 		cookie("selected", $.makeArray(ids).reverse().join(","), { expires: 365 });
+		cookie("current", cur, session.options);
+
+		// If there is no current, delete current cookie
+		if (cur == undefined) cookie("current", null);
+	}
+
+	// Save selected ids
+	session.saveSelected = function(selected) {
+		var string = selected.reverse().join(",");
+		console.debug("saving: " + string);
+		// Right now we save selected in the reverse order that they 
+		// were saved so that they are loaded in the correct order. This 
+		// might not be the right way to do things in the future, if we 
+		// for example want to have selected items sorted by 
+		// presentation time or the like
+		cookie("selected", string, session.options);
+
+		// Test to see if it was saved
+		console.debug("saved as: " + cookie("selected"));
+		return cookie;
+	}
+
+	// Save current
+	session.saveCurrent = function(current) {
+		
 		cookie("current", cur, { expires: 365 });
 
 		// If there is no current, delete current cookie
@@ -38,7 +61,29 @@ define(["jquery", "util/cookie", "radio"], function($, cookie, radio) {
 	}
 
 
+
+
 	// Load selected papers
+	session.loadSelected = function() {
+		// get strings
+		var txt = cookie("selected");
+		var ids = txt ? txt.split(",") : [];
+
+		// Parse selected and filter the NaN
+		var selected = ids.map(function(e) { return parseInt(e); })
+						  .filter(function(e) { return !isNaN(e); }); 
+
+		return selected;
+	}
+
+	// Load current paper
+	session.loadCurrent = function() {
+		var cur = cookie("current")
+		return (cur == null) ? null : parseInt(cur);
+	}
+
+	
+	// Load selected and current papers
 	session.load = function() {
 		// get strings
 		var txt = cookie("selected");

@@ -57,7 +57,7 @@
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  * Modified by Jonas Arnfred
  */
-define(function () {
+define(["util/array"], function () {
 	
 	// Define the cookie function
 	var cookie = function(name, value, options) {
@@ -90,9 +90,9 @@ define(function () {
 			if (document.cookie && document.cookie != '') {
 				var cookies = document.cookie.split(';');
 				for (var i = 0; i < cookies.length; i++) {
-					var cookie = jQuery.trim(cookies[i]);
+					var cookie = cookies[i].trim();
 					// Does this cookie string begin with the name we want?
-					if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					if (cookie.substring(0, name.length + 1) == (name + '=') && cookie.length > (name.length + 1)) {
 						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
 						break;
 					}
