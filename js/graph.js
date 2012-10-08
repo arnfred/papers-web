@@ -1,4 +1,5 @@
-define(["d3", "util/screen", "radio"], function(d3, screen, radio) {
+// TODO: Make this independent of session
+define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, session) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -280,9 +281,7 @@ define(["d3", "util/screen", "radio"], function(d3, screen, radio) {
 			.classed("selected", true);
 
 		// Save selected to a cookie
-		// TODO: make sure we have an event in cookies/session/whatever I'll 
-		// name that file for saving the selected
-		// saveSelected();
+		session.save();
 	}
 
 
