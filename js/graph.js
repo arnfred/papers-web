@@ -1,12 +1,57 @@
-define(["d3", "util/screen"], function(d3dss, screen) {
+define(["d3", "util/screen", "radio"], function(d3, screen, radio) {
 
 	//////////////////////////////////////////////
 	//											//
 	//               Interface					//
 	//											//
 	//////////////////////////////////////////////
-	var g = {}
+	var graph = {}
+
+
+
+	//////////////////////////////////////////////
+	//											//
+	//                Events					//
+	//											//
+	//////////////////////////////////////////////
 	
+	graph.events = function () {
+
+		/**
+		 * Broadcast
+		 */
+
+		// Broadcast when a node is clicked
+		graph.node.on("click.node", function (data) { radio("node:click").broadcast(data.index) });
+
+		// Broadcast when the mouse enters a node
+		graph.node.on("mouseover.node", function (data) { radio("node:mouseover").broadcast(data.index) });
+
+		// Broadcast when the mouse exits a node
+		graph.node.on("mouseout.node", function (data) { radio("node:mouseout").broadcast(data.index) });
+
+
+		/**
+		 * Subscribe
+		 */
+
+		// On node click, call either the select or the deselect event	
+		radio("node:click").subscribe(selectToggle);
+
+		// On node select, make sure the node is selected in the the graph
+		radio("node:select").subscribe(select);
+
+		// On node deselect, make sure the node is selected in the the graph
+		radio("node:deselect").subscribe(deselect);
+
+		// On node mouseover
+		radio("node:mouseover").subscribe(hover);
+
+		// On node mouseout
+		radio("node:mouseout").subscribe(hoverOut);
+	}
+
+
 
 	//////////////////////////////////////////////
 	//											//
@@ -38,94 +83,88 @@ define(["d3", "util/screen"], function(d3dss, screen) {
 		edgeSizeBig	= 0.3;
 
 
+
 	//////////////////////////////////////////////
 	//											//
 	//               Graph Init 				//
 	//											//
 	//////////////////////////////////////////////
 
+	graph.init = function () {
 
-	// Adapted from http://mbostock.github.com/d3/ex/force.js
-	g.vis = d3.select("#graph").append("svg")
-		.attr("width", "100%")
-		.attr("height", "100%")
-		.append('g')
-		.attr('id', 'viewport');
+		// Adapted from http://mbostock.github.com/d3/ex/force.js
+		var vis = d3.select("#graph").append("svg")
+			.attr("width", "100%")
+			.attr("height", "100%")
+			.append('g')
+			.attr('id', 'viewport');
 
-		// TODO: enable scrolling somewhere else
-	// Enable scrolling
-	//$('svg').svgPan('viewPort');
+			// TODO: enable scrolling somewhere else
+		// Enable scrolling
+		//$('svg').svgPan('viewPort');
 
-	// Import data to graph
-	d3.json(data, function(graph) {
-	  var force = d3.layout.force()
-		  .charge(-90)
-		  .linkDistance(70)
-		  .friction(0.5)
-		  .theta(0.4)
-		  .nodes(graph.nodes)
-		  .links(graph.links.slice(1))
-		  .size([w, h])
-		  .linkStrength( function(d, i) { return Math.log(d.value)/10; })
-		  .start(0.1);
+		// Import data to graph
+		d3.json(data, function(papers) {
+			graph.force = d3.layout.force()
+				.charge(-90)
+				.linkDistance(70)
+				.friction(0.5)
+				.theta(0.4)
+				.nodes(papers.nodes)
+				.links(papers.links.slice(1))
+				.size([w, h])
+				.linkStrength( function(d, i) { return Math.log(d.value)/10; })
+				.start(0.1);
 
-	  // Import links
-	  var link = g.vis.selectAll("line.link")
-		  .data(graph.links)
-		  .enter().append("line")
-		  .attr("class", "link")
-		  .style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
-		  .attr("x1", function(d) { return d.source.x; })
-		  .attr("y1", function(d) { return d.source.y; })
-		  .attr("x2", function(d) { return d.target.x; })
-		  .attr("y2", function(d) { return d.target.y; });
+			// Import links
+			graph.link = vis.selectAll("line.link")
+				.data(papers.links)
+				.enter().append("line")
+				.attr("class", "link")
+				.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
+				.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
 
-	  // Import Nodes
-	  var node = g.vis.selectAll("circle.node")
-		  .data(graph.nodes)
-		  .enter().append("circle")
-		  .attr("class", "node")
-		  .attr("cx", function(d) { return d.x; })
-		  .attr("cy", function(d) { return d.y; })
-		  .attr("r", nodeSize)
-		  .on("mouseover.node", g.nodeHover)
-		  .on("mouseout.node", g.nodeHoverOut)
-		  .call(function() { setTimeout(function () { g.stopGraph(force) }, 20000); });
-		  //.call(force.drag);
+			// Import Nodes
+			graph.node = vis.selectAll("circle.node")
+				.data(papers.nodes)
+				.enter().append("circle")
+				.attr("class", "node")
+				.attr("cx", function(d) { return d.x; })
+				.attr("cy", function(d) { return d.y; })
+				.attr("r", nodeSize)
+				.call(function() { setTimeout(function () { graph.stop() }, 20000); });
+				//.call(force.drag);
 
-	  // Add alt-text when hovering over a node
-	  // node.append("title")
-	  //     .text(function(d) { return d.title + " (" + d.authors + ")"; });
+			// Add alt-text when hovering over a node
+			// node.append("title")
+			//     .text(function(d) { return d.title + " (" + d.authors + ")"; });
 
-	  // TODO: move this somewhere else
-	  // Add nodes to hidden selectbox
-	  //selectInit(graph.nodes);
+			// TODO: move this somewhere else
+			// Add nodes to hidden selectbox
+			//selectInit(graph.nodes);
+			//This function is renamed to addNodes
 
-	  // TODO: Move this to events
-	  // node.on("click.node", g.nodeClick);
+			graph.force.on("tick", function() {
+				graph.link.attr("x1", function(d) { return d.source.x; })
+						  .attr("y1", function(d) { return d.source.y; })
+						  .attr("x2", function(d) { return d.target.x; })
+						  .attr("y2", function(d) { return d.target.y; });
 
-	  force.on("tick", function() {
-		link.attr("x1", function(d) { return d.source.x; })
-			.attr("y1", function(d) { return d.source.y; })
-			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });
+				graph.node.attr("cx", function(d) { return d.x; })
+						  .attr("cy", function(d) { return d.y; });
+			});
 
-		node.attr("cx", function(d) { return d.x; })
-			.attr("cy", function(d) { return d.y; });
-	  });
-	});
+			// Initialize events
+			graph.events();
+		});
 
 
-	// Make search box work
-	d3.select(".searchField").on("click", function () { 
-		var field = d3.select(".search")
+	}
 
-		// Search for term
-		var t = field.property("value")
-		g.searchPaper(t.toLowerCase(), t); 
-		// Clear search box
-		field.property("value", "");
-	}); 
+
 
 
 	//////////////////////////////////////////////
@@ -136,65 +175,16 @@ define(["d3", "util/screen"], function(d3dss, screen) {
 
 
 	// Stops the graph animation
-	g.stopGraph = function(f) { f.stop(); }
+	graph.stop = function() { graph.force.stop(); }
 
-	// Select a particular node
-	g.select = function(index) {
-		var lastNode	= d3.select("circle.current");
-		var lastEdges	= d3.selectAll("line.current");
-		var currentNode	= getNodeFromIndex(index);
-
-		// Add paper to list of selected and make current item current
-		addListItem(index);
-		g.setCurrent(index);
-
-		// TODO: set sidebar node as current
-		// Add which element is current in the list
-		// $("li.current").removeClass("current");
-		// $("li[rel=" + index + "]").addClass("current").click(function() { 
-			//window.open(currentNode.property("__data__").pdf); });
-
-		// Update the new current node to selected
-		currentNode.classed("selected", true);
-
-		// Find all edges belinging to current node and update them
-		g.vis.selectAll("line.link.current")
-			.filter(function (d) { return (d.source.index == index || d.target.index == index); })
-			.classed("selected", true);
-
-		// Save selected to a cookie
-		saveSelected();
-	}
-
-	// Deselect a particular node
-	g.deselect = function(index) {
-		//var lastEdges	= d3.selectAll("line.current");
-		var currentNode = getNodeFromIndex(index);
-
-		// Remove it from list
-		dropListItem(index);
-
-		// Deselect it
-		//if (currentNode.classed("current")) lastEdges.classed("current", false);
-		//currentNode.classed("current", false);
-		currentNode.classed("selected", false);
-
-		// Go through all selected edges and deselect all that aren't connect to another selected node
-		g.vis.selectAll("line.link.selected")
-			.filter(function (d) { return ((d.source.index == index && !getNodeFromIndex(d.target.index).classed("selected")) 
-										|| (d.target.index == index && !getNodeFromIndex(d.source.index).classed("selected"))); })
-			.classed("selected", false);
-
-		// Save the rest of the selected nodes to a cookie
-		saveSelected();
-	}
 
 
 	// Function that corresponds to the "surprise me" button
-	g.imFeelingLucky = function() {
+	// TODO: change function call in appropriate file
+	graph.selectRandom = function() {
 
 		// Get all nodes
-		var nodes = g.vis.selectAll("circle.node");
+		var nodes = d3.selectAll("circle.node");
 
 		// Get random index
 		index = Math.ceil(Math.random()*nodes[0].length)
@@ -207,63 +197,13 @@ define(["d3", "util/screen"], function(d3dss, screen) {
 	}
 
 
-	// What happens when we hover over a node
-	g.nodeHoverOut = function(d) {
-		// Get index and node
-		var index = d.index;
-		var node = getNodeFromIndex(index);
-
-		// TODO fade out infobox
-		// Fade out description
-		//$("#info").stop(true, true).delay(3000).fadeOut();
-	}
-
-
-	// Sets the node as the current node
-	g.setCurrent = function(index) {
-
-		// Gode node
-		var node = getNodeFromIndex(index);
-
-		// Make previous node not red
-		d3.selectAll("node.current").classed("current", false);
-
-		// Make node red
-		node.classed("current", true);
-
-		// Find all edges belonging to old current node and update them
-		g.vis.selectAll("line.link")
-			.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
-			.classed("current", false);
-
-		// Find all edges belinging to current node and update them
-		g.vis.selectAll("line.link")
-			.filter(function (d) { return (d.source.index == index || d.target.index == index); })
-			.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
-			.classed("current", true);
-	}
-
-
-	// What happens when we hover over a node
-	g.nodeHover = function(d) {
-
-		// Get index and node
-		var index = d.index;
-		var node = getNodeFromIndex(index);
-
-		// TODO: add text to the infobox
-		// Get description
-	//	d3.select("#info").text(d.authors + ": " + d.title);
-	//	$("#info").stop(true,true).fadeIn("fast");
-
-		// Set node as current
-		g.setCurrent(index);
-	}
-
 	
-	g.searchPaper = function(term) {
+	/**
+	 * Searches the graph for a particular title or author
+	 */
+	graph.search = function(term) {
 
-		var nodes = g.vis.selectAll("circle.node");
+		var nodes = d3.selectAll("circle.node");
 
 		// remove all edges
 		nodes.classed("search", false);
@@ -282,38 +222,149 @@ define(["d3", "util/screen"], function(d3dss, screen) {
 
 
 	// Calculates the stroke width
-	function strokeWidth(d, weight) { 
+	var strokeWidth = function(d, weight) { 
 		if (weight == undefined) weight = 0.1;
 		return Math.log(d.value*weight); 
 	}
 
 
-
-
 	// Returns a node if you have the index of the node
-	function getNodeFromIndex(index) {
+	var getNodeFromIndex = function(index) {
 		return d3.selectAll("circle.node").filter(function (d) { return (d.index == index); });
 	}
 
+
 	// Returns the data of a node if you have the index of the node
-	function getDataFromIndex(index) {
+	var getDataFromIndex = function(index) {
 		return getNodeFromIndex(index).property("__data__");
 	}
 
+
 	// Toggles a node on and off
-	function selectToggle(index) {
+	var selectToggle = function(index) {
+
 		// Get node
 		var currentNode	= getNodeFromIndex(index);
 
 		// check if node is selected
-		if (currentNode.classed("selected")) return g.deselect(index);
-		else return select(index);
+		if (currentNode.classed("selected")) radio("node:deselect").broadcast(index);
+		else radio("node:select").broadcast(index);
+
+		return currentNode.classed("selected");
 	}
 
 
+	// Select a particular node
+	var select = function(index) {
+		var lastNode	= d3.select("circle.current");
+		var lastEdges	= d3.selectAll("line.current");
+		var currentNode	= getNodeFromIndex(index);
+
+		// Add paper to list of selected and make current item current
+		// TODO: make sure we have an event in sidebar.js for addlistitem
+		//addListItem(index);
+		setCurrent(index);
+
+		// TODO: set sidebar node as current
+		// Add which element is current in the list
+		// $("li.current").removeClass("current");
+		// $("li[rel=" + index + "]").addClass("current").click(function() { 
+			//window.open(currentNode.property("__data__").pdf); });
+
+		// Update the new current node to selected
+		currentNode.classed("selected", true);
+
+		// Find all edges belinging to current node and update them
+		d3.selectAll("line.link.current")
+			.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+			.classed("selected", true);
+
+		// Save selected to a cookie
+		// TODO: make sure we have an event in cookies/session/whatever I'll 
+		// name that file for saving the selected
+		// saveSelected();
+	}
+
+
+	// Deselect a particular node
+	var deselect = function(index) {
+
+		//var lastEdges	= d3.selectAll("line.current");
+		var currentNode = getNodeFromIndex(index);
+
+		// Remove it from list
+		// TODO: make sure node is dropped from list too
+		// dropListItem(index);
+
+		// Deselect it
+		//if (currentNode.classed("current")) lastEdges.classed("current", false);
+		//currentNode.classed("current", false);
+		currentNode.classed("selected", false);
+
+		// Go through all selected edges and deselect all that aren't connect to another selected node
+		d3.selectAll("line.link.selected")
+			.filter(function (d) { return ((d.source.index == index && !getNodeFromIndex(d.target.index).classed("selected")) 
+										|| (d.target.index == index && !getNodeFromIndex(d.source.index).classed("selected"))); })
+			.classed("selected", false);
+
+		// Save the rest of the selected nodes to a cookie
+		// TODO: make sure updated nodes are saved
+		//saveSelected();
+	}
+
+
+	// What happens when we hover over a node
+	var hoverOut = function(index) {
+		var node = getNodeFromIndex(index);
+
+		// TODO fade out infobox
+		// Fade out description
+		//$("#info").stop(true, true).delay(3000).fadeOut();
+	}
+
+
+	// What happens when we hover over a node
+	var hover = function(index) {
+
+		var node = getNodeFromIndex(index);
+
+		// TODO: add text to the infobox
+		// Get description
+	//	d3.select("#info").text(d.authors + ": " + d.title);
+	//	$("#info").stop(true,true).fadeIn("fast");
+
+		// Set node as current
+		setCurrent(index);
+	}
+
+
+	// Sets the node as the current node
+	var setCurrent = function(index) {
+
+		// Get node
+		var node = getNodeFromIndex(index);
+
+		// Make previous node not red
+		d3.selectAll("circle.current").classed("current", false);
+
+		// Make node red
+		node.classed("current", true);
+
+		// Find all edges belonging to old current node and update them
+		d3.selectAll("line.link")
+			.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
+			.classed("current", false);
+
+		// Find all edges belinging to current node and update them
+		d3.selectAll("line.link")
+			.filter(function (d) { return (d.source.index == index || d.target.index == index); })
+			.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
+			.classed("current", true);
+	}
+
 
 	// Preliminary search
-	function searchFilter(term, d) {
+	var searchFilter = function(term, d) {
 		var t = term.toLowerCase();
 		var title = d.title.toLowerCase();
 		var authors = d.authors.replace(',','').toLowerCase();
@@ -330,7 +381,7 @@ define(["d3", "util/screen"], function(d3dss, screen) {
 			return (Math.min(minDistAuthors,minDistTitle) <= 1)
 		}
 	}
-
+	
 
 
 	//////////////////////////////////////////////
@@ -338,7 +389,7 @@ define(["d3", "util/screen"], function(d3dss, screen) {
 	//            Return Interface				//
 	//											//
 	//////////////////////////////////////////////
-	
-	return g;
+
+	return graph;
 })
 

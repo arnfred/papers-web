@@ -41,7 +41,8 @@ curl(
 		baseUrl: 'js',
 		paths: {
 			"jquery": "lib/jquery/jquery.min",
-			"jquery/lib": "lib/jquery"
+			"jquery/lib": "lib/jquery",
+			"radio": "lib/radio/radio"
 		},
 	}, 
 
@@ -50,7 +51,7 @@ curl(
 
 	// The call back function
 	function(graph) {
-		//test();
+		graph.init();
 	}
 )
 
