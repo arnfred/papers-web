@@ -47,6 +47,9 @@ define(["jquery", "util/cookie", "radio"], function($, cookie, radio) {
 
 		// For each id, load it to the list
 		for (i = 0; i < ids.length; i++) {
+			// TODO: this is not the right way to do it. Instead we 
+			// should have the nodes loaded to a model from which we 
+			// initialize them
 			if (!isNaN(parseInt(ids[i]))) radio("node:selected").broadcast(parseInt(ids[i]));
 		}
 

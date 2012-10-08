@@ -31,13 +31,6 @@ define(["domReady!"], function () {
 
 
 
-
-
-
-
-
-
-
 	// What happens when we click on a node
 	function nodeClick(data) {
 

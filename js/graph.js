@@ -1,5 +1,5 @@
 // TODO: Make this independent of session
-define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, session) {
+define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, session, model) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -91,7 +91,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	//											//
 	//////////////////////////////////////////////
 
-	graph.init = function () {
+	graph.init = function (nodes, links) {
 
 		// Adapted from http://mbostock.github.com/d3/ex/force.js
 		var vis = d3.select("#graph").append("svg")
@@ -105,64 +105,60 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		//$('svg').svgPan('viewPort');
 
 		// Import data to graph
-		d3.json(data, function(papers) {
-			graph.force = d3.layout.force()
-				.charge(-90)
-				.linkDistance(70)
-				.friction(0.5)
-				.theta(0.4)
-				.nodes(papers.nodes)
-				.links(papers.links.slice(1))
-				.size([w, h])
-				.linkStrength( function(d, i) { return Math.log(d.value)/10; })
-				.start(0.1);
+		graph.force = d3.layout.force()
+			.charge(-90)
+			.linkDistance(70)
+			.friction(0.5)
+			.theta(0.4)
+			.nodes(nodes)
+			.links(links.slice(1))
+			.size([w, h])
+			.linkStrength( function(d, i) { return Math.log(d.value)/10; })
+			.start(0.1);
 
-			// Import links
-			graph.link = vis.selectAll("line.link")
-				.data(papers.links)
-				.enter().append("line")
-				.attr("class", "link")
-				.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
-				.attr("x1", function(d) { return d.source.x; })
-				.attr("y1", function(d) { return d.source.y; })
-				.attr("x2", function(d) { return d.target.x; })
-				.attr("y2", function(d) { return d.target.y; });
+		// Import links
+		graph.link = vis.selectAll("line.link")
+			.data(links)
+			.enter().append("line")
+			.attr("class", "link")
+			.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
+			.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
 
-			// Import Nodes
-			graph.node = vis.selectAll("circle.node")
-				.data(papers.nodes)
-				.enter().append("circle")
-				.attr("class", "node")
-				.attr("cx", function(d) { return d.x; })
-				.attr("cy", function(d) { return d.y; })
-				.attr("r", nodeSize)
-				.call(function() { setTimeout(function () { graph.stop() }, 20000); });
-				//.call(force.drag);
+		// Import Nodes
+		graph.node = vis.selectAll("circle.node")
+			.data(nodes)
+			.enter().append("circle")
+			.attr("class", "node")
+			.attr("cx", function(d) { return d.x; })
+			.attr("cy", function(d) { return d.y; })
+			.attr("r", nodeSize)
+			.call(function() { setTimeout(function () { graph.stop() }, 20000); });
+			//.call(force.drag);
 
-			// Add alt-text when hovering over a node
-			// node.append("title")
-			//     .text(function(d) { return d.title + " (" + d.authors + ")"; });
+		// Add alt-text when hovering over a node
+		// node.append("title")
+		//     .text(function(d) { return d.title + " (" + d.authors + ")"; });
 
-			// TODO: move this somewhere else
-			// Add nodes to hidden selectbox
-			//selectInit(graph.nodes);
-			//This function is renamed to addNodes
+		// TODO: move this somewhere else
+		// Add nodes to hidden selectbox
+		//selectInit(graph.nodes);
+		//This function is renamed to addNodes
 
-			graph.force.on("tick", function() {
-				graph.link.attr("x1", function(d) { return d.source.x; })
-						  .attr("y1", function(d) { return d.source.y; })
-						  .attr("x2", function(d) { return d.target.x; })
-						  .attr("y2", function(d) { return d.target.y; });
+		graph.force.on("tick", function() {
+			graph.link.attr("x1", function(d) { return d.source.x; })
+					  .attr("y1", function(d) { return d.source.y; })
+					  .attr("x2", function(d) { return d.target.x; })
+					  .attr("y2", function(d) { return d.target.y; });
 
-				graph.node.attr("cx", function(d) { return d.x; })
-						  .attr("cy", function(d) { return d.y; });
-			});
-
-			// Initialize events
-			graph.events();
+			graph.node.attr("cx", function(d) { return d.x; })
+					  .attr("cy", function(d) { return d.y; });
 		});
 
-
+		// Initialize events
+		graph.events();
 	}
 
 
