@@ -26,7 +26,10 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		graph.node.on("click.node", function (data) { radio("node:click").broadcast(data.index) });
 
 		// Broadcast when the mouse enters a node
-		graph.node.on("mouseover.node", function (data) { radio("node:mouseover").broadcast(data.index) });
+		graph.node.on("mouseover.node", function (data) { 
+			radio("node:mouseover").broadcast(data.index);
+			radio("node:current").broadcast(data.index);
+		});
 
 		// Broadcast when the mouse exits a node
 		graph.node.on("mouseout.node", function (data) { radio("node:mouseout").broadcast(data.index) });

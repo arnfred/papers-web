@@ -37,17 +37,10 @@ define(["jquery", "util/cookie", "util/array", "radio"], function($, cookie, arr
 
 	// Save selected ids
 	session.saveSelected = function(selected) {
-		var string = selected.reverse().join(",");
-		console.debug("saving: " + string);
-		// Right now we save selected in the reverse order that they 
-		// were saved so that they are loaded in the correct order. This 
-		// might not be the right way to do things in the future, if we 
-		// for example want to have selected items sorted by 
-		// presentation time or the like
+		var string = selected.join(",");
 		cookie("selected", string, session.options);
 
 		// Test to see if it was saved
-		console.debug("saved as: " + cookie("selected"));
 		return cookie;
 	}
 

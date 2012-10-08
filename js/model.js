@@ -48,9 +48,6 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		model.selected = session.loadSelected();
 		model.current = session.loadCurrent();
 
-		// Broadcast session
-		model.selected.map(function(e) { return radio("node:select").broadcast(e); });
-		radio("node:isCurrent").broadcast(model.current);
 	}
 
 
@@ -61,11 +58,20 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	//											//
 	//////////////////////////////////////////////
 
-	// Initialize selected and current paper
+	// Return list of selected nodes (model.selected only contains the 
+	// indices, so this function is convenient for when we need to know 
+	// more
 	model.getSelected = function() {
-		var sel = model.selected.map(function(i) { return model.nodeMap[i.id]; });
+		var sel = model.selected.map(function(i) { return model.nodeMap[i]; });
 		return sel;
 	}
+
+	model.broadcastSelected = function() {
+		// Broadcast session
+		model.selected.forEach(function(e) { return radio("node:select").broadcast(e); });
+		radio("node:current").broadcast(model.current);
+	}
+
 
 
 
@@ -75,13 +81,21 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	//											//
 	//////////////////////////////////////////////
 
+	// Adds a new node to the list of selected nodes, but only if it 
+	// isn't already in the list
 	var select = function(index) {
-		// Add new item
-		model.selected.push(index)
-		// Save changes
-		session.saveSelected(model.selected);
+		// Get a map of all the selected nodes
+		var selMap = model.getSelected()
+		// Check if index doesn't already exist
+		if (selMap[index] != undefined) {
+			// Add new item
+			model.selected.push(index)
+			// Save changes
+			session.saveSelected(model.selected);
+		}
 	}
 
+	// Removes the index from the list of selected nodes
 	var deselect = function(index) {
 		model.selected = model.selected.filter(function(i) { return (i != index); });
 	}
@@ -89,17 +103,13 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	var makeNodeMap = function(nodes) {
 		var map = new Object;
 		nodes.forEach(function(n) { map[n.id] = n; });
+		return map;
 	}
 
-		// Add node to selected
-
-	// Returns a list of selected with data
-	// TODO
-	// model.getSelected = function() {
-	// }
 
 
-	// subscribe to events
+
+	// subscribe to events and initialize
 	model.init();
 	model.events();
 
