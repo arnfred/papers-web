@@ -68,7 +68,8 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// indices, so this function is convenient for when we need to know 
 	// more
 	model.getSelected = function() {
-		var sel = model.selected.map(function(i) { return model.nodeMap[i]; });
+		var sel = new Object;
+		model.selected.forEach(function(i) { sel[i] = model.nodeMap[i]; });
 		return sel;
 	}
 
@@ -99,7 +100,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 
 		// If not, then fetch abstract from server
 		else {
-			$.get("ajax.php", { task: "abstract", id: d.id }, function (data) { 
+			$.get("ajax.php", { task: "abstract", id: n.id }, function (data) { 
 				n.abstract = data;
 				if (callback != undefined) callback(data);
 			});
@@ -119,11 +120,14 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// Adds a new node to the list of selected nodes, but only if it 
 	// isn't already in the list
 	var select = function(id) {
-		console.debug(id)
+		console.debug("selecting " + id);
 		// Get a map of all the selected nodes
-		var selMap = model.getSelected()
+		var selMap = model.getSelected();
+		console.debug("selMap: ");
+		console.debug(selMap);
 		// Check if id doesn't already exist
 		if (selMap[id] == undefined) {
+			console.debug(id + " wasn't defined in selMap so we are adding it");
 			// Add new item
 			model.selected.push(id)
 			// Save changes
@@ -134,6 +138,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// Removes the id from the list of selected nodes
 	var deselect = function(id) {
 		model.selected = model.selected.filter(function(i) { return (i != id); });
+		session.saveSelected(model.selected);
 	}
 
 	var setCurrent = function(id) {

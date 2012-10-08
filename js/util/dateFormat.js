@@ -121,4 +121,4 @@ define(function () {
 
 	// Return the declared function
 	return dateFormat;
-}
+})

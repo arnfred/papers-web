@@ -38,9 +38,6 @@ define(["domReady!"], function () {
 		var index = data.index;
 		var node = getNodeFromIndex(index);
 
-		// Updates the abstract if needed
-		setAbstract(node)
-
 		// Set current index in clickwrap (stupid html javascript content 
 		// swapping)
 		$("#clickwrap").attr("index",index);
