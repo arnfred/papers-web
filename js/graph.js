@@ -134,7 +134,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		graph.node = vis.selectAll("circle.node")
 			.data(nodes)
 			.enter().append("circle")
-			.attr("class", "node")
+			.attr("class", function(d) { return "node " + d.id; })
 			.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) { return d.y; })
 			.attr("r", nodeSize)
@@ -199,6 +199,10 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		return false;
 	}
 
+	graph.getNodeFromId = function(id) {
+		return d3.selectAll("circle.node").filter(function (d) { return (d.id == id); });
+	}
+
 
 	
 	/**
@@ -231,17 +235,11 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	}
 
 
-	// Returns a node if you have the id of the node
-	var getNodeFromId = function(id) {
-		return d3.selectAll("circle.node").filter(function (d) { return (d.id == id); });
-	}
-
-
 	// Toggles a node on and off
 	var selectToggle = function(id) {
 
 		// Get node
-		var currentNode	= getNodeFromId(id);
+		var currentNode	= graph.getNodeFromId(id);
 
 		// check if node is selected
 		if (currentNode.classed("selected")) radio("node:deselect").broadcast(id);
@@ -255,7 +253,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	var select = function(id) {
 		var lastNode	= d3.select("circle.current");
 		var lastEdges	= d3.selectAll("line.current");
-		var currentNode	= getNodeFromId(id);
+		var currentNode	= graph.getNodeFromId(id);
 
 		// Add paper to list of selected and make current item current
 		// TODO: make sure we have an event in sidebar.js for addlistitem
@@ -285,7 +283,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	var deselect = function(id) {
 
 		//var lastEdges	= d3.selectAll("line.current");
-		var currentNode = getNodeFromId(id);
+		var currentNode = graph.getNodeFromId(id);
 
 		// Remove it from list
 		// TODO: make sure node is dropped from list too
@@ -298,8 +296,8 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 		// Go through all selected edges and deselect all that aren't connect to another selected node
 		d3.selectAll("line.link.selected")
-			.filter(function (d) { return ((d.source.id == id && !getNodeFromId(d.target.id).classed("selected")) 
-										|| (d.target.id == id && !getNodeFromId(d.source.id).classed("selected"))); })
+			.filter(function (d) { return ((d.source.id == id && !graph.getNodeFromId(d.target.id).classed("selected")) 
+										|| (d.target.id == id && !graph.getNodeFromId(d.source.id).classed("selected"))); })
 			.classed("selected", false);
 
 		// Save the rest of the selected nodes to a cookie
@@ -310,7 +308,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 	// What happens when we hover over a node
 	var hoverOut = function(id) {
-		var node = getNodeFromId(id);
+		var node = graph.getNodeFromId(id);
 
 		// TODO fade out infobox
 		// Fade out description
@@ -321,7 +319,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	// What happens when we hover over a node
 	var hover = function(id) {
 
-		var node = getNodeFromId(id);
+		var node = graph.getNodeFromId(id);
 
 		// TODO: add text to the infobox
 		// Get description
@@ -337,7 +335,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 	var setCurrent = function(id) {
 
 		// Get node
-		var node = getNodeFromId(id);
+		var node = graph.getNodeFromId(id);
 
 		// Make previous node not red
 		d3.selectAll("circle.current").classed("current", false);

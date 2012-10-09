@@ -40,21 +40,11 @@ define(["domReady!"], function () {
 
 		// Set current index in clickwrap (stupid html javascript content 
 		// swapping)
-		$("#clickwrap").attr("index",index);
+		// $("#clickwrap").attr("index",index);
 
 		// If node is selected, change image to Remove
 		setClickBoxImage(index);
 
-		// Set download link
-		node.each(function (d) { $("#download a").attr("href", d.pdf).attr("target", "_blank"); });
-			
-		// Change position of and fade in
-		pos = $(node[0][0]).position();
-		$("#clickwrap")
-			.stop(true, true)
-			.css("left",pos.left + 5 + "px")
-			.css("top", pos.top + 6 + "px")
-			.fadeIn().delay(3000).fadeOut();
 
 		// Get a list of connected nodes
 		
@@ -66,40 +56,8 @@ define(["domReady!"], function () {
 
 	}
 
-	function setClickBoxImage(index) {
-		// Get node
-		var node = getNodeFromIndex(index);
-
-		// Check if node is selected
-		if (!node.classed("selected")) {
-			$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
-			$("#select a").attr("title","Add to Schedule");
-		}
-		else {
-			$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
-			$("#select a").attr("title","Remove from Schedule");
-		}
-	}
 
 
-	function setupClickBox() {
-
-		// Make sure box doesn't dissappear before the mouse leaves
-		$("#clickwrap").hover(function () { $(this).stop(true,true); }, function () { $(this).stop(true,true).delay(500).fadeOut(); })
-
-		// Set up select
-		$("#select").click(function () { 
-			// Get index
-			var index = $(this).parent().parent().attr("index");
-
-			// Select or deselect paper
-			selectToggle(index); 
-
-			// Change image
-			setClickBoxImage(index);
-		});
-
-	}
 
 
 })
