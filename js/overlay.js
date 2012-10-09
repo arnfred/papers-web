@@ -1,4 +1,4 @@
-define(["jquery", "graph", "model", "radio"], function ($, graph, model, radio) {
+define(["jquery", "model", "radio"], function ($, model, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -27,6 +27,9 @@ define(["jquery", "graph", "model", "radio"], function ($, graph, model, radio) 
 			function() { radio("overlay:mouseout").broadcast(this); }
 		)
 
+		// Broadcast when a the select field is clicked
+		$("#select").click(function () { radio("node:toggleSelect").broadcast(model.current); });
+
 
 		/**
 		 * Subscribe
@@ -40,6 +43,10 @@ define(["jquery", "graph", "model", "radio"], function ($, graph, model, radio) 
 		radio("overlay:mouseover").subscribe(cancelAnimation);
 		radio("overlay:mouseout").subscribe(restartAnimation);
 
+		// On select or deselect, change image
+		radio("node:select").subscribe(setDeselect);
+		radio("node:deselect").subscribe(setSelect);
+
 	}
 
 
@@ -51,46 +58,38 @@ define(["jquery", "graph", "model", "radio"], function ($, graph, model, radio) 
 
 	// Shows the small box that overlays the graph when you click on a 
 	// node
-	var showOverlay = function(id) {
+	var showOverlay = function(id, e) {
 
-		// Get node
-		var node = graph.getNodeFromId(id);
+		// Get node data
+		var data = model.getDataFromId(id);
 
-		// set image
-		setOverlayImage(id, node);
+		// set select image
+		if (model.isSelected(id)) { setDeselect(id); }
+		else setSelect(id);
 
 		// Set download link
-		node.each(function (d) { $("#download a").attr("href", d.pdf).attr("target", "_blank"); });
-			
+		$("#download a").attr("href", data.pdf).attr("target", "_blank");
+
 		// Change position of and fade in
-		// TODO: set position after cursor
-		pos = $(node[0][0]).position();
 		$("#clickwrap")
 			.stop(true, true)
-			.css("left",pos.left + 5 + "px")
-			.css("top", pos.top + 6 + "px")
+			.css("left",e.clientX + "px")
+			.css("top", e.clientY + "px")
 			.fadeIn().delay(3000).fadeOut();
 	}
 
 
-	// The function which is called when we click on the select or 
-	// remove. This function is set by 'setSelect'.
-	var select = function () { /* Nothing here */ };
+	// Sets the image on the overlay as selected
+	var setSelect = function(id) {
+		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
+		$("#select a").attr("title","Add to Schedule");
+	}
 
-	// Sets the image on the overlay depending on whether it's selected
-	var setSelect = function(id, node) {
 
-		// Check if node is selected
-		if (!node.classed("selected")) {
-			$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
-			$("#select a").attr("title","Add to Schedule");
-			select = function() { radio("node:select".broadcast(id); };
-		}
-		else {
-			$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
-			$("#select a").attr("title","Remove from Schedule");
-			select = function() { radio("node:deselect".broadcast(id); };
-		}
+	// Sets the image on the overlay as deselected
+	var setDeselect = function() {
+		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
+		$("#select a").attr("title","Remove from Schedule");
 	}
 
 
@@ -110,16 +109,15 @@ define(["jquery", "graph", "model", "radio"], function ($, graph, model, radio) 
 	var setupOverlay = function() {
 
 		// Set up select
-		$("#select").click(function () { 
-			// Get index
-			var id = $(this).parent().parent().attr("id");
+		// $("#select").click(function () { // Get index
+		// 	var id = $(this).parent().parent().attr("id");
 
-			// Select or deselect paper
-			selectToggle(id); 
+		// 	// Select or deselect paper
+		// 	selectToggle(id); 
 
-			// Change image
-			setClickBoxImage(id);
-		});
+		// 	// Change image
+		// 	setClickBoxImage(id);
+		// });
 
 	}
 

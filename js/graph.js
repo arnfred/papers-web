@@ -23,16 +23,22 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		 */
 
 		// Broadcast when a node is clicked
-		graph.node.on("click.node", function(node) { radio("node:click").broadcast(node.id) });
+		graph.node.on("click.node", function(node) { 
+			var e = d3.event; radio("node:click").broadcast(node.id, e) 
+		});
 
 		// Broadcast when the mouse enters a node
 		graph.node.on("mouseover.node", function(node) { 
-			radio("node:mouseover").broadcast(node.id);
-			radio("node:current").broadcast(node.id);
+			var e = d3.event;
+			radio("node:mouseover").broadcast(node.id, e);
+			radio("node:current").broadcast(node.id, e);
 		});
 
 		// Broadcast when the mouse exits a node
-		graph.node.on("mouseout.node", function(node) { radio("node:mouseout").broadcast(node.id) });
+		graph.node.on("mouseout.node", function(node) { 
+			var e = d3.event;
+			radio("node:mouseout").broadcast(node.id, e) 
+		});
 
 
 		/**
@@ -40,7 +46,7 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		 */
 
 		// On node click, call either the select or the deselect event	
-		radio("node:click").subscribe(selectToggle);
+		// radio("node:click").subscribe(selectToggle);
 
 		// On node select, make sure the node is selected in the the graph
 		radio("node:select").subscribe(select);

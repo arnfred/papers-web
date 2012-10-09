@@ -18,6 +18,17 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	model.events = function() {
 
 		/**
+		 * Broadcast
+		 */
+
+		// Broadcasts select or deselect based on the id
+		var toggleSelect = function(id) {
+			if (model.isSelected(id)) radio("node:deselect").broadcast(id);
+			else radio("node:select").broadcast(id);
+		}
+
+
+		/**
 		 * Subscribe
 		 */
 
@@ -30,6 +41,10 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		// On node current, make sure the node is marked as current in 
 		// the model
 		radio("node:current").subscribe(setCurrent);
+
+		// When some code calls toggleSelect, we check if the node is 
+		// selected or not and call the proper event back
+		radio("node:toggleSelect").subscribe(toggleSelect);
 	};
 
 	//////////////////////////////////////////////
@@ -64,6 +79,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	//											//
 	//////////////////////////////////////////////
 
+
 	// Return list of selected nodes (model.selected only contains the 
 	// indices, so this function is convenient for when we need to know 
 	// more
@@ -72,6 +88,13 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		model.selected.forEach(function(i) { sel[i] = model.nodeMap[i]; });
 		return sel;
 	}
+
+
+	// Returns true if the id is selected and false if it isn't
+	model.isSelected = function(id) {
+		return (model.selected.indexOf(id) != -1);
+	}
+
 
 	// Broadcasts the selected nodes and the current nodes. This should 
 	// only be called in the initialization of the page, but I've put it 
@@ -82,12 +105,14 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		radio("node:current").broadcast(model.current);
 	}
 
+
 	// Finally this function is not a hack anymore. Returns the data 
 	// based on an id of a node. Look in graph.js for it's companion 
 	// 'getNodeFromId'
 	model.getDataFromId = function(id) {
 		return model.nodeMap[id];
 	}
+
 
 	// Fetches an abstract with an ajax call and adds it to a node if 
 	// necessary before returning it
