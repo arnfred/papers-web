@@ -1,5 +1,4 @@
-// TODO: Make this independent of session
-define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, session, model) {
+define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, radio, levenshtein) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -59,6 +58,9 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 		// On node mouseout
 		radio("node:mouseout").subscribe(hoverOut);
+
+		// On search
+		radio("search:do").subscribe(search);
 	}
 
 
@@ -187,7 +189,8 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 	// Function that corresponds to the "surprise me" button
 	// TODO: change function call in appropriate file
-	// TODO: I don't think this function works because of the 
+	// TODO: I don't think this function works because of the
+	// TODO: Change to broadcast event
 	graph.selectRandom = function() {
 
 		// Get all nodes
@@ -211,20 +214,6 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 
 
 	
-	/**
-	 * Searches the graph for a particular title or author
-	 */
-	graph.search = function(term) {
-
-		var nodes = d3.selectAll("circle.node");
-
-		// remove all edges
-		nodes.classed("search", false);
-
-		// Add edges for nodes matching the search
-		nodes.filter(function (d) { return searchFilter(term, d); }).classed("search", true);
-	}
-
 
 
 	//////////////////////////////////////////////
@@ -264,7 +253,6 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		// Add paper to list of selected and make current item current
 		// TODO: make sure we have an event in sidebar.js for addlistitem
 		//addListItem(id);
-		// setCurrent(id);
 
 		// TODO: set sidebar node as current
 		// Add which element is current in the list
@@ -280,8 +268,6 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 			.filter(function (d) { return (d.source.id == id || d.target.id == id); })
 			.classed("selected", true);
 
-		// Save selected to a cookie
-		session.save();
 	}
 
 
@@ -296,8 +282,6 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 		// dropListItem(id);
 
 		// Deselect it
-		//if (currentNode.classed("current")) lastEdges.classed("current", false);
-		//currentNode.classed("current", false);
 		currentNode.classed("selected", false);
 
 		// Go through all selected edges and deselect all that aren't connect to another selected node
@@ -305,32 +289,17 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 			.filter(function (d) { return ((d.source.id == id && !graph.getNodeFromId(d.target.id).classed("selected")) 
 										|| (d.target.id == id && !graph.getNodeFromId(d.source.id).classed("selected"))); })
 			.classed("selected", false);
-
-		// Save the rest of the selected nodes to a cookie
-		// TODO: make sure updated nodes are saved
-		//saveSelected();
 	}
 
 
 	// What happens when we hover over a node
 	var hoverOut = function(id) {
-		var node = graph.getNodeFromId(id);
-
-		// TODO fade out infobox
-		// Fade out description
-		//$("#info").stop(true, true).delay(3000).fadeOut();
+		// Nothing here
 	}
 
 
 	// What happens when we hover over a node
 	var hover = function(id) {
-
-		var node = graph.getNodeFromId(id);
-
-		// TODO: add text to the infobox
-		// Get description
-	//	d3.select("#info").text(d.authors + ": " + d.title);
-	//	$("#info").stop(true,true).fadeIn("fast");
 
 		// Set node as current
 		setCurrent(id);
@@ -359,6 +328,23 @@ define(["d3", "util/screen", "radio", "session"], function(d3, screen, radio, se
 			.filter(function (d) { return (d.source.id == id || d.target.id == id); })
 			.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
 			.classed("current", true);
+	}
+
+
+	/**
+	 * Searches the graph for a particular title or author
+	 */
+	var search = function(term) {
+
+		if (term == "") term = "qqqqqqqqqqqqqqqq"; // Something that isn't there
+
+		var nodes = d3.selectAll("circle.node");
+
+		// remove all edges
+		nodes.classed("search", false);
+
+		// Add edges for nodes matching the search
+		nodes.filter(function (d) { return searchFilter(term, d); }).classed("search", true);
 	}
 
 

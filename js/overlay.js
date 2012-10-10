@@ -55,6 +55,7 @@ define(["jquery", "model", "radio"], function ($, model, radio) {
 	//											//
 	//           Private Functions				//
 	//											//
+	//////////////////////////////////////////////
 
 	// Shows the small box that overlays the graph when you click on a 
 	// node
@@ -105,25 +106,7 @@ define(["jquery", "model", "radio"], function ($, model, radio) {
 	}
 
 
-	// Set up various events. TODO: get rid of this
-	var setupOverlay = function() {
-
-		// Set up select
-		// $("#select").click(function () { // Get index
-		// 	var id = $(this).parent().parent().attr("id");
-
-		// 	// Select or deselect paper
-		// 	selectToggle(id); 
-
-		// 	// Change image
-		// 	setClickBoxImage(id);
-		// });
-
-	}
-
-
 	// Initialize and set events
-	setupOverlay();
 	overlay.events();
 	return overlay;
 });

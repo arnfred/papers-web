@@ -75,5 +75,7 @@ define(function () {
 		return v0[s1_len];
 	}
 
+
+	// Return the levenshtein function
 	return l;
-}
+});

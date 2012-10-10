@@ -1,4 +1,4 @@
-define(["jquery", "graph"], function ($, graph) {
+define(["jquery", "util/delay", "radio"], function ($, delay, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -14,59 +14,63 @@ define(["jquery", "graph"], function ($, graph) {
 	//											//
 	//////////////////////////////////////////////
 
-	// Broadcast the on searchfield click event
-	$(".searchField").click(function () { radio("search:click").broadcast(); });
+	search.events = function() {
+		/**
+		 * Broadcast
+		 */
 
-	// TODO: broadcast onkeypress for search field
-	// Broadcast the on searchfield keypress event
-	// $(".searchField").click(function () { 
-		//radio("search:click").broadcast(); });
-	
-	
-	// On node click, call either the select or the deselect event	
-	radio("search:click").subscribe(search.click);
+		// Broadcast the on searchfield click event
+		$("#searchField").click(function (e) { radio("search:click").broadcast(e); });
+
+		// Broadcast the on searchfield keyPress event
+		$("#searchField").keyup(function (e) { radio("search:keypress").broadcast($(".search").attr("value"), e); });
+
+
+		/**
+		 * Subscribe
+		 */
+
+		// On search click, call either the select or the deselect event	
+		radio("search:click").subscribe(click);
+
+		// On search keypress, do a few things
+		radio("search:keypress").subscribe(keyPress);
+	}
 
 
 
 	//////////////////////////////////////////////
 	//											//
-	//            Public Functions				//
+	//            Private Functions				//
 	//											//
 	//////////////////////////////////////////////
-	
+
+
 	// Make search box focus on click
-	search.click = function () {
-		var field = d3.select(".search")
-
-		// Search for term
-		var t = field.property("value")
-		graph.search(t.toLowerCase()); 
+	var click = function () {
 		// Clear search box
-		field.property("value", "");
-	}); 
-	
+		$(".search").attr("value","");
+	}
+
+
 	// Search on keypress
-	search.keyPress = function(e) {
-
-		var delay = (function(){
-			var timer = 0;
-			return function(callback, ms){
-				clearTimeout (timer);
-				timer = setTimeout(callback, ms);
-			};
-		})();
-
-		// Get field and term
-		field 	= $("#searchField");
-		term	= field.val();
+	var keyPress = function(term, e) {
 
 		// If enter, deselect field
-		if (e.which == 13) field.blur();
+		if (e.which == 13) $(".search").blur();
 
-		// Check that there is something in the search box
-		if (term.length == "") term = "Blablabla";
-
-		// Search for current term 
-		delay( function(){ searchPaper(term); }, 200 );
+		// Search for current term, but delay the search for 200 ms
+		delay( function(){ radio("search:do").broadcast(term); }, 200 );
 	}
+
+
+	//////////////////////////////////////////////
+	//											//
+	//          Prepare and Return				//
+	//											//
+	//////////////////////////////////////////////
+
+
+	search.events()
+	return search;
 })

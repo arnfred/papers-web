@@ -18,23 +18,6 @@ define(["jquery", "util/cookie", "util/array", "radio"], function($, cookie, arr
 	//////////////////////////////////////////////
 	
 
-	// Saves the selected papers
-	session.save = function() {
-		// get ids
-		// TODO: make this independent of the DOM
-		var ids = $("li.asmListItem").map(function () { return $(this).attr("rel"); });
-		
-		// get current
-		var cur = $("li.current").attr("rel");
-
-		// Save ids and current
-		cookie("selected", $.makeArray(ids).reverse().join(","), { expires: 365 });
-		cookie("current", cur, session.options);
-
-		// If there is no current, delete current cookie
-		if (cur == undefined) cookie("current", null);
-	}
-
 	// Save selected ids
 	session.saveSelected = function(selected) {
 		var string = selected.join(",");
