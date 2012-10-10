@@ -29,7 +29,6 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		// Broadcast when the mouse enters a node
 		graph.node.on("mouseover.node", function(node) { 
 			var e = d3.event;
-			radio("node:mouseover").broadcast(node.id, e);
 			radio("node:current").broadcast(node.id, e);
 		});
 
@@ -54,10 +53,7 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		radio("node:deselect").subscribe(deselect);
 
 		// On node mouseover
-		radio("node:mouseover").subscribe(hover);
-
-		// On node mouseout
-		radio("node:mouseout").subscribe(hoverOut);
+		radio("node:current").subscribe(setCurrent);
 
 		// On search
 		radio("search:do").subscribe(search);
@@ -289,20 +285,6 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 			.filter(function (d) { return ((d.source.id == id && !graph.getNodeFromId(d.target.id).classed("selected")) 
 										|| (d.target.id == id && !graph.getNodeFromId(d.source.id).classed("selected"))); })
 			.classed("selected", false);
-	}
-
-
-	// What happens when we hover over a node
-	var hoverOut = function(id) {
-		// Nothing here
-	}
-
-
-	// What happens when we hover over a node
-	var hover = function(id) {
-
-		// Set node as current
-		setCurrent(id);
 	}
 
 

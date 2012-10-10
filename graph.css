@@ -93,24 +93,22 @@ span.downpdf				{ margin-right:-1px; }
 span.removeall				{ border-right: solid 1px #999; margin-left:-2px; margin-right:-1px; }
 div.info span img			{ margin-right: 10px; margin-bottom: -4px; margin-left: -20px; }
 select.asmSelect			{ display:none; }
-ol.asmList 					{ margin: 0.25em 0 1em 0; position: relative; display: block; list-style: none; }
-li.asmListItem.dark			{ background: rgb(226, 226, 226); background: rgba(226, 226, 226, 0.8);}
-li.asmListItem.dark			{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8e0e0e0, endColorstr=#C0e0e0e0); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0e0e0e0, endColorstr=#C0F0F0F0)"; }
-li.asmListItem				{ background: rgb(246, 246, 246); background: rgba(246, 246, 246, 0.8);}
-li.asmListItem				{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8f5f5f5, endColorstr=#C0f5f5f5); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
-li.asmListItem 				{ position: relative; list-style: none; border: 1px solid #aaa; width: 100%; margin: 0 0 -1px 0; line-height: 1em; }
-li.asmListItem				{ border-left:2px solid #099; padding-left:2px; }
-li.asmListItem:hover 		{ background-color: #fafafa; }
-li.asmListItem.current		{ background-color: #faeaea; border-left:4px solid #921; padding-left:0px; }
-span.asmListItemLabel 		{ height:26px; padding: 5px; display: block; }
-span.asmListItemLabel img	{ position:relative; float: left; margin-top:5px; margin-right:8px; padding-left:2px; }
+ul#sidebar 					{ margin: 0.25em 0 1em 0; position: relative; display: block; list-style: none; }
+li#listItemTemplate			{ display:none; }
+li.listItem					{ background: rgb(246, 246, 246); background: rgba(246, 246, 246, 0.8);}
+li.listItem					{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8f5f5f5, endColorstr=#C0f5f5f5); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
+li.listItem 				{ position: relative; list-style: none; border: 1px solid #aaa; width: 100%; margin: 0 0 -1px 0; line-height: 1em; }
+li.listItem					{ border-left:2px solid #099; padding-left:2px; }
+li.listItem:hover 			{ background-color: #fafafa; }
+li.listItem.current			{ background-color: #faeaea; border-left:4px solid #921; padding-left:0px; }
+span.listItemLabel 			{ height:26px; padding: 5px; display: block; }
+span.listItemLabel img		{ position:relative; float: left; margin-top:5px; margin-right:8px; padding-left:2px; }
 img.imgtitle				{ padding-top: 6px; padding-left:2px; }
 img.imgauthors				{ padding-left:2px; }
 img.imgdownload				{ padding-left:2px; }
 img.imgpresentation			{ padding-top:2px; }
-span.asmListItemLabel p		{ position:relative; float: left; width:230px; }
-a.asmListItemRemove			{ position: absolute; right: 0; top: 6px; padding: 5px; }
-a.asmListItemExpand			{ position: absolute; right: 22px; top: 5px; padding: 5px; }
+span.listItemLabel p		{ position:relative; float: left; width:230px; }
+a.listItemRemove			{ position: absolute; right: 0; top: 6px; padding: 5px; }
 ul.infoList					{ position: relative; display: block; padding-left:0; margin: 10px 0 10px 10px; list-style: none; }
 li.infoItem 				{ position: relative; padding-left: 2px; list-style: none; border-bottom: 1px solid #ddd; width: auto; margin: 0 5px -1px 0; line-height: 1em;clear:both; }
 span.img					{ position: relative; padding: 4px 0; float: left; width: 10%; }

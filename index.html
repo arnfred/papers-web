@@ -188,14 +188,33 @@ curl(
 			<a href="#"><span class="downpdf"><img alt="Download Paper" src="img/icons/download.png"/>Download</span></a>
 			<a href="#"><span class="removeall"><img alt="Download Paper" src="img/icons/remove.png"/>Remove All</span></a>
 		</div>
-				
-		<select multiple="multiple" id="papers" name="papers[]" 
-			style="display:none" multiple="multiple" title="Please select a 
-			paper">
-		</select>
 
+		<div id="downloadType" class="scheduleSelect">
+			<p>Include Abstract?</p>
+			<p class="click" id="getLarge">Yes</p>
+			<p>/</p>
+			<p class="click" id="getSmall">no</p>
+			<input type="hidden" name="abstract" value="0"/>
+		</div>
 
+		<div id="sure" class="scheduleSelect">
+			<p>Are you sure?</p>
+			<p class="click" id="sureYes">Yes</p>
+			<p>/</p>
+			<p class="click" id="sureNo">no</p>
+		</div>
 
+		<ul id="sidebar">
+			<li id="listItemTemplate" class="listItem">
+				<a href="#" class="listItemRemove">
+					<img src="img/icons/remove.png" />
+				</a>
+				<span class="listItemLabel">
+					<img src="img/icons/paper.png" />
+					<p class="listItemText">List item</p>
+				</span>
+			</li>
+		</ul>
 
 	</div>
 

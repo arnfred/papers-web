@@ -1,6 +1,7 @@
 //define(["graph", "sidebar", "infobox"], function(graph, sidebar, 
 //infobox) {
-define(["model", "graph", "infobox", "overlay", "search"], function(model, graph, infobox, overlay, search) {
+	define(["model", "graph", "infobox", "overlay", "search", "sidebar"], 
+	function(model, graph, infobox, overlay, search, sidebar) {
 
 
 	//////////////////////////////////////////////
