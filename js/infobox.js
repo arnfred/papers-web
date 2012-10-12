@@ -62,8 +62,6 @@ define(["jquery", "util/dateFormat", "radio", "model"], function ($, _, radio, m
 		// Get data from model
 		var data = model.getDataFromId(id);
 
-		console.log("here");
-		
 		// Get description
 		$("#info").text(data.authors + ": " + data.title);
 		$("#info").stop(true,true).fadeIn("fast");
