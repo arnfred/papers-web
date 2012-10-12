@@ -1,4 +1,4 @@
-define(["jquery", "radio", "model", "util/truncate"], function($, radio, model, truncate) {
+define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, radio, model, truncate, arrrr) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -37,7 +37,18 @@ define(["jquery", "radio", "model", "util/truncate"], function($, radio, model, 
 		radio("node:deselect").subscribe(deselect);
 
 		// On deselect all nodes, we should close "are you sure?"
-		radio("sidebar:removeAll").subscribe(function () { $(".scheduleSelect").hide(); });
+		radio("sidebar:removeAll").subscribe(removeAll);
+
+		// on hover in the sidebar, broadcast node:current
+		radio("sidebar:hover").subscribe(function (id, e) { 
+			radio("node:current").broadcast(id, e);
+		});
+
+		// when we click remove in the sidebar, deselect the item
+		radio("sidebar:remove").subscribe(function (id, e) { 
+			radio("node:deselect").broadcast(id, e);
+		});
+
 	}
 
 
@@ -107,9 +118,13 @@ define(["jquery", "radio", "model", "util/truncate"], function($, radio, model, 
 		// Get data from model
 		var data = model.getDataFromId(id);
 
-		// Clone listItemTemplate and fill out title
+		// Clone listItemTemplate
 		var item = $("#listItemTemplate").clone().attr("id",id);
-		item.find(".listItemText").html(truncate(data.title, 65));
+
+		// Add information
+		item.find(".listItemText").html(truncate(data.title, 62));
+		item.find(".listItemPdfLink").attr("href",data.pdf);
+		item.find("input").attr("value", id);
 
 		// Add it to the list
 		$("#sidebar").append(item);
@@ -120,11 +135,15 @@ define(["jquery", "radio", "model", "util/truncate"], function($, radio, model, 
 		// Fade in
 		$(".info, #" + id).fadeIn("fast");
 
-		// set current
-		radio("node:current").broadcast(id);
-		
 		// Add mouseover event
-		$("#" + id).mouseover(function (e) { radio("node:current").broadcast(id); });
+		item.mouseover(function (e) { 
+			radio("sidebar:hover").broadcast(id,e); 
+		});
+
+		// Add remove event
+		item.find(".listItemRemove").click(function (e) { 
+			radio("sidebar:remove").broadcast(id,e); 
+		});
 	}
 
 
@@ -192,8 +211,14 @@ define(["jquery", "radio", "model", "util/truncate"], function($, radio, model, 
 	 */
 	var removeAll = function() {
 
-		$(".scheduleSelect").hide();
-		return false;
+		// Hide the scheduleselect box
+		$(".scheduleSelect").slideToggle("fast");
+
+		// Get all selected nodes
+		var selected = model.selected;
+
+		// Call deselect signal for all nodes in the list
+		selected.map(function (s) { radio("node:deselect").broadcast(s); })
 	}
 
 

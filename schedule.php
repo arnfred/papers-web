@@ -3,6 +3,10 @@
 // Get selected papers from post
 $selected = $_POST["papers"];
 
+// echo "<PRE>";
+// print_r($selected);
+// echo "</PRE>";
+
 // Get json data
 $source	= file_get_contents("js/data.json");
 $json	= json_decode($source);
@@ -44,9 +48,12 @@ header( 'Location: '.$temp_output.'.pdf' ) ;
  */
 function get_papers($json, $selected) {
 	$result = array();
-	foreach ($selected as $id) {
-		$result[$id] = $json[$id];
-		$result[$id]->index = $id;
+	// For each paper in the list
+	foreach ($json as $p) {
+		// For each selected paper
+		foreach ($selected as $id) {
+			if ($p->id == $id) $result[$id] = $p;
+		}
 	}
 	return $result;
 }

@@ -101,7 +101,9 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// apart from init() since it relies on the graph being generated
 	model.broadcastSelected = function() {
 		// Broadcast session
-		model.selected.forEach(function(e) { return radio("node:select").broadcast(e); });
+		model.selected.forEach(function(e) { 
+			return radio("node:select").broadcast(e); 
+		});
 		radio("node:current").broadcast(model.current);
 	}
 

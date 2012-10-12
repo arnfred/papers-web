@@ -29,6 +29,7 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		// Broadcast when the mouse enters a node
 		graph.node.on("mouseover.node", function(node) { 
 			var e = d3.event;
+			radio("node:mouseover").broadcast(node.id, e);
 			radio("node:current").broadcast(node.id, e);
 		});
 
@@ -143,7 +144,7 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 			.attr("cy", function(d) { return d.y; })
 			.attr("r", nodeSize)
 			.call(function() { setTimeout(function () { graph.stop() }, 20000); });
-			//.call(force.drag);
+			//.call(graph.force.drag);
 
 		// Add alt-text when hovering over a node
 		// node.append("title")
