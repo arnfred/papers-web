@@ -1,6 +1,6 @@
 //define(["graph", "sidebar", "infobox"], function(graph, sidebar, 
 //infobox) {
-define(["model", "graph", "infobox", "overlay", "search"], function(model, graph, infobox, overlay, search) {
+define(["model", "graph2", "infobox", "overlay", "search"], function(model, graph, infobox, overlay, search) {
 
 
 	//////////////////////////////////////////////
@@ -19,7 +19,7 @@ define(["model", "graph", "infobox", "overlay", "search"], function(model, graph
 	//////////////////////////////////////////////
 
 	// Initialize graph
-	graph.init(model.nodes, model.links);
+	graph.init(model.node);
 
 
 	// Initialize sidebar

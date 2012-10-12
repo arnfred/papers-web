@@ -1,4 +1,4 @@
-define(["data/graph", "radio", "session", "util/array", "util/cookie"], function(json, radio, session, arrrr, cookie) {
+define(["data/graph2", "radio", "session", "util/array", "util/cookie"], function(json, radio, session, arrrr, cookie) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -55,13 +55,22 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	
 	model.init = function() {
 		// Load nodes
-		model.nodes = json.nodes;
+		model.node = new Array();
+		
+		json.nodes.forEach( function(el, i){
+			el.id = i;
+			el.links = new Array();
+			el.domNode = null;
+			model.node[i] = el;
+			
+		});
 
 		// Load links
-		model.links = json.links;
+		//model.links = json.links;
+		
 
 		// Arrange nodes in a map by id
-		model.nodeMap = makeNodeMap(model.nodes);
+		// model.nodeMap = makeNodeMap(model.nodes);
 
 		// Load session
 		model.selected = session.loadSelected();
@@ -85,7 +94,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// more
 	model.getSelected = function() {
 		var sel = new Object;
-		model.selected.forEach(function(i) { sel[i] = model.nodeMap[i]; });
+		model.selected.forEach(function(i) { sel[i] = model.node[i]; });
 		return sel;
 	}
 
@@ -110,7 +119,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// based on an id of a node. Look in graph.js for it's companion 
 	// 'getNodeFromId'
 	model.getDataFromId = function(id) {
-		return model.nodeMap[id];
+		return model.node[id];
 	}
 
 
@@ -118,7 +127,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// necessary before returning it
 	model.getAbstract = function(id, callback) {
 
-		var n = model.nodeMap[id];
+		var n = model.node[id];
 
 		// If we have an abstract already, call the callback
 		if (n.abstract != undefined) callback(n.abstract)
@@ -166,11 +175,11 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		model.current = id;
 	}
 
-	var makeNodeMap = function(nodes) {
+	/*var makeNodeMap = function(nodes) {
 		var map = new Object;
 		nodes.forEach(function(n) { map[n.id] = n; });
 		return map;
-	}
+	}*/
 
 
 

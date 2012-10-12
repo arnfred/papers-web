@@ -1,0 +1,3 @@
+[submodule "js/lib/d3"]
+	path = js/lib/d3
+	url = https://github.com/arnfred/d3
