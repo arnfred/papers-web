@@ -19,11 +19,19 @@ define(["jquery", "util/delay", "radio"], function ($, delay, radio) {
 		 * Broadcast
 		 */
 
+		// Broadcast when we select all search results
+		$("#selectAll").click(function () { 
+			radio("search:select").broadcast(); 
+			return false; 
+		});
+
 		// Broadcast the on searchfield click event
 		$("#searchField").click(function (e) { radio("search:click").broadcast(e); });
 
 		// Broadcast the on searchfield keyPress event
-		$("#searchField").keyup(function (e) { radio("search:keypress").broadcast($(".search").attr("value"), e); });
+		$("#searchField").keyup(function (e) { 
+			radio("search:keypress").broadcast($(".search").attr("value"), e); 
+		});
 
 
 		/**

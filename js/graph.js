@@ -58,6 +58,9 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 
 		// On search
 		radio("search:do").subscribe(search);
+
+		// 
+		radio("search:select").subscribe(searchSelect);
 	}
 
 
@@ -328,6 +331,16 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 			var minDistTitle = Math.min.apply(null,distTitle);
 			return (Math.min(minDistAuthors,minDistTitle) <= 1)
 		}
+	}
+
+
+	// Selects all node from a search result
+	// TODO: This isn't very pretty. Maybe move info about searched nodes to 
+	// the model
+	var searchSelect = function() {
+		d3.selectAll("circle.search").each( function (d,i) { 
+			radio("node:select").broadcast(d.id);
+		}); 
 	}
 	
 
