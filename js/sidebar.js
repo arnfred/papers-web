@@ -119,7 +119,7 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 		var data = model.getDataFromId(id);
 
 		// Clone listItemTemplate
-		var item = $("#listItemTemplate").clone().attr("id",id);
+		var item = $("#listItemTemplate").clone().attr("id",id).css("display","none");
 
 		// Add information
 		item.find(".listItemText").html(truncate(data.title, 62));
@@ -156,10 +156,17 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 		var item = $("#" + id);
 
 		// Fade out and delete
-		item.fadeOut("fast", function() { item.remove(); });
+		item.fadeOut("fast", function() { 
 
-		// If the list is empty, fade out the info box too
-		if ($(".listItem:visible").length == 0) $(".info").fadeOut("fast");
+			// If the list is empty, fade out the info box too
+			if ($(".listItem:visible").length == 0) {
+				$(".info").fadeOut("fast");
+				$("#sure").fadeOut("fast");
+			}
+
+			// Remove the jquery item from the DOM
+			item.remove(); 
+		});
 	}
 
 	/**
@@ -212,7 +219,7 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 	var removeAll = function() {
 
 		// Hide the scheduleselect box
-		$(".scheduleSelect").slideToggle("fast");
+		//$(".scheduleSelect").slideToggle("fast");
 
 		// Get all selected nodes
 		var selected = model.selected;

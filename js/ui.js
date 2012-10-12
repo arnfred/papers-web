@@ -10,11 +10,6 @@ define(["domReady!"], function () {
 		// Make search box work
 		$("#searchField").keyup(function (e) { searchKeyPress(e); });
 
-		// Make menu work
-		$("#menulist li").click(function () { showInfo($(this)); return false; });
-
-		// Make Surprise Me work
-		$("#surprise").click(function () { return imFeelingLucky(); });
 
 
 		// Selects all results of a particular search

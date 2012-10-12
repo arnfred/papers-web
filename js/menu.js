@@ -1,4 +1,4 @@
-define(["jquery"], function($) {
+define(["jquery", "radio", "model"], function($, radio, model) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -21,16 +21,43 @@ define(["jquery"], function($) {
 		 * Broadcast
 		 */
 
+		// Make Surprise Me work
+		$("#surprise").click(function () { 
+			radio("node:select").broadcast(model.getRandom());
+		});
+
 
 
 		/**
 		 * Subscribe
 		 */
 
-		// On nodeclick, make sure the current node is selected in the graph
-		radio("menu:click").subscribe(show);
+	}
+
+
+	//////////////////////////////////////////////
+	//											//
+	//                  Init					//
+	//											//
+	//////////////////////////////////////////////
+	
+
+	menu.init = function () {
+
+		// Make menu work
+		$("#menulist li").click(function () { show($(this)); return false; });
+
 
 	}
+	
+
+
+	//////////////////////////////////////////////
+	//											//
+	//            Private Functions				//
+	//											//
+	//////////////////////////////////////////////
+	
 
 	/**
 	 * When a user clicks on an element in the list, this is the 
@@ -63,5 +90,17 @@ define(["jquery"], function($) {
 		// Else slide it down
 		else boxmm.slideDown();
 	}
+
+
+
+	//////////////////////////////////////////////
+	//											//
+	//					Return					//
+	//											//
+	//////////////////////////////////////////////
+	
+	menu.init();
+	menu.events();
+	return menu;
 
 });
