@@ -66,7 +66,7 @@ define(["jquery", "radio", "model"], function($, radio, model) {
 	var show = function(menuitem) {
 
 		// Remove current class from former current menu item
-		$(".currentListItem").removeClass("currentListItem");
+		$(".currentInfo").removeClass("currentInfo");
 
 		// Get box
 		box = $("#" + menuitem.attr("class"))
