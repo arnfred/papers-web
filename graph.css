@@ -127,8 +127,8 @@ circle						{ cursor: pointer; }
 circle.node 				{ fill: #ffbf44; stroke: #ffd; stroke-width: 1.5px; }
 circle.selected				{ fill: #099; stroke: #dff; }
 circle.current				{ fill: #802b00; stroke: #fdd; }
-circle.search				{ stroke:#555; stroke-width:3px; }
-line.link 					{ stroke: #999; stroke-opacity: .6; }
+circle.search				{ stroke:yellow; stroke-width:3px; }
+line.link 					{ stroke: #000; stroke-opacity: .05; }
 line.selected				{ stroke: #099; stroke-opacity: .7; }
 line.current				{ stroke: #b21; stroke-opacity: .9; }
 

@@ -8,7 +8,7 @@
 
 
 
-define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, radio, levenshtein) {
+define(["d3", "util/screen", "radio", "util/levenshtein", "position"], function(d3, screen, radio, levenshtein, position) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -24,7 +24,7 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 	//                Events					//
 	//											//
 	//////////////////////////////////////////////
-	
+
 	graph.events = function () {
 
 		/**
@@ -32,45 +32,71 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		 */
 
 		// Broadcast when a node is clicked
-		graph.node.on("click.node", function(node) { 
+		graph.nodes.forEach(function(node){
+			node.domNode.on("click", function(d,i) { 
 			var e = d3.event; radio("node:click").broadcast(node.id, e) 
+		});
 		});
 
 		// Broadcast when the mouse enters a node
-		graph.node.on("mouseover.node", function(node) { 
+		graph.nodes.forEach(function(node){
+			node.domNode.on("mouseover", function(d, i) { 
 			var e = d3.event;
 			radio("node:mouseover").broadcast(node.id, e);
 			radio("node:current").broadcast(node.id, e);
 		});
-
+});
 		// Broadcast when the mouse exits a node
-		graph.node.on("mouseout.node", function(node) { 
+		graph.nodes.forEach(function(node){
+			node.domNode.on("mouseout", function(d, i) { 
 			var e = d3.event;
 			radio("node:mouseout").broadcast(node.id, e) 
 		});
-
+});
 
 		/**
 		 * Subscribe
 		 */
+		 
+		 /*
+		 
+		 State of the nodes:
+		 
+		 - clicked:
+		 
+		 - registered:
+		 
+		 - selected:
+		 
+		 - focused:
+		 
+		 - mouseover:
+		 
+		 - mouseout:
+		 
+		 */
 
 		// On node click, call either the select or the deselect event	
-		// radio("node:click").subscribe(selectToggle);
+		 radio("node:click").subscribe(selectToggle);
 
 		// On node select, make sure the node is selected in the the graph
-		radio("node:select").subscribe(select);
+		 radio("node:select").subscribe(select);
+		// 
+		// // On node deselect, make sure the node is selected in the the graph
+		 radio("node:deselect").subscribe(deselect);
+		// 
+		 // On node mouseover
+		 radio("node:mouseover").subscribe(hover);
 
-		// On node deselect, make sure the node is selected in the the graph
-		radio("node:deselect").subscribe(deselect);
+		 // On node mouseout
+		 radio("node:mouseout").subscribe(hoverOut);
 
-		// On node mouseover
-		radio("node:mouseover").subscribe(hover);
+		 // On search
+		 radio("search:do").subscribe(search);
 
-		// On node mouseout
-		radio("node:mouseout").subscribe(hoverOut);
 
-		// On search
-		radio("search:do").subscribe(search);
+		 // On node click, we want to try a new interface: focus on the node	
+		 radio("node:click").subscribe(focusNode);
 	}
 
 
@@ -82,8 +108,8 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 	//////////////////////////////////////////////
 
 		// Dimensions
-	var w = screen.width() - 250,
-		h = screen.height() + 300,
+	var w = screen.width(),
+		h = screen.height(),
 
 		// Colors
 		fill 		= d3.rgb(0,50,180),
@@ -91,18 +117,9 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		current 	= d3.rgb(180,50,80),
 		selected 	= d3.rgb(248, 128, 23),
 		edge 		= d3.rgb(153,153,153),
-		currentEdge = d3.rgb(255,0,0),
+		currentEdge = d3.rgb(255,0,0);
 
-		// Data
-		testdata	= "js/data_test.json",
-		data		= "js/data.json",
 
-		// SVG stats
-		nodeSize	= 6.4,
-		nodeSizeBig	= 11,
-		edgeSize	= 0.1,
-		edgeSizeCur	= 0.2,
-		edgeSizeBig	= 0.3;
 
 
 
@@ -114,30 +131,66 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 
 	graph.init = function (nodes) {
 
-		// Adapted from http://mbostock.github.com/d3/ex/force.js
+		// Our canvas.
+		// g is just an window that can move...
+
+
 		var vis = d3.select("#graph").append("svg")
 			.attr("width", "100%")
 			.attr("height", "100%")
-			.append('g')
-			.attr('id', 'viewport');
+			.attr("pointer-events", "all")
+			.append('svg:g')
+			.attr('id', 'viewport')
+			  .call(d3.behavior.zoom().on("zoom", function() {
+			  		console.log("here", d3.event.translate, d3.event.scale);
+			  		vis.attr("transform",
+			  			 "translate(" + d3.event.translate + ")"
+			  				+ " scale(" + d3.event.scale + ")");
+			  })
+			  .append('svg:g');
 
 			// TODO: enable scrolling somewhere else
 		// Enable scrolling
-		//$('svg').svgPan('viewPort');
-		
+
+
 		graph.force = null;
 		graph.nodes = nodes;
-		var j = 0, space = 50, nbTotLine = Math.round(w/space)-2; 
+		//console.log(nodes.length)
+		var j = 0, space = Math.sqrt((w * h)/(nodes.length)), nbTotLine = Math.floor(w/space)-1; 
 		graph.nodes.forEach(function(el, i){
-			
-			if( (i % j)*space > w) j++;
-			
-			nodes[i].domNode = vis.append('svg:circle')
-								  .attr('cx', (i % nbTotLine)*space + 50 )
-								  .attr('cy', j*space + 50 )
-								  .attr('r', 6).style('fill', 'black');
-			
+
+			if( (i/nbTotLine) >= (j+1)) j++;
+
+			//graph.nodes[i].pos = {x: ( i % nbTotLine)*space + 50 + (10*Math.random()-5), y: j*space + 50 + (10*Math.random()-5)};
+			graph.nodes[i].pos = position[i];
+
+
 		});
+		graph.nodes.forEach(function(el, j){
+				el.links.forEach(function(link, i){
+				if(link.domlink == null ){
+					//console.log(link.target);
+					link.domlink = vis.append('svg:line')
+									  .attr('x1', el.pos.x)
+									  .attr('y1', el.pos.y)
+									  .attr('x2', graph.nodes[link.target].pos.x)
+									  .attr('y2', graph.nodes[link.target].pos.y)
+									  .attr('source', el.id)
+									  .attr('target', graph.nodes[link.target].id)
+									  .classed('link', true);
+
+				}
+			});	
+		});
+
+		graph.nodes.forEach(function(el){
+			el.domNode = vis.append('svg:circle')
+										.attr('cx', el.pos.x)
+										.attr('cy', el.pos.y)
+										.attr('r', 4);
+		});								
+
+		//console.log(nodes.length);
 		graph.link = null;
 		// Import data to graph
 		/* graph.force = d3.layout.force()
@@ -193,8 +246,8 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		}); */
 
 		// Initialize events
-		//graph.events();
-		console.log("ok");
+		graph.events();
+		//console.log("ok");
 	}
 
 
@@ -206,9 +259,6 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 	//											//
 	//////////////////////////////////////////////
 
-
-	// Stops the graph animation
-	graph.stop = function() { graph.force.stop(); }
 
 
 
@@ -224,7 +274,7 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		// Get random index
 		var index = Math.ceil(Math.random()*nodes[0].length)
 		var node = nodes[0][index];
-		
+
 
 		// Select this node
 		select(node.id);
@@ -234,11 +284,11 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 	}
 
 	graph.getNodeFromId = function(id) {
-		return d3.selectAll("circle.node").filter(function (d) { return (d.id == id); });
+		return graph.nodes[id].domNode;
 	}
 
 
-	
+
 
 
 	//////////////////////////////////////////////
@@ -289,10 +339,9 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		currentNode.classed("selected", true);
 
 		// Find all edges belinging to current node and update them
-		d3.selectAll("line.link.current")
-			.filter(function (d) { return (d.source.id == id || d.target.id == id); })
-			.classed("selected", true);
-
+		graph.nodes[id].links.forEach(function(link){
+			if(link.domlink != null) link.domlink.classed("selected", true);
+		});
 	}
 
 
@@ -310,10 +359,9 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		currentNode.classed("selected", false);
 
 		// Go through all selected edges and deselect all that aren't connect to another selected node
-		d3.selectAll("line.link.selected")
-			.filter(function (d) { return ((d.source.id == id && !graph.getNodeFromId(d.target.id).classed("selected")) 
-										|| (d.target.id == id && !graph.getNodeFromId(d.source.id).classed("selected"))); })
-			.classed("selected", false);
+		currentNode.links.forEach(function(link){
+			link.domlink.classed("selected", false);
+		});
 	}
 
 
@@ -344,15 +392,14 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 		node.classed("current", true);
 
 		// Find all edges belonging to old current node and update them
-		d3.selectAll("line.link")
-			.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
+		d3.selectAll("line.link.current")
+			//.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
 			.classed("current", false);
 
 		// Find all edges belinging to current node and update them
-		d3.selectAll("line.link")
-			.filter(function (d) { return (d.source.id == id || d.target.id == id); })
-			.style("stroke-width", function (d) { return strokeWidth(d, edgeSizeBig); })
-			.classed("current", true);
+		graph.nodes[id].links.forEach(function(link){
+			if(link.domlink) link.domlink.classed("current", true);
+		});
 	}
 
 
@@ -363,13 +410,14 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 
 		if (term == "") term = "qqqqqqqqqqqqqqqq"; // Something that isn't there
 
-		var nodes = d3.selectAll("circle.node");
+		var nodes = d3.selectAll("circle");
 
 		// remove all edges
 		nodes.classed("search", false);
 
 		// Add edges for nodes matching the search
-		nodes.filter(function (d) { return searchFilter(term, d); }).classed("search", true);
+		var nodefound = graph.nodes.filter(function (d) { return searchFilter(term, d); });
+		nodefound.forEach(function(n){n.domNode.classed("search", true)});
 	}
 
 
@@ -391,7 +439,43 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 			return (Math.min(minDistAuthors,minDistTitle) <= 1)
 		}
 	}
-	
+
+
+	// Function to focus on the node, that is to zoom around the node
+
+	var focusNode = function(id){
+
+		var canvas = d3.select('g');
+
+		var currentNode = graph.nodes[id];
+
+
+		//find the bounds of our square
+		var minx = 100000, miny = 100000, maxx = 0, maxy = 0;
+
+		currentNode.links.forEach(function(link){
+
+			var neighbors = graph.nodes[link.target];
+
+			// Find min
+			if(neighbors.pos.x < currentNode.pos.x && minx > neighbors.pos.x) minx = neighbors.pos.x;
+			if(neighbors.pos.y < currentNode.pos.y && minx > neighbors.pos.y) miny = neighbors.pos.y;
+
+			//Find max
+			if(neighbors.pos.x > currentNode.pos.x && maxx < neighbors.pos.x) maxx = neighbors.pos.x;
+			if(neighbors.pos.y > currentNode.pos.y && maxx < neighbors.pos.y) maxy = neighbors.pos.y;
+
+		});
+		var w = screen.width(), h = screen.height();
+		factor = 0.6*w/Math.abs(maxx-minx);
+		if(factor < 1) factor = 1;
+		var transx = factor * currentNode.pos.x - w/2, transy = factor * currentNode.pos.y - h/2; 
+
+
+		canvas.transition().attr('transform', "translate(0, 0) scale(1, 1)");
+		canvas.transition().attr('transform', "translate(-"+transx+", -"+transy+") scale(" +factor+", "+factor+")").delay(500);
+
+	}
 
 
 	//////////////////////////////////////////////

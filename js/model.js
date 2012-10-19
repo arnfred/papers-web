@@ -1,4 +1,4 @@
-define(["data/graph2", "radio", "session", "util/array", "util/cookie"], function(json, radio, session, arrrr, cookie) {
+define(["data/graph", "radio", "session", "util/array", "util/cookie"], function(json, radio, session, arrrr, cookie) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -61,10 +61,16 @@ define(["data/graph2", "radio", "session", "util/array", "util/cookie"], functio
 			el.id = i;
 			el.links = new Array();
 			el.domNode = null;
+			el.pos = null;
 			model.node[i] = el;
 			
 		});
-
+		
+		json.links.forEach( function(link, i){
+			
+				model.node[link.source].links.push({target: link.target, value: link.value, domlink: null});
+				model.node[link.target].links.push({target: link.source, value: link.value, domlink: null}); 
+		});
 		// Load links
 		//model.links = json.links;
 		
