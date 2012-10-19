@@ -297,6 +297,15 @@ define(["d3", "util/screen", "radio", "util/levenshtein"], function(d3, screen, 
 	}
 
 
+
+	var dateSearch = function(date) {
+
+		console.log("searching for dates... ");
+
+
+	}
+
+
 	/**
 	 * Searches the graph for a particular title or author
 	 */

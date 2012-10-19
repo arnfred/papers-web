@@ -1,4 +1,4 @@
-define(["jquery", "util/delay", "radio"], function ($, delay, radio) {
+define(["jquery", "util/datepicker", "util/delay", "radio"], function ($, ui, delay, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -70,6 +70,14 @@ define(["jquery", "util/delay", "radio"], function ($, delay, radio) {
 		// Search for current term, but delay the search for 200 ms
 		delay( function(){ radio("search:do").broadcast(term); }, 200 );
 	}
+
+	// Datepicker on date click
+	$("#searchField").datepicker({
+		showOn: "button",
+		buttonImage: "img/calendar.gif",
+		buttonImageOnly: true,
+		constrainInput: false
+	});
 
 
 	//////////////////////////////////////////////

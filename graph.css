@@ -3,7 +3,7 @@ body						{ text-align: center; font-size:13px; font-family: Helvetica; }
 br.clear					{ clear:both; }
 .leftMargin					{ padding-left: 230px; }
 .leftCol					{ width: 30%; min-width: 300px; position: relative; float: left; }
-.rightCol					{ width: 33%; min-width: 440px; position: relative; float: left; }
+.rightCol					{ width: 33%; min-width: 530px; position: relative; float: left; }
 .loading					{ float:left; padding:3px; }
 .loading-text				{ padding:7px; margin-top:3px; margin-left: 20px; display:block; }
 

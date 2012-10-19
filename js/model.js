@@ -1,4 +1,4 @@
-define(["data/graph", "radio", "session", "util/array", "util/cookie"], function(json, radio, session, arrrr, cookie) {
+define(["data/graph", "radio", "session", "util/array", "util/cookie", "util/dateFormat"], function(json, radio, session, arrrr, cookie, df) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -63,6 +63,9 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		// Arrange nodes in a map by id
 		model.nodeMap = makeNodeMap(model.nodes);
 
+		// Collect the dates used
+		model.dates = getDates(model.nodes);
+
 		// Load session
 		model.selected = session.loadSelected();
 		model.current = session.loadCurrent();
@@ -101,6 +104,12 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		var index = Math.ceil(Math.random()*model.nodes.length);
 		var node = model.nodes[index];
 		return node.id;
+	}
+
+
+	// Returns a map of all the dates
+	model.getDates = function() {
+		return model.dates;
 	}
 
 
@@ -172,10 +181,22 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		session.saveSelected(model.selected);
 	}
 
+	// Updates the current node
 	var setCurrent = function(id) {
 		model.current = id;
 	}
 
+	// Get the dates from the nodes
+	var getDates = function(nodes) {
+		var map = new Object;
+		nodes.forEach(function(n) { 
+			var date = new Date(parseInt(n.date) + (new Date()).getTimezoneOffset()*60000)
+			map[date.format("d")] = date; 
+		});
+		console.debug(map);
+	}
+
+	// create a constant way of accessing a node given an id
 	var makeNodeMap = function(nodes) {
 		var map = new Object;
 		nodes.forEach(function(n) { map[n.id] = n; });
