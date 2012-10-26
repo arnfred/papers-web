@@ -35,6 +35,7 @@ define(["jquery", "util/delay", "radio"], function ($, delay, radio) {
 
 		// On search keypress, do a few things
 		radio("search:keypress").subscribe(keyPress);
+		
 	}
 
 

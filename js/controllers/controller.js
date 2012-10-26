@@ -1,6 +1,4 @@
-//define(["graph", "sidebar", "infobox"], function(graph, sidebar, 
-//infobox) {
-define(["model", "graph2", "infobox", "overlay", "search"], function(model, graph, infobox, overlay, search) {
+define(["models/nodes", "views/views"], function (nodes, views) {
 
 
 	//////////////////////////////////////////////
@@ -8,8 +6,7 @@ define(["model", "graph2", "infobox", "overlay", "search"], function(model, grap
 	//               Interface					//
 	//											//
 	//////////////////////////////////////////////
-	var views = {};
-
+	var controller = {};
 
 
 	//////////////////////////////////////////////
@@ -18,14 +15,15 @@ define(["model", "graph2", "infobox", "overlay", "search"], function(model, grap
 	//											//
 	//////////////////////////////////////////////
 
-	// Initialize graph
-	graph.init(model.node);
+	// Add to controller and views
+	controller.model = nodes;
+	controller.views = views;
+
+	// Add selected and current node(s) from last session
+	controller.model.broadcastSelected();
 
 
-	// Initialize sidebar
-	//sidebar.init(model.selected)
+	// Return the controller
+	return controller;
 
-
-	// Return views
-	return views;
 });

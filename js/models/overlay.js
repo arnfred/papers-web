@@ -1,4 +1,4 @@
-define(["jquery", "model", "radio"], function ($, model, radio) {
+define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 
 	//////////////////////////////////////////////
 	//											//

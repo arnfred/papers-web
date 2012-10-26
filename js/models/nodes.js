@@ -1,11 +1,11 @@
-define(["data/graph", "radio", "session", "util/array", "util/cookie"], function(json, radio, session, arrrr, cookie) {
+define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie", "data/position"], function(json, radio, session, arrrr, cookie, position) {
 
 	//////////////////////////////////////////////
 	//											//
 	//               Interface					//
 	//											//
 	//////////////////////////////////////////////
-	var model = {};
+	var nodes = {};
 
 
 
@@ -15,7 +15,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	//											//
 	//////////////////////////////////////////////
 
-	model.events = function() {
+	nodes.events = function() {
 
 		/**
 		 * Broadcast
@@ -23,7 +23,7 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 
 		// Broadcasts select or deselect based on the id
 		var toggleSelect = function(id) {
-			if (model.isSelected(id)) radio("node:deselect").broadcast(id);
+			if (nodes.isSelected(id)) radio("node:deselect").broadcast(id);
 			else radio("node:select").broadcast(id);
 		}
 
@@ -32,14 +32,14 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 		 * Subscribe
 		 */
 
-		// On node select, make sure the node is selected in the model
+		// On node select, make sure the node is selected in the nodes
 		radio("node:select").subscribe(select);
 
-		// On node deselect, make sure the node is selected in the model
+		// On node deselect, make sure the node is selected in the nodes
 		radio("node:deselect").subscribe(deselect);
 
 		// On node current, make sure the node is marked as current in 
-		// the model
+		// the nodes
 		radio("node:current").subscribe(setCurrent);
 
 		// When some code calls toggleSelect, we check if the node is 
@@ -53,37 +53,34 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	//											//
 	//////////////////////////////////////////////
 	
-	model.init = function() {
+	nodes.init = function() {
 		// Load nodes
-		model.node = new Array();
+		nodes.node = new Array();
 		
 		json.nodes.forEach( function(el, i){
 			el.id = i;
 			el.links = new Array();
 			el.domNode = null;
-			el.pos = null;
-			model.node[i] = el;
+			el.pos = position[i];
+			nodes.node[i] = el;
 			
 		});
 		
+		
+		// Load links
 		json.links.forEach( function(link, i){
 			
-				model.node[link.source].links.push({target: link.target, value: link.value, domlink: null});
-				model.node[link.target].links.push({target: link.source, value: link.value, domlink: null}); 
+				nodes.node[link.source].links.push({target: link.target, value: link.value, domlink: null});
+				nodes.node[link.target].links.push({target: link.source, value: link.value, domlink: null}); 
 		});
-		// Load links
-		//model.links = json.links;
 		
 
-		// Arrange nodes in a map by id
-		// model.nodeMap = makeNodeMap(model.nodes);
-
 		// Load session
-		model.selected = session.loadSelected();
-		model.current = session.loadCurrent();
+		nodes.selected = session.loadSelected();
+		nodes.current = session.loadCurrent();
 
 		// Activate events
-		model.events();
+		nodes.events();
 	}
 
 
@@ -95,45 +92,45 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	//////////////////////////////////////////////
 
 
-	// Return list of selected nodes (model.selected only contains the 
+	// Return list of selected nodes (nodes.selected only contains the 
 	// indices, so this function is convenient for when we need to know 
 	// more
-	model.getSelected = function() {
+	nodes.getSelected = function() {
 		var sel = new Object;
-		model.selected.forEach(function(i) { sel[i] = model.node[i]; });
+		nodes.selected.forEach(function(i) { sel[i] = nodes.node[i]; });
 		return sel;
 	}
 
 
 	// Returns true if the id is selected and false if it isn't
-	model.isSelected = function(id) {
-		return (model.selected.indexOf(id) != -1);
+	nodes.isSelected = function(id) {
+		return (nodes.selected.indexOf(id) != -1);
 	}
 
 
 	// Broadcasts the selected nodes and the current nodes. This should 
 	// only be called in the initialization of the page, but I've put it 
 	// apart from init() since it relies on the graph being generated
-	model.broadcastSelected = function() {
+	nodes.broadcastSelected = function() {
 		// Broadcast session
-		model.selected.forEach(function(e) { return radio("node:select").broadcast(e); });
-		radio("node:current").broadcast(model.current);
+		nodes.selected.forEach(function(e) { return radio("node:select").broadcast(e); });
+		radio("node:current").broadcast(nodes.current);
 	}
 
 
 	// Finally this function is not a hack anymore. Returns the data 
 	// based on an id of a node. Look in graph.js for it's companion 
 	// 'getNodeFromId'
-	model.getDataFromId = function(id) {
-		return model.node[id];
+	nodes.getDataFromId = function(id) {
+		return nodes.node[id];
 	}
 
 
 	// Fetches an abstract with an ajax call and adds it to a node if 
 	// necessary before returning it
-	model.getAbstract = function(id, callback) {
+	nodes.getAbstract = function(id, callback) {
 
-		var n = model.node[id];
+		var n = nodes.node[id];
 
 		// If we have an abstract already, call the callback
 		if (n.abstract != undefined) callback(n.abstract)
@@ -161,24 +158,24 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// isn't already in the list
 	var select = function(id) {
 		// Get a map of all the selected nodes
-		var selMap = model.getSelected();
+		var selMap = nodes.getSelected();
 		// Check if id doesn't already exist
 		if (selMap[id] == undefined) {
 			// Add new item
-			model.selected.push(id)
+			nodes.selected.push(id)
 			// Save changes
-			session.saveSelected(model.selected);
+			session.saveSelected(nodes.selected);
 		}
 	}
 
 	// Removes the id from the list of selected nodes
 	var deselect = function(id) {
-		model.selected = model.selected.filter(function(i) { return (i != id); });
-		session.saveSelected(model.selected);
+		nodes.selected = nodes.selected.filter(function(i) { return (i != id); });
+		session.saveSelected(nodes.selected);
 	}
 
 	var setCurrent = function(id) {
-		model.current = id;
+		nodes.current = id;
 	}
 
 	/*var makeNodeMap = function(nodes) {
@@ -193,8 +190,8 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie"], function
 	// Initialize. The init is down here to keep the initialization on 
 	// top of the function definitions. The events has to happen after 
 	// the initialization
-	model.init();
+	nodes.init();
 
 	// Return object
-	return model;
+	return nodes;
 });
