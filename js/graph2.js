@@ -19,87 +19,6 @@ define(["d3", "util/screen", "radio", "util/levenshtein", "position"], function(
 
 
 
-	//////////////////////////////////////////////
-	//											//
-	//                Events					//
-	//											//
-	//////////////////////////////////////////////
-
-	graph.events = function () {
-
-		/**
-		 * Broadcast
-		 */
-
-		// Broadcast when a node is clicked
-		graph.nodes.forEach(function(node){
-			node.domNode.on("click", function(d,i) { 
-			var e = d3.event; radio("node:click").broadcast(node.id, e) 
-		});
-		});
-
-		// Broadcast when the mouse enters a node
-		graph.nodes.forEach(function(node){
-			node.domNode.on("mouseover", function(d, i) { 
-			var e = d3.event;
-			radio("node:mouseover").broadcast(node.id, e);
-			radio("node:current").broadcast(node.id, e);
-		});
-});
-		// Broadcast when the mouse exits a node
-		graph.nodes.forEach(function(node){
-			node.domNode.on("mouseout", function(d, i) { 
-			var e = d3.event;
-			radio("node:mouseout").broadcast(node.id, e) 
-		});
-});
-
-		/**
-		 * Subscribe
-		 */
-		 
-		 /*
-		 
-		 State of the nodes:
-		 
-		 - clicked:
-		 
-		 - registered:
-		 
-		 - selected:
-		 
-		 - focused:
-		 
-		 - mouseover:
-		 
-		 - mouseout:
-		 
-		 */
-
-		// On node click, call either the select or the deselect event	
-		 radio("node:click").subscribe(selectToggle);
-
-		// On node select, make sure the node is selected in the the graph
-		 radio("node:select").subscribe(select);
-		// 
-		// // On node deselect, make sure the node is selected in the the graph
-		 radio("node:deselect").subscribe(deselect);
-		// 
-		 // On node mouseover
-		 radio("node:mouseover").subscribe(hover);
-
-		 // On node mouseout
-		 radio("node:mouseout").subscribe(hoverOut);
-
-		 // On search
-		 radio("search:do").subscribe(search);
-
-
-		 // On node click, we want to try a new interface: focus on the node	
-		 radio("node:click").subscribe(focusNode);
-	}
-
-
 
 	//////////////////////////////////////////////
 	//											//
@@ -133,35 +52,34 @@ define(["d3", "util/screen", "radio", "util/levenshtein", "position"], function(
 
 		// Our canvas.
 		// g is just an window that can move...
-
+		
+		
 
 		var vis = d3.select("#graph").append("svg")
 			.attr("width", "100%")
 			.attr("height", "100%")
-			.attr("pointer-events", "all")
-			.append('svg:g')
-			.attr('id', 'viewport')
-			  .call(d3.behavior.zoom().on("zoom", function() {
-			  		console.log("here", d3.event.translate, d3.event.scale);
-			  		vis.attr("transform",
-			  			 "translate(" + d3.event.translate + ")"
-			  				+ " scale(" + d3.event.scale + ")");
-			  })
-			  .append('svg:g');
-
+			
+			
+			
 			// TODO: enable scrolling somewhere else
-		// Enable scrolling
+			.call(	d3.behavior.zoom().on("zoom", function() {
+					//console.log("here", d3.event.translate, d3.event.scale);
+					 vis.attr("transform",
+					 	 "translate(" + d3.event.translate + ")"
+					 		+ " scale(" + d3.event.scale + ")");
+			}))
+			.append('svg:g') 
+			.attr("pointer-events", "all")
+			.attr('id', 'viewport');
+			  //.append('svg:g');
 
-
+		
 		graph.force = null;
 		graph.nodes = nodes;
 		//console.log(nodes.length)
-		var j = 0, space = Math.sqrt((w * h)/(nodes.length)), nbTotLine = Math.floor(w/space)-1; 
 		graph.nodes.forEach(function(el, i){
 
-			if( (i/nbTotLine) >= (j+1)) j++;
 
-			//graph.nodes[i].pos = {x: ( i % nbTotLine)*space + 50 + (10*Math.random()-5), y: j*space + 50 + (10*Math.random()-5)};
 			graph.nodes[i].pos = position[i];
 
 
@@ -175,8 +93,8 @@ define(["d3", "util/screen", "radio", "util/levenshtein", "position"], function(
 									  .attr('y1', el.pos.y)
 									  .attr('x2', graph.nodes[link.target].pos.x)
 									  .attr('y2', graph.nodes[link.target].pos.y)
-									  .attr('source', el.id)
-									  .attr('target', graph.nodes[link.target].id)
+									  //.attr('source', el.id)
+									  //.attr('target', graph.nodes[link.target].id)
 									  .classed('link', true);
 
 				}
@@ -190,68 +108,92 @@ define(["d3", "util/screen", "radio", "util/levenshtein", "position"], function(
 										.attr('r', 4);
 		});								
 
-		//console.log(nodes.length);
-		graph.link = null;
-		// Import data to graph
-		/* graph.force = d3.layout.force()
-			.charge(-90)
-			.linkDistance(70)
-			.friction(0.5)
-			.theta(0.4)
-			.nodes(nodes)
-			.links(links.slice(1))
-			.size([w, h])
-			.linkStrength( function(d, i) { return Math.log(d.value)/10; })
-			.start(0.1);
-
-		// Import links
-		graph.link = vis.selectAll("line.link")
-			.data(links)
-			.enter().append("line")
-			.attr("class", "link")
-			.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
-			.attr("x1", function(d) { return d.source.x; })
-			.attr("y1", function(d) { return d.source.y; })
-			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });
-
-		// Import Nodes
-		graph.node = vis.selectAll("circle.node")
-			.data(nodes)
-			.enter().append("circle")
-			.attr("class", function(d) { return "node " + d.id; })
-			.attr("cx", function(d) { return d.x; })
-			.attr("cy", function(d) { return d.y; })
-			.attr("r", nodeSize)
-			.call(function() { setTimeout(function () { graph.stop() }, 20000); });
-			//.call(force.drag);
-
-		// Add alt-text when hovering over a node
-		// node.append("title")
-		//     .text(function(d) { return d.title + " (" + d.authors + ")"; });
-
-		// TODO: move this somewhere else
-		// Add nodes to hidden selectbox
-		//selectInit(graph.nodes);
-		//This function is renamed to addNodes
-
-		graph.force.on("tick", function() {
-			graph.link.attr("x1", function(d) { return d.source.x; })
-					  .attr("y1", function(d) { return d.source.y; })
-					  .attr("x2", function(d) { return d.target.x; })
-					  .attr("y2", function(d) { return d.target.y; });
-
-			graph.node.attr("cx", function(d) { return d.x; })
-					  .attr("cy", function(d) { return d.y; });
-		}); */
 
 		// Initialize events
 		graph.events();
-		//console.log("ok");
+		
 	}
 
 
-
+	//////////////////////////////////////////////
+		//											//
+		//                Events					//
+		//											//
+		//////////////////////////////////////////////
+	
+		graph.events = function () {
+	
+			/**
+			 * Broadcast
+			 */
+	
+			// Broadcast when a node is clicked
+			graph.nodes.forEach(function(node){
+				node.domNode.on("click", function(d,i) { 
+				var e = d3.event; radio("node:click").broadcast(node.id, e) 
+			});
+			});
+	
+			// Broadcast when the mouse enters a node
+			graph.nodes.forEach(function(node){
+				node.domNode.on("mouseover", function(d, i) { 
+				var e = d3.event;
+				radio("node:mouseover").broadcast(node.id, e);
+				radio("node:current").broadcast(node.id, e);
+			});
+	});
+			// Broadcast when the mouse exits a node
+			graph.nodes.forEach(function(node){
+				node.domNode.on("mouseout", function(d, i) { 
+				var e = d3.event;
+				radio("node:mouseout").broadcast(node.id, e) 
+			});
+	});
+	
+			/**
+			 * Subscribe
+			 */
+	
+			 /*
+	
+			 State of the nodes:
+	
+			 - clicked:
+	
+			 - registered:
+	
+			 - selected:
+	
+			 - focused:
+	
+			 - mouseover:
+	
+			 - mouseout:
+	
+			 */
+	
+			// On node click, call either the select or the deselect event	
+			 radio("node:click").subscribe(selectToggle);
+	
+			// On node select, make sure the node is selected in the the graph
+			 radio("node:select").subscribe(select);
+			// 
+			// // On node deselect, make sure the node is selected in the the graph
+			 radio("node:deselect").subscribe(deselect);
+			// 
+			 // On node mouseover
+			 radio("node:mouseover").subscribe(hover);
+	
+			 // On node mouseout
+			 radio("node:mouseout").subscribe(hoverOut);
+	
+			 // On search
+			 radio("search:do").subscribe(search);
+	
+	
+			 // On node click, we want to try a new interface: focus on the node	
+			 radio("node:click").subscribe(focusNode);
+		}
 
 	//////////////////////////////////////////////
 	//											//
