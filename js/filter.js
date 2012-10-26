@@ -1,4 +1,4 @@
-define(["model", "util/merge", "util/array"], function(model, merge, arr) {
+define(["model", "util/merge", "util/array", "util/levenshtein"], function(model, merge, arr, levenshtein) {
 
 
 	//////////////////////////////////////////////
@@ -24,8 +24,12 @@ define(["model", "util/merge", "util/array"], function(model, merge, arr) {
 					location	: location,
 					//compose		: compose,
 					nodes		: nodes,
-					_options	: {},
-					_nodes		: null
+					_nodes		: null,
+					_options	: {
+						levenshtein	: 1,
+						keywords	: [],
+						location	: ""
+					}
 			}
 
 		return f;
@@ -48,7 +52,6 @@ define(["model", "util/merge", "util/array"], function(model, merge, arr) {
 
 		// Returns the current options from the filter
 		var old_kws = this._options.keywords;
-		if (old_kws == undefined) old_kws = [];
 
 		// Add our new word and context to the list of keywords
 		var kws = old_kws.concat([{ word: w, context: c }]);
@@ -58,7 +61,6 @@ define(["model", "util/merge", "util/array"], function(model, merge, arr) {
 
 		// Merge the old and new filter and return
 		return merge(this, new_f)
-
 
 	}
 
@@ -103,44 +105,85 @@ define(["model", "util/merge", "util/array"], function(model, merge, arr) {
 	var nodes = function() {
 
 		// Keep this as the right object and not the window
-		var that = this;
+		var scope = this;
 
 		// Check if we've done this already
-		if (that._nodes == null) {
+		if (this._nodes == null) {
 
 			// Get nodes from model
 			var ns = model.nodes;
 
 			// Construct filter
-			var f = function(n) {
-
-				// Check if there are some search keywords that appear in some contexts
-				var kw_p = that._options.keywords.some(function (k) {
-					// Get context and word
-					var c = k.context;
-					var s = k.word;
-
-					// Check if word is within context
-					// TODO: levenshtein etc
-					return ((n[c]).indexOf(s) != -1);
-				});
-
-				// Check that the node has specified location
-				var loc = that._options.location;
-				var loc_p = (loc == undefined || loc == n.location);
-
-				// Check that the node is winthin the to and from date
-				// TODO
-
-
-				return ([loc_p, kw_p]).every(function (e) { return (e == true); });
-			}
+			var f = function(n) { return searchFilter(n,scope); }
 
 			// Now map nodes using filter
-			that._nodes = ns.filter(f);
+			this._nodes = ns.filter(f);
 		}
 
-		return that._nodes;
+		return this._nodes;
+	}
+
+
+
+	// The filtering function for searching
+	var searchFilter = function(node, scope) {
+
+		// Check if there are some search keywords that appear in some contexts
+		var kw_p	= scope._options.keywords.some(function (k) {
+			// Get context and word
+			var c	= (node[k.context]).toLowerCase();
+			var s	= k.word.toLowerCase();
+
+			// Now check if s is in c
+			return filterKeyword(s, c, scope);
+		});
+
+		// Check that the node has specified location
+		var loc		= scope._options.location;
+		var loc_p	= (loc == "" || loc == node.location);
+
+		// Check that the node is winthin the to and from date
+		var inter	= scope._options.interval;
+		var date	= new Date(parseInt(node.date) + (new Date()).getTimezoneOffset()*60000)
+		var date_p	= (inter == undefined) || (inter.from < date && inter.to > date);
+
+		//return (loc_p && kw_p && date_p);
+		console.debug(kw_p);
+		return (loc_p && kw_p);
+
+	}
+
+
+	// Check if any words in string are within levenshtein distance d of any
+	// word in the context
+	var filterKeyword = function(string, context, scope) {
+
+		// Get max levenshtein distance
+		var dist = scope._options.levenshtein; // default is set to 1
+
+		// Ssplit string into terms
+		var terms = string.split(" ");
+
+		// Split context into terms
+		var c = context.split(" ");
+
+		// Check if context contains any terms
+		var match = terms.every(function(t) { return (c.indexOf(t) != -1); }); 
+
+		// If there was a match or if the distance is 0 return the result of the match
+		if (match == true || dist == 0) return match;
+
+		// Else check if there is a fuzzy match
+		var fuzzy = terms.every(function(t) {
+
+			// Return true if the smallest distance is less or equal to dist 
+			var term_dist = c.map(function (w) { return levenshtein(w,t); });
+			var min_dist = Math.min.apply(null,term_dist);
+			return (min_dist <= dist);
+		});
+
+		// Return the result of our fuzzy match
+		return fuzzy;
 	}
 
 
