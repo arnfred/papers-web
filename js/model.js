@@ -98,6 +98,14 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie", "util/dat
 		return (model.selected.indexOf(id) != -1);
 	}
 
+	// Returns the date of a node
+	model.getDate = function(id) {
+
+		var node	= model.nodeMap[id];
+		var date	= new Date(parseInt(node.date) + (new Date()).getTimezoneOffset()*60000)
+		return date;
+	}
+
 
 	// returns a random id
 	model.getRandom = function() {
@@ -193,7 +201,6 @@ define(["data/graph", "radio", "session", "util/array", "util/cookie", "util/dat
 			var date = new Date(parseInt(n.date) + (new Date()).getTimezoneOffset()*60000)
 			map[date.format("d")] = date; 
 		});
-		console.debug(map);
 	}
 
 	// create a constant way of accessing a node given an id
