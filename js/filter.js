@@ -188,7 +188,7 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 	}
 		
 
-	// Check if any words in string are within levenshtein distance d of any
+	// Check if all words in string are within levenshtein distance d of any
 	// word in the context
 	var filterKeyword = function(terms, context, scope, node) {
 
@@ -201,7 +201,7 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 		var needle_lengths = needles.map(function (t) { return t.length; });
 		var max_needle_length = Math.max.apply(null,needle_lengths);
 
-		// Check if context contains any terms
+		// Check if context contains all terms
 		var match = needles.every(function(t) { return (haystack.indexOf(t) != -1); }); 
 
 		// If there was no match and there are more than twice the number of
