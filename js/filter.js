@@ -23,10 +23,11 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 		var f = {	keyword		: keyword,
 					interval	: interval,
 					location	: location,
-					//compose		: compose,
 					nodes		: nodes,
+					and			: andFilter,
+					or			: orFilter,
 					_nodes		: model.nodes,
-					_filters	: [],
+					_filter		: t,
 					_options	: {
 						levenshtein	: 1,
 					}
@@ -42,6 +43,77 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 	//											//
 	//////////////////////////////////////////////
 	
+
+	/**
+	 * Returns a new filter which is a combination of this and g
+	 *
+	 * arg g		: filter, 			the filter we are combining with
+	 **/
+	// var and = function(g) {
+	// 	// Create new
+	// 	var filters = this._filters.concat(g._filters);
+
+	// 	// Create new object containing the new filter
+	// 	var new_f = {	_filters	: filters };
+
+	// 	// Merge the old and new filter and return
+	// 	return merge(this, new_f)
+	// }
+	
+
+	// Merges two filter objects
+	var andFilter = function(g) {
+		var f = this;
+		return and(f,g._filter);
+	}
+
+
+	// Merges two filter objects
+	var orFilter = function(g) {
+		var f = this;
+		return or(f,g._filter);
+	}
+
+
+	// A function that always returns true
+	var t = function(n) { return true; }
+
+
+	/**
+	 * Returns a new filter which is a logical and of this and g
+	 *
+	 * arg g		: filter, 			the filter we are combining with
+	 **/
+	var and = function(f, g) {
+
+		// Create new filter
+		var fg		= function(node) { return g(node) && f._filter(node); }
+
+		// Create new object containing the new filter
+		var new_f 	= {	_filter	: fg };
+
+		// Merge the old and new filter and return
+		return merge(f, new_f)
+	}
+
+
+	/**
+	 * Returns a new filter which is a logical or of this and g
+	 *
+	 * arg g		: filter, 			the filter we are combining with
+	 **/
+	var or = function(f, g) {
+
+		// Create new filter
+		var fg		= function(node) { return g(node) || f._filter(node); }
+
+		// Create new object containing the new filter
+		var new_f 	= {	_filter	: fg };
+
+		// Merge the old and new filter and return
+		return merge(f, new_f)
+	}
+
 	/**
 	 * Returns a new filter that filters for word
 	 *
@@ -50,18 +122,17 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 	 **/
 	var keyword = function(terms, context) {
 
-		// Get context
+		// Catch scope
 		var scope = this;
 
-		var f		= function(node) { return filterKeyword(terms, context, scope, node); }
-		var filters = this._filters.concat([f]);
+		// Define keyword filter
+		var g = function(node) { return filterKeyword(terms, context, scope, node); }
 
-		// Create new object containing the new filter
-		var new_f = {	_filters	: filters };
-
-		// Merge the old and new filter and return
-		return merge(this, new_f)
+		// Return the logical and combination of the past node and the new filter
+		return and(this, g);
 	}
+
+
 
 
 	/**
@@ -72,25 +143,18 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 	 **/
 	var interval = function(from, to) {
 
-		// Get context
-		var scope = this;
+		// if from and to are undefined we fail hard
+		if (from == undefined || to == undefined) throw new Error("Missing date in filter interval");
 
-		var f		= function(node) {
+		var g		= function(node) {
 			// Check that the node is winthin the to and from date
-			var inter	= scope._options.interval;
 			var date	= model.getDate(node.id);
-			var date_p	= (inter == undefined) || (inter.from < date && inter.to > date);
+			var date_p	= (from == undefined) || (from < date && to > date);
 			return date_p;
 		}
 
-		// Add filter to list
-		var filters = this._filters.concat([f]);
-
-		// Create new object containing the new filter
-		var new_f = {	_filters	: filters };
-
-		// Merge the old and new filter and return
-		return merge(this, new_f)
+		// Return the logical and combination of the past node and the new filter
+		return and(this, g);
 	}
 
 
@@ -101,16 +165,14 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 	 **/
 	var location = function(loc) {
 
-		// Get context
-		var scope = this;
-
-		var f		= function(node) {
+		var g		= function(node) {
 			// Check that the node has specified location
-			var loc		= scope._options.location;
-			var loc_p	= (loc == "" || loc == node.location);
+			var loc_p	= (loc == "" || loc == node.room);
 			return loc_p;
 		}
 
+		// Return the logical and combination of the past node and the new filter
+		return and(this, g);
 	}
 
 
@@ -119,11 +181,8 @@ define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"],
 	 **/
 	var nodes = function() {
 
-		// Get context
-		var scope = this;
-
 		// We filter the nodes with each filter that we have
-		this._filters.forEach(function (f) { scope._nodes = scope._nodes.filter(f); });
+		this._nodes = this._nodes.filter(this._filter);
 
 		return this._nodes;
 	}
