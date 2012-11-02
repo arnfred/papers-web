@@ -48,7 +48,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	graph.zoom.pos = {};
 	graph.zoom.pos.x = 0;
 	graph.zoom.pos.y = 0;
-	graph.zoom.pos.s = 0;
+	graph.zoom.pos.s = 0; // Scale
 
 	//////////////////////////////////////////////
 	//											//

@@ -1,6 +1,13 @@
 /* Body style */
 body						{ text-align: center; font-size:13px; font-family: Helvetica; }
 br.clear					{ clear:both; }
+
+/* Common helper*/
+.left						{float: left;display: inline;}
+.right						{float: right;display: inline;}
+.clear						{width: 100%; height: 1px;clear: both;}
+.hidden						{display: none;}
+
 .leftMargin					{ padding-left: 230px; }
 .leftCol					{ width: 30%; min-width: 300px; position: relative; float: left; }
 .rightCol					{ width: 33%; min-width: 530px; position: relative; float: left; }
@@ -81,35 +88,106 @@ p#infoRoom					{ float:right; font-style:italic; }
 p#infoAbstract				{ margin-top:3px; }
 
 /* List */
-div#list					{ position:absolute; right:10px; top:40px; z-index:1; float:left; width:293px; margin:10px 0; text-align: left; }
-div#list select	p			{ display:none; }
-div.move					{ height: 160px; display:none; }
-div.info					{ display:none; margin: 5px -5px 3px 0; border-bottom:solid 1px #999; height:55px; }
+div#tabs					{ position:absolute; left:0px; top:40px; z-index:1; width:310px; margin:0px 0; text-align: left; background: #dddddd; border-right: 1px solid #c3c3c3;
+}
+div#tabs select	p			{ display:none; }
+div.toolbar					{  margin: 20px; height:25px; width: 260px; border: 1px solid #e2e2e2; box-shadow: 0 0 5px rgba(1,1,1,.5); }
 div.info h2					{ font-size: 17px; text-align: center; background-color: #666; color: #DDD; padding: 5px; border: solid 1px #333; }
-div.info span				{ background: rgb(240, 240, 240); background: rgba(240, 240, 240, 0.8);}
-div.info span				{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8eeeeee, endColorstr=#C0eeeeee); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
-div.info span				{ border-left: solid 1px #999; width: 50%; display: block; float: left; text-align: center; position:relative; z-index:2; padding: 5px 0; height: 16px; }
-span.downpdf				{ margin-right:-1px; }
-span.removeall				{ border-right: solid 1px #999; margin-left:-2px; margin-right:-1px; }
-div.info span img			{ margin-right: 10px; margin-bottom: -4px; margin-left: -20px; }
+div.toolbar div				{ display: inline; float: left; width: 39%;background-color: #fff;
+							  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEyNSAzMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGxpbmVhckdyYWRpZW50IGlkPSJoYXQwIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSItMS40MjEwODU0NzE1MjAyZS0xNCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZGFkYWRhIiBzdG9wLW9wYWNpdHk9IjEiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZjVmNWY1IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgPC9saW5lYXJHcmFkaWVudD4KCjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjUiIGhlaWdodD0iMzEiIGZpbGw9InVybCgjaGF0MCkiIC8+Cjwvc3ZnPg==);
+							  background-image: -moz-linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
+							  background-image: -o-linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
+							  background-image: -webkit-linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
+							  background-image: linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
+							  padding-top: 5px; padding-left:11%; height: 21px;
+							  padding-right: 1px;
+							}
+							
+#tabhead 					{
+								height: 40px;
+								background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDIzOSA0MCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGxpbmVhckdyYWRpZW50IGlkPSJoYXQwIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSItMS40MjEwODU0NzE1MjAyZS0xNCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZDJkMmQyIiBzdG9wLW9wYWNpdHk9IjEiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZGRkIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgPC9saW5lYXJHcmFkaWVudD4KCjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMzkiIGhlaWdodD0iNDAiIGZpbGw9InVybCgjaGF0MCkiIC8+Cjwvc3ZnPg==);
+								background-image: -moz-linear-gradient(bottom, #d2d2d2 0%, #ddd 100%);
+								background-image: -o-linear-gradient(bottom, #d2d2d2 0%, #ddd 100%);
+								background-image: -webkit-linear-gradient(bottom, #d2d2d2 0%, #ddd 100%);
+								background-image: linear-gradient(bottom, #d2d2d2 0%, #ddd 100%);
+								border-bottom: 1px solid #B4B4B4;
+							}
+#tabhead li					{
+								float: left;
+								display: inline;
+								width: 33%;
+								text-align: center;
+								line-height: 40px;
+								border-left: 1px solid #B4B4B4;
+								margin-left: -1px;
+							}
+#tabhead li:last-child		{
+								width: 34.5%; /* to fill the gap*/
+							}
+#tabhead li	a				{
+								color: #848484;
+								display: inline-block;
+								width: 100%;
+							}							
+#tabhead li.ui-state-active	{	
+								background: #dddddd;
+								height: 39px;
+								padding-top: 2px;
+								color: #555;
+							}
+#tabhead li.ui-state-active	a{color: #555;}
+#tabhead li.ui-state-active:hover	a{color: #555;}
+#tabhead li.ui-state-active:hover {background: #dddddd;}
+#tabhead li:hover {background: #dddddd;}
+div.toolbar a:first-child div{
+							  border-right: 1px solid #AAAAAA;
+							}
+div.toolbar div img			{ vertical-align: -2px; margin-right: 10px; }
+div.toolbar div.downpdf img	{ margin-bottom: -1px;}
+div.toolbar div.downpdf		{ padding-top: 4px;height: 22px; padding-right: 0px;}
+	
 select.asmSelect			{ display:none; }
-ul#sidebar 					{ margin: 0.25em 0 1em 0; position: relative; display: block; list-style: none; }
+ul#sidebar 					{ margin: 20px; display: block; list-style: none; width: 260px;
+}
 li#listItemTemplate			{ display:none; }
 li.listItem					{ background: rgb(246, 246, 246); background: rgba(246, 246, 246, 0.8);}
 li.listItem					{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8f5f5f5, endColorstr=#C0f5f5f5); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
-li.listItem 				{ position: relative; list-style: none; border: 1px solid #aaa; width: 100%; margin: 0 0 -1px 0; line-height: 1em; }
-li.listItem					{ border-left:2px solid #099; padding-left:2px; }
+li.listItem 				{ position: relative; 
+							  list-style: none; 
+							  border: 1px solid #aaa; 
+							  width: 100%; 
+							  margin-bottom: -1px; 
+							  line-height: 1em; 
+							  border-left: 2px solid #099; 
+							  border: 1px solid #b3b3b3;
+							  background-color: #ececec;
+							  -moz-box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+							  -webkit-box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+							  box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+							   
+							}
 li.listItem:hover 			{ background-color: #fafafa; }
-li.listItem.current			{ background-color: #faeaea; border-left:4px solid #921; padding-left:0px; }
+li.listItem.current			{ background-color: #faeaea; 
+							  padding-left:0px;
+							}
 a.listItemPdfLink			{ color: #000; }
-span.listItemLabel 			{ height:26px; padding: 5px; display: block; }
-span.listItemLabel img		{ position:relative; float: left; margin-top:5px; margin-right:8px; padding-left:2px; }
+span.listItemLabel 			{ 
+							  font-size: 11px;
+							  margin-left: 1px;
+							  display: block;
+							  border-left: 4px solid #368485; 
+							  }
+li.listItem.current	span.listItemLabel {
+							  border-left: 4px solid #921;
+							}						  
+span.listItemLabel img		{ position:relative; float: left; margin-top:5px; margin-right:10px; padding-left:2px; margin-left: 7px;
+}
 img.imgtitle				{ padding-top: 6px; padding-left:2px; }
 img.imgauthors				{ padding-left:2px; }
 img.imgdownload				{ padding-left:2px; }
 img.imgpresentation			{ padding-top:2px; }
-span.listItemLabel p		{ position:relative; float: left; width:230px; }
-a.listItemRemove			{ position: absolute; right: 0; top: 6px; padding: 5px; }
+span.listItemLabel p		{ position:relative; float: left; width:190px; }
+a.listItemRemove			{ position: absolute; right: 3px; top: 9px; padding: 5px; }
 ul.infoList					{ position: relative; display: block; padding-left:0; margin: 10px 0 10px 10px; list-style: none; }
 li.infoItem 				{ position: relative; padding-left: 2px; list-style: none; border-bottom: 1px solid #ddd; width: auto; margin: 0 5px -1px 0; line-height: 1em;clear:both; }
 span.img					{ position: relative; padding: 4px 0; float: left; width: 10%; }

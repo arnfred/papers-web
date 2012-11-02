@@ -1,4 +1,4 @@
-define(["jquery", "radio", "models/nodes", "util/truncate", "util/array"], function($, radio, model, truncate, arrrr) {
+define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-tabs.min.js!order'], function($, radio, model, truncate, arrrr, screen, tabbbb) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -85,6 +85,13 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array"], funct
 		// Call events
 		sidebar.events();
 		
+		// Set the UI height:
+		$('#tabs').css('height', screen.height()-40);
+		
+		// Init the tabs:
+		$('#tabs').tabs();
+		
+		
 	}
 
 
@@ -120,7 +127,7 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array"], funct
 		// Get data from model
 		var data = model.getDataFromId(id);
 
-		console.log(data)
+		//console.log(data)
 
 		// Clone listItemTemplate
 		var item = $("#listItemTemplate").clone().attr("id",id).css("display","none");

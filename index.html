@@ -181,44 +181,56 @@ curl(
 	</div></div>
 
 	<!-- List -->
-	<div id="list" class="text">
-		<div class="move">&nbsp;</div>
-		<div class="info">
-			<h2>Your Schedule</h2>
-			<a href="#"><span class="downpdf"><img alt="Download Paper" src="img/icons/download.png"/>Download</span></a>
-			<a href="#"><span class="removeall"><img alt="Download Paper" src="img/icons/remove.png"/>Remove All</span></a>
-		</div>
-
-		<div id="downloadType" class="scheduleSelect">
-			<p>Include Abstract?</p>
-			<p class="click" id="getLarge">Yes</p>
-			<p>/</p>
-			<p class="click" id="getSmall">no</p>
-			<input type="hidden" name="abstract" value="0"/>
-		</div>
-
-		<div id="sure" class="scheduleSelect">
-			<p>Are you sure?</p>
-			<p class="click" id="sureYes">Yes</p>
-			<p>/</p>
-			<p class="click" id="sureNo">no</p>
-		</div>
-
-		<ul id="sidebar">
-			<li id="listItemTemplate" class="listItem">
-				<a href="#" class="listItemRemove">
-					<img src="img/icons/remove.png" />
-				</a>
-				<a class="listItemPdfLink" href="#" target="_blank">
-					<span class="listItemLabel">
-						<img src="img/icons/paper.png" />
-						<p class="listItemText">List item</p>
-					</span>
-				</a>
-				<input type="hidden" name="papers[]" value="" />
-			</li>
+	<div id="tabs" class="text">
+		
+		<ul id="tabhead">
+		        
+		        <li><a href="#tabs-2">Schedule</a></li>
+		        <li><a href="#tabs-1">Info</a></li>
+		        <li><a href="#tabs-3">Filters</a></li>
 		</ul>
-
+		<div id="tabs-2">
+			<div class="toolbar">
+				<a href="#"><div class="downpdf"><img alt="Download Paper" src="img/icons/download.png"/>Download</div></a>
+				<a href="#"><div class="removeall"><img alt="Download Paper" src="img/icons/remove.png"/>Remove All</div></a>
+			</div>
+	
+			<div id="downloadType" class="scheduleSelect">
+				<p>Include Abstract?</p>
+				<p class="click" id="getLarge">Yes</p>
+				<p>/</p>
+				<p class="click" id="getSmall">no</p>
+				<input type="hidden" name="abstract" value="0"/>
+			</div>
+	
+			<div id="sure" class="scheduleSelect">
+				<p>Are you sure?</p>
+				<p class="click" id="sureYes">Yes</p>
+				<p>/</p>
+				<p class="click" id="sureNo">no</p>
+			</div>
+	
+			<ul id="sidebar">
+				<li id="listItemTemplate" class="listItem">
+					<a href="#" class="listItemRemove">
+						<img src="img/icons/remove.png" />
+					</a>
+					<a class="listItemPdfLink" href="#" target="_blank">
+					
+						<span class="listItemLabel">
+							<div class="clear" style="height: 8px;"></div>
+							<img src="img/icons/paper.png" />
+							<p class="listItemText">List item</p>
+							<div class="clear" style="height: 8px;"></div>
+						</span>
+					</a>
+					<input type="hidden" name="papers[]" value="" />
+				</li>
+			</ul>
+		</div>
+		<div id="tab-1"></div>
+		<div id="tab-3"></div>
+		
 	</div>
 
 </div>
