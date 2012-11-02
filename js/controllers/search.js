@@ -43,6 +43,7 @@ define(["jquery", "util/datepicker", "util/delay", "radio"], function ($, ui, de
 
 		// On search keypress, do a few things
 		radio("search:keypress").subscribe(keyPress);
+		
 	}
 
 

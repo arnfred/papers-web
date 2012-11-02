@@ -1,4 +1,4 @@
-define(["jquery", "model", "radio"], function ($, model, radio) {
+define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -28,7 +28,7 @@ define(["jquery", "model", "radio"], function ($, model, radio) {
 		)
 
 		// Broadcast when a the select field is clicked
-		$("#select").click(function () { radio("node:toggleSelect").broadcast(model.current); });
+		$("#select").click(function () { radio("node:toggleScheduled").broadcast(model.selected); });
 
 
 		/**
@@ -44,8 +44,8 @@ define(["jquery", "model", "radio"], function ($, model, radio) {
 		radio("overlay:mouseout").subscribe(restartAnimation);
 
 		// On select or deselect, change image
-		radio("node:select").subscribe(setDeselect);
-		radio("node:deselect").subscribe(setSelect);
+		radio("node:scheduled").subscribe(setUnscheduled);
+		radio("node:unscheduled").subscribe(setScheduled);
 
 	}
 
@@ -65,8 +65,8 @@ define(["jquery", "model", "radio"], function ($, model, radio) {
 		var data = model.getDataFromId(id);
 
 		// set select image
-		if (model.isSelected(id)) { setDeselect(id); }
-		else setSelect(id);
+		if (model.isScheduled(id)) { setUnscheduled(id); }
+		else setScheduled(id);
 
 		// Set download link
 		$("#download a").attr("href", data.pdf).attr("target", "_blank");
@@ -81,14 +81,14 @@ define(["jquery", "model", "radio"], function ($, model, radio) {
 
 
 	// Sets the image on the overlay as selected
-	var setSelect = function(id) {
+	var setScheduled = function(id) {
 		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
 		$("#select a").attr("title","Add to Schedule");
 	}
 
 
 	// Sets the image on the overlay as deselected
-	var setDeselect = function() {
+	var setUnscheduled = function() {
 		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
 		$("#select a").attr("title","Remove from Schedule");
 	}

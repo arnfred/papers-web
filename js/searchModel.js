@@ -85,6 +85,9 @@ define(["filter"], function (filter) {
 		// Set currentIndices to the index we just pushed
 		search.currentIndices.push(index);
 
+		// Update current filer
+		createCurrent();
+
 		// Draw the update somehow
 		// TODO
 	}
