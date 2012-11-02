@@ -1,4 +1,5 @@
-{
+define( function() {
+return {
 "nodes":[
   {"title":"Network Control: A Rate-Distortion Perspective",
    "authors":"J. Jose, S. Vishwanath",
@@ -20,4 +21,5 @@
   {"source":1,"target":3,"value":04},
   {"source":2,"target":3,"value":46}
 ]
-}
+};
+});
