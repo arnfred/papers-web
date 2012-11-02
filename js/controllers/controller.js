@@ -1,4 +1,4 @@
-define(["model", "views"], function (model, views) {
+define(["models/nodes", "views/views"], function (nodes, views) {
 
 
 	//////////////////////////////////////////////
@@ -16,11 +16,11 @@ define(["model", "views"], function (model, views) {
 	//////////////////////////////////////////////
 
 	// Add to controller and views
-	controller.model = model;
+	controller.model = nodes;
 	controller.views = views;
 
 	// Add selected and current node(s) from last session
-	model.broadcastSelected();
+	controller.model.broadcastScheduled();
 
 
 	// Return the controller

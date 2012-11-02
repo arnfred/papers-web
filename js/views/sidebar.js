@@ -1,4 +1,4 @@
-define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, radio, model, truncate, arrrr) {
+define(["jquery", "radio", "models/nodes", "util/truncate", "util/array"], function($, radio, model, truncate, arrrr) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -31,22 +31,22 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 		radio("node:current").subscribe(setCurrent);
 
 		// Select node
-		radio("node:select").subscribe(select);
+		radio("node:scheduled").subscribe(scheduled);
 
-		// Deselect node
-		radio("node:deselect").subscribe(deselect);
+		// unscheduled node
+		radio("node:unscheduled").subscribe(unscheduled);
 
-		// On deselect all nodes, we should close "are you sure?"
+		// On unscheduled all nodes, we should close "are you sure?"
 		radio("sidebar:removeAll").subscribe(removeAll);
 
 		// on hover in the sidebar, broadcast node:current
 		radio("sidebar:hover").subscribe(function (id, e) { 
-			radio("node:current").broadcast(id, e);
+			radio("node:mouseover").broadcast(id, e);
 		});
 
-		// when we click remove in the sidebar, deselect the item
+		// when we click remove in the sidebar, unscheduled the item
 		radio("sidebar:remove").subscribe(function (id, e) { 
-			radio("node:deselect").broadcast(id, e);
+			radio("node:unscheduled").broadcast(id, e);
 		});
 
 	}
@@ -72,7 +72,7 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 		// Close "Are you sure" on click on "No"
 		$("#sureNo").click(function () { $("#sure").slideToggle("fast"); });
 
-		// Deselect all nodes
+		// unscheduled all nodes
 		$("#sureYes").click(function (e) { radio("sidebar:removeAll").broadcast(e); });
 
 		// Make generate schedule button work
@@ -111,12 +111,16 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 
 
 	/**
-	 * What happens when a node is selected
+	 * What happens when a node is scheduled
 	 */
-	var select = function(id) {
+	var scheduled = function(id) {
+
+		console.debug(id)
 
 		// Get data from model
 		var data = model.getDataFromId(id);
+
+		console.log(data)
 
 		// Clone listItemTemplate
 		var item = $("#listItemTemplate").clone().attr("id",id).css("display","none");
@@ -148,9 +152,9 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 
 
 	/**
-	 * What happens when a node is selected
+	 * What happens when a node is scheduled
 	 */
-	var deselect = function(id) {
+	var unscheduled = function(id) {
 
 		// Get item
 		var item = $("#" + id);
@@ -222,10 +226,10 @@ define(["jquery", "radio", "model", "util/truncate", "util/array"], function($, 
 		//$(".scheduleSelect").slideToggle("fast");
 
 		// Get all selected nodes
-		var selected = model.selected;
+		var scheduled = model.scheduled;
 
-		// Call deselect signal for all nodes in the list
-		selected.map(function (s) { radio("node:deselect").broadcast(s); })
+		// Call unscheduled signal for all nodes in the list
+		scheduled.map(function (s) { radio("node:unscheduled").broadcast(s); })
 	}
 
 
