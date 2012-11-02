@@ -2,24 +2,24 @@
 
 <head>
 
-<!-- Util -->
-<script type="text/javascript" src="js/util.js"></script>
+<!-- <1!-- Util --1> -->
+<!-- <script type="text/javascript" src="js/util.js"></script> -->
 
-<!-- D3 -->
-<script type="text/javascript" src="lib/d3/d3.js"></script>
-<script type="text/javascript" src="lib/d3/d3.geom.js"></script>
-<script type="text/javascript" src="lib/d3/d3.layout.js"></script>
+<!-- <1!-- D3 --1> -->
+<!-- <script type="text/javascript" src="lib/d3/d3.js"></script> -->
+<!-- <script type="text/javascript" src="lib/d3/d3.geom.js"></script> -->
+<!-- <script type="text/javascript" src="lib/d3/d3.layout.js"></script> -->
 
-<!-- JQuery -->
-<script type="text/javascript" src="lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="lib/jquery/jquery.asmselect.js"></script>
-<script type="text/javascript" src="lib/jquery/jquery-ui.js"></script>
-<script type="text/javascript" src="lib/jquery/jquery-svgpan.min.js"></script>
-<link rel="stylesheet" type="text/css" href="lib/jquery/ui-lightness/jquery-ui-1.8.18.custom.css" />
+<!-- <1!-- JQuery --1> -->
+<!-- <script type="text/javascript" src="lib/jquery/jquery.js"></script> -->
+<!-- <script type="text/javascript" src="lib/jquery/jquery.asmselect.js"></script> -->
+<!-- <script type="text/javascript" src="lib/jquery/jquery-ui.js"></script> -->
+<!-- <script type="text/javascript" src="lib/jquery/jquery-svgpan.min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="lib/jquery/ui-lightness/jquery-ui-1.8.18.custom.css" /> -->
 
-<!-- Site -->
-<script type="text/javascript" src="js/cookie.js"></script>
-<script type="text/javascript" src="js/ui.js"></script>
+<!-- <1!-- Site --1> -->
+<!-- <script type="text/javascript" src="js/cookie.js"></script> -->
+<!-- <script type="text/javascript" src="js/ui.js"></script> -->
 
 
 <link type="text/css" rel="stylesheet" href="reset.css"/>	
@@ -28,6 +28,35 @@
 </head>
 
 <body>
+
+<!-- Loading curl -->
+<script type="text/javascript" src="js/lib/curl/curl.js"></script>
+<script>
+
+// Set up curl
+curl(
+
+	// Set up the configuration
+	{
+		baseUrl: 'js',
+		paths: {
+			"jquery": "lib/jquery/jquery",
+			"jquery/lib": "lib/jquery",
+			"radio": "lib/radio/radio"
+		},
+	}, 
+
+	// Set up the required modules
+	["controllers/controller"],
+
+	// The call back function
+	function(controller) {
+		// Do nothing
+	}
+)
+
+</script>
+
 <form action="schedule.php" target="_blank" name="schedule" method="post" 
 	onSubmit="return false;">
 
@@ -174,7 +203,7 @@
 
 </form>
 
-<script type="text/javascript" src="js/graph.js"></script>
+<!-- <script type="text/javascript" src="js/graph.js"></script> -->
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
