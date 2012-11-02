@@ -65,7 +65,7 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 		var data = model.getDataFromId(id);
 
 		// set select image
-		if (model.isSelected(id)) { setDeselect(id); }
+		if (model.isScheduled(id)) { setDeselect(id); }
 		else setSelect(id);
 
 		// Set download link

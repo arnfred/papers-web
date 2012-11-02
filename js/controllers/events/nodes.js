@@ -1,6 +1,6 @@
 //////////////////////////////////////////////
 //											//
-//            Events of the nodes			//
+//           Events of the nodes			//
 //											//
 //////////////////////////////////////////////
 
@@ -27,15 +27,15 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 
 		 /*
 
-		 State of the nodes:
-
-		 - clicked:
-
-		 - registered:
-
-		 - selected:
+		 Event for the nodes:
 
 		 - focused:
+
+		 - scheduled:
+
+		 - matched:
+
+		 - clicked:
 
 		 - mouseover:
 
@@ -44,13 +44,13 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		 */
 
 		// On node click, call either the select or the deselect event	
-		 radio("node:click").subscribe(selectToggle);
+		// radio("node:click").subscribe(selectToggle);
 
 		// On node select, make sure the node is selected in the the graph
 		 radio("node:select").subscribe(select);
 		// 
 		// // On node deselect, make sure the node is selected in the the graph
-		 radio("node:deselect").subscribe(deselect);
+		 radio("node:deselect").subscribe(unselect);
 		// 
 		 // On node mouseover
 		 radio("node:mouseover").subscribe(hover);
@@ -60,7 +60,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 
 
 		 // On node click, we want to try a new interface: focus on the node	
-		 radio("node:click").subscribe(focusNode2);
+		 radio("node:click").subscribe(setFocused);
 		 
 		 
 	} // End of events initilization
@@ -82,7 +82,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		
 		
 			// Select a particular node
-			var select = function(id) {
+			var scheduled = function(id) {
 				var lastNode	= d3.select("circle.current");
 				var lastEdges	= d3.selectAll("line.current");
 				var currentNode	= nodes[id].domNode;
@@ -100,7 +100,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 				// Update the new current node to selected
 				currentNode.classed("selected", true);
 		
-				// Find all edges belinging to current node and update them
+				// Find all edges belonging to current node and update them
 				nodes[id].links.forEach(function(link){
 					if(link.domlink != null) link.domlink.classed("selected", true);
 					
@@ -112,7 +112,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		
 		
 			// Deselect a particular node
-			var deselect = function(id) {
+			var unscheduled = function(id) {
 		
 				//var lastEdges	= d3.selectAll("line.current");
 				var currentNode = nodes[id];
@@ -133,39 +133,107 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		
 			// What happens when we hover over a node
 			var hoverOut = function(id) {
-				// Nothing here
+				// Get node
+				var node = nodes[id].domNode;
+
+		
+				// Make node red
+				node.classed("current", false);
+		
+		
+				// Find all edges belinging to current node and update them
+				nodes[id].links.forEach(function(link){
+					if(link.domlink) link.domlink.classed("current", false);
+				});
 			}
 		
 		
-			// What happens when we hover over a node
+			// Sets the node as the current node NON PERSISTANT
 			var hover = function(id) {
-		
-				// Set node as current
-				setCurrent(id);
-			}
-		
-		
-			// Sets the node as the current node
-			var setCurrent = function(id) {
 		
 				// Get node
 				var node = nodes[id].domNode;
 
-				// Make previous node not red
-				d3.selectAll("circle.current").classed("current", false);
 		
 				// Make node red
 				node.classed("current", true);
 		
-				// Find all edges belonging to old current node and update them
-				d3.selectAll("line.link.current")
-					//.style("stroke-width", function (d) { return strokeWidth(d, edgeSize); })
-					.classed("current", false);
 		
 				// Find all edges belinging to current node and update them
 				nodes[id].links.forEach(function(link){
 					if(link.domlink) link.domlink.classed("current", true);
 				});
+			}
+		
+			// General variable to know who is under focus
+			var selected_node_id = null;
+			
+			// What happends when we select a node
+			var select = function(id) {
+				// Get node
+				var node = nodes[id].domNode;
+				
+				// Unselected the privous node:
+				if(selected_node_id) unselect(selected_node_id);
+				 
+				// Register this node as selected:
+				selected_node_id = id;
+		
+				// Make node red
+				node.classed("selected", true);
+		
+				// Find all edges belonging to old current node and update them
+				
+		
+				// Find all edges belinging to current node and update them
+				nodes[id].links.forEach(function(link){
+					if(link.domlink) if(link.domlink) {
+						var e = d3.event;
+						radio("link:selected").broadcast(link, e)
+					}
+					
+					
+					//link.domlink.classed("selected", true);
+				});
+			
+			
+			
+			}
+			
+			// What happends when we unselect a node
+			var unselect = function(id) {
+				// Get node
+				var node = nodes[id].domNode;
+		
+				// Make node red
+				node.classed("selected", false);
+		
+				// Find all edges belonging to old current node and update them
+				
+		
+				// Find all edges belinging to current node and update them
+				nodes[id].links.forEach(function(link){
+					if(link.domlink) {
+						var e = d3.event;
+						radio("link:unselected").broadcast(link, e)
+					}
+					
+					//link.domlink.classed("selected", false);
+				});
+			
+			
+			
+						}
+			
+			// Focus on a particular node
+			// 
+			var setFocused = function(id) {
+					
+					// Here we must translate to the right node
+					
+					
+					// Then we select it:
+					select(id);
 			}
 	
 		// Function to focus on the node, that is to zoom around the node
@@ -211,16 +279,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		}
 		
 		
-		var focusNode2 = function(id){
 		
-				var canvas = d3.select('g');
-		
-				var currentNode = nodes[id];
-		
-		
-				
-		
-		}
 	
 	return events;
 });

@@ -131,6 +131,7 @@ circle.search				{ stroke:yellow; stroke-width:3px; }
 line.link 					{ stroke: #000; stroke-opacity: .05; }
 line.selected				{ stroke: #099; stroke-opacity: .7; }
 line.current				{ stroke: #b21; stroke-opacity: .9; }
+line.clikable				{ position: absolute; z-index: 1000; stroke: #C4854E!important; stroke-opacity: .9!important;}
 
 
 

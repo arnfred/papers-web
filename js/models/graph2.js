@@ -43,6 +43,12 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//////////////////////////////////////////////
 	
 	graph.zoom = d3.behavior.zoom();
+	
+	// Track the position:
+	graph.zoom.pos = {};
+	graph.zoom.pos.x = 0;
+	graph.zoom.pos.y = 0;
+	graph.zoom.pos.s = 0;
 
 	//////////////////////////////////////////////
 	//											//
@@ -58,23 +64,32 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		var vis = d3.select("#graph").append("svg")
 			.attr("width", "100%")
 			.attr("height", "100%")
-			
-			
-			
-			// TODO: enable scrolling somewhere else
-			.call(	graph.zoom.on("zoom", function() {
-					//console.log("here", d3.event.translate, d3.event.scale);
-					 vis.attr("transform",
-					 	 "translate(" + d3.event.translate + ")"
-					 		+ " scale(" + d3.event.scale + ")");
-			}))
-			
-			
+			// Enable zoom feature:
+			.call(	graph.zoom)
+			// Add paning g:
 			.append('svg:g') 
 			.attr("pointer-events", "all")
 			.attr('id', 'viewport');
-
 		
+		
+		// TODO: enable scrolling somewhere else
+		graph.zoom.on("zoom", function() {
+				//console.log("here", d3.event.translate, d3.event.scale);
+				
+				var e = d3.event;
+				var transform = e.translate;
+				var scale = e.scale;
+				
+				 vis.attr("transform",
+				 	 "translate(" + transform + ")"
+				 		+ " scale(" + scale + ")");
+				 
+				 graph.zoom.pos.x = transform[0];
+				 graph.zoom.pos.y = transform[1];
+				 graph.zoom.pos.s = scale;
+		});
+		
+		//graph.zoom.translate([-200, -200]);
 		graph.force = null;
 		graph.nodes = nodes;
 		
@@ -125,7 +140,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 			node.domNode.on("mouseover", function(d, i) { 
 				var e = d3.event;
 				radio("node:mouseover").broadcast(node.id, e);
-				radio("node:current").broadcast(node.id, e);
+				//radio("node:current").broadcast(node.id, e);
 			});
 		});
 		
@@ -142,7 +157,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		// That is subscribe everything. 
 		events.init(nodes);
 		
-		eventsLinks.init(nodes, graph.zoom);
+		eventsLinks.init(nodes, graph.zoom, vis);
 		
 		// Other stuff to do:
 		// On search
