@@ -210,5 +210,8 @@ line.selected				{ stroke: #099; stroke-opacity: .7; }
 line.current				{ stroke: #b21; stroke-opacity: .9; }
 line.clikable				{ position: absolute; z-index: 1000; stroke: #C4854E!important; stroke-opacity: .9!important;}
 
+polygon.handle				{ stroke: #eee; position: absolute; z-index: 1000;
+}
+
 
 

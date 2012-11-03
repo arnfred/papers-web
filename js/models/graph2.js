@@ -156,9 +156,9 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 
 		// Initialize events
 		// That is subscribe everything. 
-		events.init(nodes);
+		events.init(nodes, vis, graph.zoom);
 		
-		eventsLinks.init(nodes, graph.zoom, vis);
+		eventsLinks.init(nodes, vis);
 		
 		// Other stuff to do:
 		// On search

@@ -117,7 +117,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		
 		// Load links
 		json.links.forEach( function(link, i){
-			
+				// TODO: verify it is not already in!
 				nodes.node[link.source].links.push({source: link.source, target: link.target, value: link.value, domlink: null});
 				nodes.node[link.target].links.push({source: link.target, target: link.source, value: link.value, domlink: null}); 
 		});
