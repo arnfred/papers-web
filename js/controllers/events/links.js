@@ -5,26 +5,22 @@
 //////////////////////////////////////////////
 
 
-define(["lib/d3", "radio", "util/array", "util/screen"], function(d3, radio, arrrr, screen) {
+define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 	
 	
 	// GLOBAL VARIABLES: 
 
 	var nodes = null, // Global variable of the nodes
-		zoomer = null,
+		canvas = null,
 	    events = {};
-	
-	// Dimension
-	var w = screen.width(),
-		h = screen.height();
+
 	    
     // Function that subscribe node event the 
-	events.init = function (_nodes, _zoomer, _canvas) {
+	events.init = function (_nodes, _canvas) {
 		
 		
 		// Stupid initializer for nodes:
 		nodes = _nodes;
-		zoomer = _zoomer;
 		canvas = _canvas;
 		/**
 		 * Subscribe
@@ -63,15 +59,51 @@ define(["lib/d3", "radio", "util/array", "util/screen"], function(d3, radio, arr
 			 *	because it is covered by other line in the DOM
 			 *	and there is no way to make close line not overlap...
 			 */
-			 var posx  = (nodes[link.source].pos.x+10);
-			 var posy  = (nodes[link.source].pos.y+10);
-			 link.clickable = canvas.insert('rect', "line:first-child")
-			 						.attr('height', 5)
-			 						.attr('width', 5)
-			 						.attr('x', posx )
-			 						.attr('y', posy);
-			
-			link.clickable.on('click', function () { jump(0, link.target) } );
+		 
+		 // Compute the direction offset:
+		 
+		 // Get the vector:
+		 var rx  = parseFloat(nodes[link.target].pos.x) - parseFloat(nodes[link.source].pos.x), ry  = parseFloat(nodes[link.target].pos.y) - parseFloat(nodes[link.source].pos.y);
+		 		 
+		 
+		 
+		 // Normalize it:
+		 rxn = rx / Math.sqrt(rx*rx+ry*ry);
+		 ryn = ry / Math.sqrt(rx*rx+ry*ry);
+		 
+		 //console.log(rxn*rxn+ryn*ryn);
+		 
+		 // Find the angle:
+		 a = 180*Math.atan2(ryn, rxn)/Math.PI+90;
+		 
+		 //console.log(a);
+		 
+		 randomfact =  10+20*Math.random();
+		 
+		 var posx  = parseFloat(nodes[link.source].pos.x) + randomfact*rxn-2, posy  = parseFloat(nodes[link.source].pos.y) + randomfact*ryn-2;
+		 
+		 // Correction of the mean of the point:
+		 posy = posy+2;
+		 
+		 posx = posx+2;
+		 
+		 link.clickable = canvas.insert('svg:polygon', "line:first-child")
+		 						.attr('points', '57.042,22.06 0,-5.159 -57.042,22.06 -57.042,5.159 0,-22.06 57.042,5.159')
+		 						//.attr('height', 4)
+		 						//.attr('width', 4)
+		 						.attr('fill', '#FF0000')
+		 						.classed('handle', true)
+		 						.attr('transform', "translate("+posx+", "+posy+") scale("+0.1+") rotate("+a+")" );
+		 						//.attr('y', );
+		
+		link.clickable.on('click', function () { 
+				
+				radio('node:unselect').broadcast(link.source);
+				
+				radio('node:setfocus').broadcast(link.target);
+				radio('node:select').broadcast(link.target); 
+				
+				} );
 
 
 			
@@ -82,27 +114,7 @@ define(["lib/d3", "radio", "util/array", "util/screen"], function(d3, radio, arr
 		link.domlink.classed('clikable', false);
 	
 	}
-	
-	var jump = function(idCurrent, idTarget){
-	
-			
-	
-			var currentNode = nodes[idCurrent],
-				nextNode = nodes[idTarget];
-			
-			console.log(nextNode.pos.x+ " " + nextNode.pos.y);
-			
-			// What is the scale?
-			var factor = zoomer.pos.s;
-			// Compute the translation coeff
-			var transx = factor * nextNode.pos.x - w/2, transy = factor * nextNode.pos.y - h/2;
-			
-			zoomer.translate([transx, transy]);
-			zoomer.scale(factor);
-			canvas.transition().attr('transform', "translate(-"+transx+", -"+transy+") scale("+factor+")");
-	
-		}
-	
+		
 	var hover = function() {
 		//TODO
 	}

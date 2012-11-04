@@ -5,22 +5,26 @@
 //////////////////////////////////////////////
 
 
-define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
+define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arrrr, screen) {
 	
 	
 	// GLOBAL VARIABLES: 
 
-	var nodes = null, // Global variable of the nodes
+	var nodes = null,
+	    zoomer = null, // Global variable of the nodes
+		canvas = null, // Global variable of the nodes
 	    events = {};
 	    
 	    
     // Function that subscribe node event the 
-	events.init = function (_nodes) {
+	events.init = function (_nodes, _canvas, _zoomer) {
 		
 		
 		// Stupid initializer for nodes:
 		nodes = _nodes;
-
+		zoomer = _zoomer;
+		canvas = _canvas;
+		
 		/**
 		 * Subscribe
 		 */
@@ -61,6 +65,10 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 
 		 // On node click, we want to try a new interface: focus on the node	
 		 radio("node:click").subscribe(setFocused);
+		 
+		 
+		 // On node click, we want to try a new interface: focus on the node	
+		 radio("node:setfocus").subscribe(setFocused);
 
 		 
 	} // End of events initilization
@@ -231,9 +239,27 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 					
 					// Here we must translate to the right node
 					
+					var nextNode = nodes[id];
 					
-					// Then we select it:
-					// select(id);
+					
+					// Dimension
+					var w = screen.width(),
+						h = screen.height();
+						
+					
+					
+					//console.log(nextNode.pos.x+ " " + nextNode.pos.y);
+					
+					// What is the scale?
+					var factor = zoomer.pos.s;
+					// Compute the translation coeff
+					var transx = factor * nextNode.pos.x - w/2, transy = factor * nextNode.pos.y - h/2;
+					
+					zoomer.translate([-transx, -transy]);
+					zoomer.scale(factor);
+					canvas.transition().attr('transform', "translate(-"+transx+", -"+transy+") scale("+factor+")");
+					
+
 			}
 	
 		// Function to focus on the node, that is to zoom around the node
@@ -277,6 +303,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 			canvas.transition().attr('transform', "translate(-"+transx+", -"+transy+") scale(" +factor+", "+factor+")").delay(500);
 	
 		}
+		
 		
 		
 		
