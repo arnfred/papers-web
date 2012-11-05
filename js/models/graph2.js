@@ -176,29 +176,6 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//////////////////////////////////////////////
 
 
-
-
-	// Function that corresponds to the "surprise me" button
-	// TODO: change function call in appropriate file
-	// TODO: I don't think this function works because of the
-	// TODO: Change to broadcast event
-	graph.selectRandom = function() {
-
-		// Get all nodes
-		var nodes = d3.selectAll("circle.node");
-
-		// Get random index
-		var index = Math.ceil(Math.random()*nodes[0].length)
-		var node = nodes[0][index];
-
-
-		// Select this node
-		select(node.id);
-
-		// Return false for mouseevent
-		return false;
-	}
-
 	graph.getNodeFromId = function(id) {
 		return graph.nodes[id].domNode;
 	}

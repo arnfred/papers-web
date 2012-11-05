@@ -172,7 +172,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	nodes.broadcastScheduled = function() {
 		// Broadcast session
 		nodes.scheduled.forEach(function(e) { return radio("node:scheduled").broadcast(e); });
-		radio("node:focused").broadcast(nodes.focused);
+		//radio("node:focused").broadcast(nodes.focused);
 	}
 
 
@@ -181,6 +181,12 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	// 'getNodeFromId'
 	nodes.getDataFromId = function(id) {
 		return nodes.node[id];
+	}
+
+
+	// Get random node
+	nodes.getRandom = function() {
+		return Math.ceil(Math.random()*nodes.node.length)
 	}
 
 

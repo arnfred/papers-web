@@ -1,5 +1,5 @@
-define(["models/nodes", "models/graph2", "views/infobox", "views/sidebar", "models/overlay", "controllers/search"], 
-	function(model, graph, infobox, overlay, search) {
+define(["models/nodes", "models/graph2", "views/infobox", "views/sidebar", "views/selectBox", "views/menu", "controllers/search"], 
+	function(model, graph, infobox, sidebar, selectbox, menu, search) {
 
 
 	//////////////////////////////////////////////

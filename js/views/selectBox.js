@@ -5,7 +5,7 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 	//               Interface					//
 	//											//
 	//////////////////////////////////////////////
-	var overlay = {};
+	var selectBox = {};
 
 
 
@@ -16,15 +16,15 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 	//////////////////////////////////////////////
 
 
-	overlay.events = function () {
+	selectBox.events = function () {
 
 		/**
 		 * Broadcast
 		 */
-		// Broadcast when the mouse enters the overlay
+		// Broadcast when the mouse enters the selectBox
 		$("#clickbox").hover(
-			function() { radio("overlay:mouseover").broadcast(this); },
-			function() { radio("overlay:mouseout").broadcast(this); }
+			function() { radio("selectBox:mouseover").broadcast(this); },
+			function() { radio("selectBox:mouseout").broadcast(this); }
 		)
 
 		// Broadcast when a the select field is clicked
@@ -36,12 +36,12 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 		 */
 
 		// On Click, add the abstract etc
-		radio("node:click").subscribe(showOverlay);
+		radio("node:click").subscribe(showselectBox);
 
 		// On mouseOver, cancel animation, then when the mouse leaves, 
 		// restart the animation
-		radio("overlay:mouseover").subscribe(cancelAnimation);
-		radio("overlay:mouseout").subscribe(restartAnimation);
+		radio("selectBox:mouseover").subscribe(cancelAnimation);
+		radio("selectBox:mouseout").subscribe(restartAnimation);
 
 		// On select or deselect, change image
 		radio("node:scheduled").subscribe(setUnscheduled);
@@ -57,9 +57,9 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 	//											//
 	//////////////////////////////////////////////
 
-	// Shows the small box that overlays the graph when you click on a 
+	// Shows the small box that selectBoxs the graph when you click on a 
 	// node
-	var showOverlay = function(id, e) {
+	var showselectBox = function(id, e) {
 
 		// Get node data
 		var data = model.getDataFromId(id);
@@ -80,33 +80,33 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 	}
 
 
-	// Sets the image on the overlay as selected
+	// Sets the image on the selectBox as selected
 	var setScheduled = function(id) {
 		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
 		$("#select a").attr("title","Add to Schedule");
 	}
 
 
-	// Sets the image on the overlay as deselected
+	// Sets the image on the selectBox as deselected
 	var setUnscheduled = function() {
 		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
 		$("#select a").attr("title","Remove from Schedule");
 	}
 
 
-	// Cancels the animation in case the mouse is over the overlay
+	// Cancels the animation in case the mouse is over the selectBox
 	var cancelAnimation = function() {
 		$("#clickwrap").stop(true,true);
 	}
 
 
-	// Restarts the animation for when the mouse leaves the overlay
+	// Restarts the animation for when the mouse leaves the selectBox
 	var restartAnimation = function() {
 		$("#clickwrap").stop(true,true).delay(500).fadeOut();
 	}
 
 
 	// Initialize and set events
-	overlay.events();
-	return overlay;
+	selectBox.events();
+	return selectBox;
 });
