@@ -1,3 +1,6 @@
+define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie", "data/position"], 
+	   function(json, radio, session, arrrr, cookie, position) {
+
 /* TRAILHEAD MODEL
  * ---------------------------------------------------
  *	
@@ -11,7 +14,7 @@
  *	links: the adjacents links
  *	domNode: the object displayed in the DOM
  *	pos: position of the node in the graph
- *		 TODO: The position is find with force layout
+ *		 TODO: The position is found with force layout
  *
  *	---------------------------------------------------
  *	And the link has the following informations:
@@ -29,9 +32,10 @@
  *			  some action on it
  *
  *	scheduled: we have added it to our schedule.
+ *
+ *	Focused: The cursor was last over this node
  */
 
-define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie", "data/position"], function(json, radio, session, arrrr, cookie, position) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -56,7 +60,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 
 		// Broadcasts select or deselect based on the id
 		var toggleScheduled = function(id) {
-			console.debug(id);
 			if (nodes.isScheduled(id)) radio("node:unscheduled").broadcast(id);
 			else radio("node:scheduled").broadcast(id);
 		}
@@ -69,9 +72,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// On node select, make sure the node is selected in the nodes
 		radio("node:select").subscribe(select);
 
-		// On node deselect, make sure the node is selected in the nodes
-		radio("node:deselect").subscribe(deselect);
-		
 		// On node scheduled, we add it to the list of scheduled nodes
 		// And change its color. 
 		radio("node:scheduled").subscribe(scheduled);
@@ -80,9 +80,9 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// and reset the UI.
 		radio("node:unscheduled").subscribe(unscheduled);
 
-		// On node current, make sure the node is marked as current in 
+		// On node focused, make sure the node is marked as focused in 
 		// the nodes
-		// radio("node:current").subscribe(setCurrent);
+		radio("node:Focused").subscribe(setFocused);
 
 		// When some code calls toggleSelect, we check if the node is 
 		// selected or not and call the proper event back
@@ -126,14 +126,13 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load session
 		// Load the node that are already scheduled
 		//nodes.scheduled = session.loadSelected();
-		nodes.scheduled = [];
+		nodes.scheduled = session.loadScheduled();
 		
 		/*  TODO: This loading should be done in 
 		 *	the future by looking session
 		 * 	in the DB with Play
 		 */
-		
-		nodes.current = session.loadCurrent();
+		nodes.focused = session.loadFocused();
 		
 		// TODO: save it in session and load it here.
 		nodes.selected = null;
@@ -167,13 +166,13 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	}
 
 
-	// Broadcasts the selected nodes and the current nodes. This should 
+	// Broadcasts the selected nodes and the focused nodes. This should 
 	// only be called in the initialization of the page, but I've put it 
 	// apart from init() since it relies on the graph being generated
 	nodes.broadcastScheduled = function() {
 		// Broadcast session
 		nodes.scheduled.forEach(function(e) { return radio("node:scheduled").broadcast(e); });
-		radio("node:current").broadcast(nodes.current);
+		radio("node:focused").broadcast(nodes.focused);
 	}
 
 
@@ -223,7 +222,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 			// Add new item
 			nodes.scheduled.push(id)
 			// Save changes
-			session.saveSelected(nodes.scheduled);
+			session.saveScheduled(nodes.scheduled);
 		}
 	}
 
@@ -233,28 +232,17 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		session.saveSelected(nodes.Scheduled);
 	}
 
-	/*
-	// Not used anymore
-	// A node is instead focused
-	// we load the last focused node
 	
-	var setCurrent = function(id) {
-		nodes.current = id;
-	}*/
-
-	/*var makeNodeMap = function(nodes) {
-		var map = new Object;
-		nodes.forEach(function(n) { map[n.id] = n; });
-		return map;
-	}*/
+	// Load the last focused node
+	var setFocused = function(id) {
+		nodes.focused = id;
+	}
 
 
+	// Select a node (when it is clicked)
 	var select = function(id) {
 		nodes.selected = id;
 	}
-	
-	var deselect = function() {};
-
 
 
 	// Initialize. The init is down here to keep the initialization on 

@@ -122,8 +122,6 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/
 	 */
 	var scheduled = function(id) {
 
-		console.debug(id)
-
 		// Get data from model
 		var data = model.getDataFromId(id);
 
