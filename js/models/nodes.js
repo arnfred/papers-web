@@ -228,8 +228,8 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 
 	// Removes the id from the list of selected nodes
 	var unscheduled = function(id) {
-		nodes.scheduled = nodes.selected.filter(function(i) { return (i != id); });
-		session.saveSelected(nodes.Scheduled);
+		nodes.scheduled = nodes.scheduled.filter(function(i) { return (i != id); });
+		session.saveScheduled(nodes.scheduled);
 	}
 
 	
