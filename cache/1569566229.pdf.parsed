@@ -1,0 +1,158 @@
+[[[ ID ]]]
+1569566229
+[[[ INDEX ]]]
+0
+[[[ TITLE ]]]
+Capacity Regions of Partly Asynchronous Multiple Access Channels
+[[[ AUTHORS ]]]
+Lóránt Farkas
+Tamás Kói
+[[[ ABSTR ]]]
+Abstract—Frame asynchronous discrete memoryless multiple access channels are analyzed, where some groups of senders are synchronized but the groups are not synchronized with each other. A single-letter characterization of the capacity region is obtained.
+Index Terms—capacity region, frame asynchronous channels, multi-access, partly asynchronous, polymatroid, rate-splitting, successive decoding
+[[[ BODY ]]]
+Multiple access channels (MACs) are most frequently stud- ied under the assumption that the senders cannot communicate with each other but are able to maintain frame synchronism. An asynchronous MAC (AMAC) arises when this assumption fails, causing unknown delays between the starting times of the codewords of the different senders, see [1], [9], [7].
+In [4] the authors gave a general formalization of AMACs, ﬁlled some gaps in the previous literature, and determined the capacity region for a new (rather artiﬁcial) model, which was strictly between those of the corresponding synchronous and totally asynchronous models. The extended version [5] gave a single-letter characterization of the capacity region also for a more practical model, with 3 senders, two of them synchronous and the third one not synchronous with them.
+Generalizing the result in [5], here a single letter characteri- zation is given for the capacity region of discrete memoryless partially asynchronous multiple access channels (PAMACs). These are AMACs with the senders divided into groups, the senders belonging to the same group are synchronized but the groups are not synchronized with each other.
+The following simple example shows that the capacity re- gion can depend on how the senders cluster into synchronized groups.
+Consider a channel W with 4 senders, with input alphabets X 1 = X 2 = X 3 = X 4 = {0, 1} and output alphabet Y = {0, 1} × {0, 1}. Let W (y|x 1 , x 2 , x 3 , x 4 ) be the following:
+ 
+if x 1 = x 2 = 1 or x 3 = x 4 = 1 1 if 	 y = (x 1 + x 2 , x 3 + x 4 ) 0 	 otherwise.
+In words, for the ﬁrst two senders and for the last two senders the channel is almost a simple additive channel but the output is completely random if both of the ﬁrst two or both of the last two senders send 1.
+When the synchronized groups of senders are {1, 2} and {3, 4} then the capacity region of this model is equal to the capacity region of the synchronous model, given by R 1 +R 2 ≤ 1, R 3 + R 4 ≤ 1. The strategy to achieve this is simple: one of the senders of the group {1, 2} and one of those of the group {3, 4} sends 0 in each time slot. However, if the synchronized groups are {1, 2}, {3}, {4} then the capacity region becomes smaller, because senders 3 and 4, if sending with positive rates, cannot ensure that in each time slot at least one of them sends 0. Note also that in the totally asynchronous case the capacity region shrinks further.
+This section is a shorter version of Section 2 in [5] with addition of the formal deﬁnition of PAMAC.
+A K-senders asynchronous discrete memoryless multiple- access channel (K-AMAC) is deﬁned in terms of K ﬁnite input alphabets X i , i ∈ {1, 2, . . . , K}, a ﬁnite output alphabet Y, and a stochastic matrix W : X 1 × X 2 × · · · × X K → Y describing the probability distribution of the output given the inputs.
+Deﬁnition 1. A code-book system of block-length n with rate vector (R 1 , R 2 , . . . , R K ) for a given K-AMAC W consists of K code-books C 1 , C 2 , . . . , C K , where the code-book C m of the m-th sender has 2 nR m codewords of length n whose symbols are from X m .
+The system is symbol synchronized but not frame synchro- nized. The differences between the timescale of the receiver and the timescales of the senders are represented by a K-tuple of delays as in Deﬁnition 3.
+The senders have two-way inﬁnite sequences of random messages, and assign codewords to their consecutive messages. The codewords go through the channel. The sequences of the senders’ codewords and hence also the output symbol se- quence are two-way inﬁnite sequences. Fix the location of the 0-th output symbol. The message of sender m ∈ {1, 2, . . . , K} whose codeword affects the 0’th output is denoted by M m,0 . This restricts the delays to be in the set {0, 1, . . . , n − 1}. Formally, we use the following deﬁnitions:
+Deﬁnition 2. For each integer j ∈ Z and for each m ∈ {1, 2, . . . , K} let M m,j be a uniformly distributed random variable taking values in the set {1, 2, . . . , 2 nR m }. All these random variables are independent of each other. The two-way inﬁnite sequence {M m,j , j ∈ Z} represents the message ﬂow sent by the m-th sender. For each integer j ∈ Z and for each m ∈ {1, 2, . . . , K} let X m,j denote the codeword assigned to M m,j in the code-book of sender m. Let X m,nj+i be the i-th symbol of X m,j where i ∈ {0, 1, . . . , n − 1}.
+be a K-tuple of random variables, not necessarily independent of each other but independent of all previously deﬁned random variables, taking values in the set {0, 1, . . . , n − 1}. D m (n) will represent the delay of sender m relative to the receiver’s timescale. The joint distribution of delays is known to the senders and the receiver. The realizations of the random variables D 1 (n), D 2 (n), . . . , D K (n) are not known to the senders and may be known or unknown to the receiver. The sequence D = {D(1), D(2), . . . , D(n), . . . } will be called the delay system.
+Deﬁnition 4. Let Y nj+i be the output random variable of the channel with transition matrix W when the inputs are
+It is possible to deﬁne the decoder in several ways depend- ing on whether the receiver is informed or uninformed on the realization of the delays, and whether the whole inﬁnite output sequence or only a ﬁnite part may be used to estimate the messages, see [4],[5]. The error terms can be deﬁned via averaging or maximizing over delays; averaging over messages is understood in both cases (for maximum error over messages, the capacity region is unknown even for synchronous MACs). Due to space limitation, attention will be restricted to informed L-block decoders considering maximal error deﬁned below; it can be shown similarly to [4],[5], that other possibilities lead to the same capacity region in case of PAMAC. In particular, additional technical difﬁculties in case of uninformed decoder can be overcome as in [4], [5].
+Deﬁnition 5. An informed L-block decoder, L ∈ Z + , is deﬁned as a function which assigns to each (2Ln + 1)-tuple {y l , l ∈ {−Ln, . . . , 0, . . . , Ln}} of possible output realizations and each realization of D(n) = (D 1 (n), D 2 (n), . . . , D K (n)) a K-tuple of messages { ˆ M m,0 , m ∈ {1, 2, . . . , K}}.
+The codebooks and the decoder form an n-length coding- decoding system.
+Deﬁnition 7. Corresponding to the delay system D, the rate vector (R 1 , R 2 , . . . , R K ) is achievable if for every ε > 0, δ > 0 for all N ∈ Z + there exists a coding system with blocklength n > N with rates coordinate-wise exceeding (R 1 − δ, R 2 − δ, . . . , R K −δ) and with error less than ε. The set of achievable rate tuples is the capacity region of the K-AMAC.
+Remark 1. In the deﬁnition above we used the ’optimistic’ deﬁnition of capacity region, rather than the more usual ’pessimistic one’ 1 . The reason is that this deﬁnition is better suited for certain AMAC models (see [4],[5]).
+Note that the above models focus on the decoding of the 0’th messages of the senders. It is assumed that the same but shifted decoding procedure occurs at the output points {nk, k ∈ Z}.
+After having discussed the K-AMAC in general we give the deﬁnition of K-PAMAC. This special case is analyzed in this paper.
+Deﬁnition 8. The K-PAMAC is deﬁned by the follow- ing delay system. Let G 1 , G 2 , . . . , G l be a ﬁxed par- tition of the set {1, 2, . . . , K} of the senders. Let D G 1 (n), D G 2 (n), . . . , D G l (n) be independent random vari- ables uniformly distributed on the set {0, 1, . . . , n−1}. For all m ∈ {1, 2, . . . , K}, deﬁne D m (n) = D G j (n) where m ∈ G j .
+Note that the classical synchronous MAC, and the totally asynchronous MAC are special cases of PAMAC: in the ﬁrst case all senders belong to the same group, in the latter case all senders belong to different groups.
+This section relies on the results of Grant, Rimoldi, Ur- banke, Whiting in [6] and of Rimoldi in [10]. It is assumed that the reader is familiar with the concepts of successive decoding and rate splitting. For a non-empty subset S ⊂ {1, 2, . . . , K} of the senders, as in [6] write
+[i] = {1, 2, . . . , i} , S c = [K] \ S 	 (2) X S = (X i ) i∈S , R(S) =
+Theorem 1. For a K-PAMAC as in Deﬁnition 8, a rate tuple (R 1 , R 2 , . . . , R K ) is achievable if and only if there exist random variables (U 1 , U 2 , . . . U l , X 1 , X 2 , . . . , X K , Y ) with values in U 1 × U 2 × · · · × U l × X 1 × · · · × X K × Y where |U i | ≤ 2 K − 1, i = 1, 2, . . . , l, whose joint dis- tribution factorizes as p(u 1 , u 2 , . . . , u l , x 1 , x 2 , . . . , x K , y) =
+p(x r |u i )W (y|x 1 , x 2 , . . . , x K ), such that for all S ⊆ {1, 2, . . . , K}:
+Furthermore, if |G i | = 1 then one can take |U i | = 1 thus U i = constant.
+Remark 2. Note that Theorem 1 gives back the synchronous and the totally asynchronous MAC coding theorems.
+The converse part of Theorem 1 follows from the general converse in [5]. The cardinality bounds on the auxiliary ran- dom variables follow from the Support Lemma 15.4 of [2]. The stronger cardinality bounds for auxiliary variables belonging to one-sender groups are obtained as follows. Let us assume that the random variables U 1 , U 2 , . . . U l , X 1 , X 2 , . . . , X K , Y
+fulﬁll the conditions of Theorem 1, and assume that for some i ∈ {1, 2, . . . , l} the group G i consists of one sender, the j’th. Then the following is true for all S ⊂ [K]:
+= I(X S , U i ∧ Y |X S c , U 1 , U 2 , . . . , U i−1 , U i+1 , . . . , U l ) − I(U i ∧ Y |X S c , U 1 , U 2 , . . . , U i−1 , U i+1 , . . . , U l )
+where in the last inequality the Markov relation U i X [K] Y is used. Hence in this case the random variable U i can be omitted or equivalently it can be assumed that |U i | = 1. Note that if {G i } = {i 1 , i 2 , . . . , i s } with s > 1, then U i cannot be omitted because the random variables X i 1 , X i 2 , . . . , X i s are not necessarily independent.
+The achievability proof of Theorem 1 relies on the following considerations.
+Deﬁnition 9. Let R [W ; p X 1 × p X 2 × · · · × p X K ] be the set of rate tuples R ∈ (R + ) K such that for all S ⊆ {1, 2, . . . , K}
+where Y and X 1 , X 2 , . . . , X K are connected by the channel W , and the joint distribution of X 1 , X 2 , . . . , X K is the product distribution p X 1 × p X 2 × · · · × p X K .
+The set R [W ; p X 1 × p X 2 × · · · × p X K ] is a special convex polytope: a polymatroid, see [3]. By [3], [6] its vertices are described as follows. Let π = (π 1 , π 2 , . . . , π K ) be an ordering of [K], and t ∈ [K]. For all i ∈ [K] let R π,t π i be equal to I(X π i ∧ Y |X {π 1 ,...,π i−1 } ) if i ≥ t and 0 otherwise. Then the rate vector R π,t = (R π,t 1 , R π,t 2 , . . . , R π,t K ) is a vertex, and all vertices of R [W ; p X 1 × p X 2 × · · · × p X K ] can be written in
+this way with appropriate pair (π, t). Note that the vertices R π,t need not be all distinct. See also [8].
+The following Lemma is the generalization of Lemma 14.4+ in [2].
+Lemma 1. For all i ∈ {1, 2, . . . , k} let W i be arbitrary multiple access channels with K senders and let p X i
+be arbitrary product distribution on the inputs of W i . Then a vector R = (R 1 , R 2 , . . . , R K ) equals a convex combination with weight vector α = (α 1 , α 2 , . . . , α k ) of vectors R i ∈ R W i ; p X i
+, i ∈ {1, . . . , k}, if and only if R is contained in the set 2 R(α) = R(α 1 , α 2 , . . . , α k ) deﬁned by the following inequalities:
+Remark 3. The proof of Theorem 1 will use the case W 1 = W 2 = · · · = W k = W , the general case is needed in the proof of Lemma 3.
+Proof of Lemma 1: The set R(α) determined by the conditions (7) is a polymatroid. By [3] it can be seen that its vertices can be written as v π,t = k i=1 α i R i;π,t , where R i;π,t is the vertex of R W i ; p X i
+described by (π, t), as in the paragraph after Deﬁnition 9. Hence the vertices of R(α) are contained in the (convex) set of convex combinations with weights α i of vectors in the sets R W i ; p X i
+, therefore so is the whole R(α). The reverse inclusion is obvious.
+The sets R(α) are generalizations of the sets R [W ; p X 1 × p X 2 × · · · × p X K ], which correspond to α degenerate (k = 1). Since R(α) is a polymatroid, it has a face Dom(R(α)) which dominates 3 all points in R(α), and whose points cannot be dominated by other points of R(α). This dominant face Dom(R(α)) consists of the rate tuples (R 1 , R 2 , . . . , R K ) from R(α) for which R 1 + R 2 + · · · + R K = k i=1 α i I(X i 1 , X i 2 , . . . , X i K ∧ Y i ).
+With the notation in the proof of Lemma 1 the vertices of Dom(R(α)) are v π,1 , where π runs over the orderings of [K]. The vertex v π,1 will be denoted by v π for the remainder of this paper.
+Proof of Theorem 1, achievability, ﬁrst part: For nota- tional simplicity, the proof will be sketched for the case l = 2, writing U and V for U 1 and U 2 .
+Let (X i,j 1 , X i,j 2 , . . . , X i,j K , Y i,j ) be random variables whose joint distribution is the same as the conditional joint dis- tribution of (X 1 , X 2 , . . . , X K , Y ) given (U = i, V = j), i ∈ {1, 2, . . . , |U |}, j ∈ {1, 2, . . . , |V|}. Note that if l ∈ G 1 then the distribution of X i,j l doesn’t depend on j, if l ∈ G 2 it doesn’t depend on i. The random variables X i,j 1 , X i,j 2 , . . . , X i,j K are independent and Y i,j is connected
+with them through the channel W . Using the deﬁnition of conditional mutual information we can write:
+The above equation shows via Lemma 1 that it is enough to prove that the convex combinations of the sets R W ; p X i,j
+, i ∈ {1, 2, . . . , |U |}, j ∈ {1, 2, . . . , |V|} with weights α ij = p(U = i)p(V = j), can be achieved. The set R(α) in Lemma 1 with α consisting of these weights will be denoted by R(U, V ). It is enough to achieve the dominant face of this set (see Deﬁnition 7). Having this in mind, the proof of Theorem 1 will be continued after establishing two key lemmas.
+In the Appendix of [6] it is shown that the vertex R π of Dom(R [W ; p X 1 × p X 2 × · · · × p X K ]) can be achieved by successive decoding with order π in the totally asynchronous case. The following lemma extends that result. From technical point of view this is the main result of this paper.
+with partition {G 1 , G 2 } of [K], for each ordering π of [K] the vertex v π of Dom(R(U, V )) can be achieved by successive decoding with order π.
+Proof: It is enough to prove the statement for the identity ordering π id = (1, 2, . . . , K). It will be shown that v π id = |U | i=1 |V| j=1 p(U = i)p(V = j)R (i,j);π id can be achieved with decoding order π id . Using the deﬁnition of R (i,j);π id , the b’th coordinate v π id b of v π id is equal to
+p(U = i)p(V = j)I(X i,j b ∧ Y i,j |X i,j {1,...,b−1} ). Without loss of generality assume that p(U = i) and p(V = j) are rational numbers.
+Let the senders choose their codebooks randomly. All symbols of the codebooks are independent but not of the same distribution. The key idea is a deterministic random- ization pattern which is constructed in the following way. Let j 1 , j 2 , . . . , j k be a sequence of elements of V whose empirical distribution is equal to the distribution of V . Let i 1 , i 2 , . . . , i l be a sequence of elements of U whose empirical distribution is equal to the distribution of U . Note that the integers k and l depend on the distributions of U and V . Using these sequences let us deﬁne the following randomization pattern of length kl:
+i 1 ,i 1 ,. . . ,i 1 i 2 ,i 2 ,. . . ,i 2 . . . ,. . . ,. . . ,. . . i l , i l ,. . . , i l j 1 ,j 2 ,. . . ,j k j 1 ,j 2 ,. . . ,j k . . . ,. . . ,. . . ,. . . j 1 ,j 2 ,. . . ,j k
+We will use those n as codeword lengths which are divisible by the length kl of the pattern. The ﬁrst row shows which distributions are used by the senders from the group G 1 to generate their codewords in their codebooks. Namely, if sender b belongs to group G 1 , he generates the ﬁrst k symbols distributed as X i 1 b , the next k symbols as X i 2 b , ..., etc.;after the kl’th symbol, this pattern is repeated periodically. Similarly, the second row shows which distributions are used by the
+The purpose of this randomization pattern is to make sure that, irrespective of the delay realization, for all i, j, exactly the fraction p(U = i)p(V = j) of the output sequence is created using the input variables (X i,j 1 , X i,j 2 , . . . , X i,j K ).
+Above, the distributions of the independent random symbols of the codebooks are determined. The number of codewords in the b th sender’s codebook is the following:
+The senders use the above random codebooks. The decoder performs successive decoding as in the Appendix of [6] and as in [5]. First, the decoder decodes the codewords of the ﬁrst sender considering the inputs of the other senders as noise. Hence from the receiver’s point of view the codewords of the ﬁrst sender go through |U ||V| different channels according to the input distributions of the other senders. These channels are the following (i ∈ {1, 2, . . . , |U |}, j ∈ {1, 2, . . . , |V|}):
+W i,j 1 (y|x 1 ) = =
+(10) We have assumed in Deﬁnition 5 that the delay real-
+izations (of senders) are known to the decoder. From the delay of the ﬁrst sender, the decoder knows that the output n tuple (Y −D 1 (n) , . . . , Y n−1−D 1 (n) ) corresponds to the 0 th message of the ﬁrst sender. For all i ∈ {1, 2, . . . , |U |}, j ∈ {1, 2, . . . , |V|}, from the delays of the other senders, the de- coder knows which coordinates of the codeword corresponding to the 0 th message went through channel W i,j 1 . Denote the set of these coordinates by T i,j ⊂ {0, 1, . . . , n − 1}. Note that |T i,j | is equal to n(p(U = i)p(V = j)) independently of the delay realizations. Note also that the symbols in T i,j of the ﬁrst sender’s codewords were generated using distribution X i,j 1 . The decoder uses joint typicality to de- cide which is the 0’th message of the ﬁrst sender. We say that the h’th codeword of the ﬁrst sender is typical in the window (Y −D 1 (n) , Y −D 1 (n)+1 . . . , Y n−1−D 1 (n) ) if the follow- ing is true for all i ∈ {1, 2, . . . , |U |}, j ∈ {1, 2, . . . , |V|}: the subsequences of the h’th codeword with coordinates in T i,j and the subsequence of the same coordinates of (Y −D 1 (n) , Y −D 1 (n)+1 , . . . , Y n−1−D 1 (n) ) are jointly δ typical according to input distribution X i,j 1 and the channel W i,j 1 . If h is the only codeword of the ﬁrst sender which is typical, then the decoder’s estimation is h for the 0’th message. The decoder decodes not just the 0’th codeword but, in a similar manner, all codewords which are necessary for the following successive steps.
+The following successive steps work the same way. The difference is that the already decoded codewords from the previous steps become part of the output instead of considering them as noise.
+The maximal error over delays of the random code can be shown to be exponentially small in n as in the Appendix of
+[6]. Note that a genie added model version is necessary for the exact proof. Hence there exists a sequence of deterministic coding-decoding systems with exponentially small maximal error over delays.
+Lemma 3 will rely on rate splitting, for deﬁniteness we use the explicit construction from [6]. A split of sender i with input distribution p X i on X i = {0, 1, . . . , X i − 1} results in two virtual senders ia, ib with distributions p X ia and p X ib , also on X i , explicitly determined by p X i and a splitting parameter 0 ≤ ε ≤ 1, such that the splitting function f (x a , x b ) = max(x a , x b ) maps p X ia × p X ib into p X i .
+Section 2 of [6] shows 4 via Rate-Splitting that each R ∈ Dom(R [W ; p X 1 × p X 2 × · · · × p X K ]) can be represented by a higher dimensional vertex. This means that there exists an auxiliary channel ˜ W R with 2K − 1 virtual senders constructed by splitting the senders of W , perhaps some of them split repeatedly and others not at all, and there exist splitting parameters ε 1 , ε 2 , . . . , ε K−1 and an ordering π on the set {1, 2, . . . , 2K − 1} with the following property. Note that the channel ˜ W R is uniquely determined by W and the splitting pattern which describes which inputs are split. The new input distributions of ˜ W R , which are determined by the distribu- tions p X 1 , p X 2 , . . . , p X K , the splitting pattern and the splitting parameters, are denoted by p ˜ X
+. Then the b’th coordinate of R is the sum of those coordinates of the vertex ˜ R π of Dom(R ˜ W R ; p ˜ X
+) that correspond to the virtual senders into which the b’th sender has been split, b = 1, 2, . . . , K.
+Lemma 3. Let R = (R 1 , R 2 , . . . , R K ) ∈ Dom(R(α)) (see Lemma 1). There exists a splitting pattern of K − 1 splits, splitting parameters ε 1 , ε 2 , . . . , ε K−1 and an ordering π on the set {1, 2, . . . , 2K − 1} such that R = k i=1 α i R i , where R i ∈ Dom(R W i ; p X i
+) is the vector that is represented by the higher dimensional vertex deter- mined by the given splitting pattern, splitting parameters and ordering corresponding to channel W i and input distributions
+Remark 4. Note that the subject of the above Lemma is not the achievability of R, it is about the convex decomposition of R by vectors which can be represented by identical splitting pattern, splitting parameters and ordering.
+Remark 5. Lemma 3 will be used for the case W 1 = W 2 = · · · = W k = W , the general formulation is needed for the inductive proof.
+Sketch of proof: The statement is trivial if K = 1. The general case can be derived following the inductive proof of [6]. Split the K’th sender of each channel W i , i ∈ {1, 2, . . . , k} with the same parameter ε 1 , and deﬁne a new K + 1 dimensional vector by R K+1 = k i=1 α i I(X i Ka ∧ Y i ), R K = R K − R K+1 , R i = R i if i < K. As in
+Section 2 of [6] there exist ε 1 and τ ⊂ [K − 1] with the following properties. R τ is in the dominant face of
+Here W i is obtained from W i by splitting the K’th sender, and W i τ |{K+1} is a channel derived from W i whose sender set is τ , the (K + 1)’th input of W i is part of its output, and the remaining inputs of W i are considered as noise. R [K]\τ is in the dominant face of the convex combination with weight vector α of the sets
+), where W i [K]\τ |{K+1}∪τ is the channel derived from W i with input set [K] \ τ , when the remaining inputs are available to the output. Then the induction hypothesis applied for R τ and for R [K]\τ gives the result. Note that implicitly Lemma 1 is also used.
+Proof of Theorem 1, achievability, second part: Lemma 2 shows that each vertex of Dom(R(U, V )) can be achieved by successive decoding. Lemma 3 applied to W 1 = W 2 = · · · = W k = W shows that any point on Dom(R(U, V )) can be represented by a vertex of Dom(R (U, V )) for a larger PAMAC system with 2K − 1 senders. This larger PAMAC W is obtained from W by splitting senders; the splitting of senders in group G 1 or G 2 results in virtual senders also in that group. Hence Lemma 3 reduces the proof of Theorem 1 to Lemma 2.
+The preparation of this article would not have been possible without the support of Dr. Imre Csiszár. We would like to thank him for his help and advice within this subject area.
+[[[ REFS ]]]
+T. M. Cove
+R. J. McEliec
+E. C. Posne
+O. 
+--
+Asynchronous Multiple- Access Channel Capacity , IEEE Trans
+----
+I. Csiszá
+J. Körne
+--
+Information theory, Coding theorems for Discrete Memoryless Systems, 2 nd edition , Cambridge University Press, 2011
+----
+J. Edmonds
+--
+Submodular functions, matroids, and certain polyhedra
+----
+L. Farka
+T. Kó
+--
+Capacity Region of Discrete Asynchronous Multiple Access Channels , IEEE International Symposium of Information Theory, Aug
+----
+L. Farka
+T. Kó
+--
+On the Capacity Region of Discrete Asynchronous Multiple Access Channels , submitted to IEEE Trans
+----
+A. J. Gran
+B. Rimold
+R. L. Urbank
+P. A. Whitin
+O. 
+--
+Rate-Splitting Multiple Access For Discrete Memoryless Channels , IEEE Trans
+----
+J. Y. N. Hu
+P. A. Humble
+O. 
+--
+The Capacity Region of the Totally Asyn- chronous Multiple-Access Channel , IEEE Trans
+----
+N. Ninosla
+B. Rimold
+--
+On the Structure of the Capacity Region of Asynchronous Memoryless Multiple-Access Channels , submitted to IEEE Trans
+----
+G. Sh
+--
+Poltyrev, Coding in an Asynchronous Multiple-Access Channel, Probl
+----
+B. Rimold
+O. 
+--
+Generalized Time Sharing: A Low-Complexity Capacity- Achieving Multiple-Access Technique , IEEE Trans
+[[[ META ]]]
+parsed -> yes
+file -> public\files\isit2012\1569566229.pdf
+[[[ LINKS ]]]
+

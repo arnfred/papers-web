@@ -1,0 +1,34 @@
+[[[ ID ]]]
+1569557585
+[[[ INDEX ]]]
+0
+[[[ TITLE ]]]
+Sum Capacity of 3 -user Deterministic Interference Channels with Connectivity Constraints
+[[[ AUTHORS ]]]
+Suvarup Saha
+Randall A. Berry
+[[[ ABSTR ]]]
+Abstract—In this paper we derive the sum-capacity of 3-user linear deterministic interference channels (LDIC) under certain connectivity assumptions with symmetric parameters. The results also directly yield the sum-capacity of a 3-user fully-connected LDIC with symmetric parameters. We further illustrate with an example the potential difﬁculties in extending the results to asymmetric cases.
+[[[ BODY ]]]
+Fig. 1. 3-user LDICs with different connectivity constraints:(a) many-to-one (b) one-to-many (c) cascade Z (d) cyclic (e) shoe-string (f) crown A (g) crown B (h) fully-connected
+1 The interference connectivities make the channels look like crowns when viewed sideways. Hence the names.
+[1] T. Han, K. Kobayashi, “A new achievable rate region for the interference channel,” IEEE Trans. on Inf. Thry., vol. 27, pp. 49-60, Jan. 1981.
+[2] A. El Gamal, M. Costa, “The Capacity Region of a Class of Deterministic Interference Channels,” in IEEE Trans. on Info. Thry., Vol. IT-28, No. 2, pp. 343-346, Mar. 1982.
+[4] R. Etkin, D. Tse, H. Wang, “Gaussian Interference Channel Capacity to within One Bit”, IEEE Trans. on Inf. Thry., vol. 54, pp. 5534-5562, 2008.
+[5] G. Bresler et. al., “The approximate capacity of the many-to-one and one-to-many Gaussian interference channels”, in the Proceedings of the Annual Allerton Conference , Monticello, IL, Sep. 2007.
+[6] G. Bresler et. al., “The two-user Gaussian interference channel: a deter- ministic view,”in Euro. Trans. Telecomm., vol. 19, no. 4, pp. 333-354, Jun. 2008.
+[7] V. Cadambe, S. Jafar, “Interference alignment and the degrees of freedom of the K user interference channel”, IEEE Trans. Info. Thry., vol. 54, pp. 34253441, Aug. 2008.
+[8] S. Sridharan et. al., “A Layered Lattice Coding Scheme for a Class of Three User Gaussian Interference Channels”, Annual Allerton Confer- ence , Monticello, IL, Sep. 2008.
+[9] V. S. Annapureddy and V. V. Veeravalli, “Gaussian interference networks: Sum capacity in the low interference regime”, in Proceedings of the ISIT, Toronto, Canada, July 2008.
+[10] S. Jafar, S. Vishwanath, “Generalized Degrees of Freedom of the Symmetric Gaussian K User Interference Channel”, arxiv 0804.4489v1
+[11] S. Saha, R. Berry, “On the Sum Capacity of a Class of 3 User Deterministic Interference Channels”, in the Proceedings of the Annual Allerton Conference , Monticello, IL, Oct. 2010.
+[12] L. Zhou, W. Yu, “On the Capacity of the K-user Cyclic Gaussian Interference Channel”, submitted to IEEE Trans. on Information Theory.
+[13] Y. Liu, E. Erkip, “On the Sum Capacity of K -user Cascade Gaussian Z-Interference Channel”, in Proceedings of the 2011 IEEE ISIT, St. Petersburg, Russia, Aug. 2011.
+[14] S. Saha, R. Berry, “Sum-Capacity of a Class of K-user Gaussian Interference Channels within O(K) bits”, in the Proceedings of the Annual Allerton Conference , Monticello, IL, Oct 2011.
+[[[ REFS ]]]
+
+[[[ META ]]]
+parsed -> yes
+file -> public\files\isit2012\1569557585.pdf
+[[[ LINKS ]]]
+
