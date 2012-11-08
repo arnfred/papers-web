@@ -5,7 +5,7 @@
  *
  */
 
-define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/nodes", "controllers/events/links"], function(d3, screen, radio, levenshtein, events, eventsLinks) {
+define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/nodes", "controllers/events/links", "models/zoom"], function(d3, screen, radio, levenshtein, events, eventsLinks, zoom) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -34,21 +34,9 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		edge 		= d3.rgb(153,153,153),
 		currentEdge = d3.rgb(255,0,0);
 
+	// The zoom and scale of the graph:	
+	graph.zoom = zoom;
 
-	
-	//////////////////////////////////////////////
-	//											//
-	//               Graph Zoom 				//
-	//											//
-	//////////////////////////////////////////////
-	
-	graph.zoom = d3.behavior.zoom();
-	
-	// Track the position:
-	graph.zoom.pos = {};
-	graph.zoom.pos.x = 0;
-	graph.zoom.pos.y = 0;
-	graph.zoom.pos.s = 0; // Scale
 
 	//////////////////////////////////////////////
 	//											//
@@ -72,22 +60,8 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 			.attr('id', 'viewport');
 		
 		
-		// TODO: enable scrolling somewhere else
-		graph.zoom.on("zoom", function() {
-				//console.log("here", d3.event.translate, d3.event.scale);
-				
-				var e = d3.event;
-				var transform = e.translate;
-				var scale = e.scale;
-				
-				 vis.attr("transform",
-				 	 "translate(" + transform + ")"
-				 		+ " scale(" + scale + ")");
-				 
-				 graph.zoom.pos.x = transform[0];
-				 graph.zoom.pos.y = transform[1];
-				 graph.zoom.pos.s = scale;
-		});
+		//enable scrolling on the canvas:
+		graph.zoom.init(vis);
 		
 		//graph.zoom.translate([-200, -200]);
 		graph.force = null;
