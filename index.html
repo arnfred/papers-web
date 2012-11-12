@@ -233,39 +233,37 @@ curl(
 		<div id="tab-1">
 		
 			<form name="filters">
-				<input name="keywords" value="" class="filter"/>
 				<label for="keywords">Search</label>
+				<input name="keywords" value="" class="filter"/>
+				<br/>
+				<label for="context">Context</label>
 				<select multiple="multiple" name="context[]" value="">
-					<option>Title</option>
-					<option>Author</option>
-					<option>Abstract</option>
-					<option>Body</option>
-					<option>References</option>
+					<option value="title">Title</option>
+					<option value="author">Author</option>
+					<option value="abstract">Abstract</option>
+					<option value="body">Body</option>
+					<option value="refs">References</option>
 				</select>
+				<br/>
+				<label for="location">Location</label>
 				<select name="location">
-					<option>No location</option>
+					<option>Not Selected</option>
 				</select>
-				<input name="from">
+				<br/>
 				<label for="from">From</label>
-				<input name="to">
+				<input name="from">
+				<br/>
 				<label for="to">To</label>
+				<input name="to">
+				<br/>
+				<button name="add" id="addFilter">Add</button>
 			</form>
 
-			<ul>
-				<li id="listItemTemplate" class="listItem">
-					<a href="#" class="listItemRemove">
-						<img src="img/icons/remove.png" />
-					</a>
-					<a class="listItemPdfLink" href="#" target="_blank">
-					
-						<span class="listItemLabel">
-							<div class="clear" style="height: 8px;"></div>
-							<img src="img/icons/paper.png" />
-							<p class="listItemText">List item</p>
-							<div class="clear" style="height: 8px;"></div>
-						</span>
-					</a>
-					<input type="hidden" name="papers[]" value="" />
+			<hr width="80%"/>
+
+			<ul id="filterList">
+				<li id="filterItemTemplate" class="filterItem">
+					<p class="filterItem"></p>
 				</li>
 			</ul>
 		

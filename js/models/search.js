@@ -60,7 +60,8 @@ define(["filter"], function (filter) {
 	// Adds a new filter
 	var add = function(data) {
 		// I expect the data to be of the following format:
-		// { keywords : "keyword1 keyword2",
+		// { id		  : number // Some integer
+		//   keywords : "keyword1 keyword2",
 		//   context  : [context1, context2, ...],
 		//   location : "some room", // Can be left blank
 		//   time     : { to : dateString, from : dateString }
