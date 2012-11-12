@@ -59,13 +59,6 @@ define(["filter"], function (filter) {
 	
 	// Adds a new filter
 	var add = function(data) {
-		// I expect the data to be of the following format:
-		// { id		  : number // Some integer
-		//   keywords : "keyword1 keyword2",
-		//   context  : [context1, context2, ...],
-		//   location : "some room", // Can be left blank
-		//   time     : { to : dateString, from : dateString }
-		// }
 
 		// Create new filter and fill in the appropriate details
 		var f = filter.new();
@@ -74,7 +67,7 @@ define(["filter"], function (filter) {
 		data.context.forEach(function(c) { 
 			var otherContext = filter.new().keyword(data.keywords, c);
 			f = f.or(otherContext);
-		}
+		});
 
 		// Add location and time
 		f = f.location(data.location).interval(data.time.from, data.time.to);
@@ -86,10 +79,11 @@ define(["filter"], function (filter) {
 		// Set currentIndices to the index we just pushed
 		search.currentIndices.push(index);
 
-		// Update current filer
+		// Update current filter
 		createCurrent();
 
-		// Draw the update somehow
+		// Draw the update
+		radio("filter:publish").broadcast(f, index)
 		// TODO
 	}
 

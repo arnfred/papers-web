@@ -7,10 +7,7 @@ define(["jquery", "radio"], function ($, radio) {
 	search.events = function() {
 
 		// Broadcast the click on add
-		$("#addFilter").click(function(e) { radio("filter:add").broadcast(e); });
-
-		// Subscribe when a filter is added
-		radio("filter:clear").subscribe(clear);
+		$("#addFilter").click(function(e) { radio("filter:getData").broadcast(e); });
 
 		// When a filter is published to the filter list
 		radio("filter:publish").subscribe(publish);
@@ -20,9 +17,38 @@ define(["jquery", "radio"], function ($, radio) {
 
 		// When a filter is edited
 		radio("filter:edit").subscribe(edit);
+
+		// When the add button is clicked
+		radio("filter:getData").subscribe(getData)
 	}
 
+
 	// Private functions
+
+
+	// Collects data from the form, clears it and broadcasts add
+	var getData = function() {
+		var f = {};
+
+		// Update all inputs
+		f.keywords = $("input[name=keywords]").val();
+		f.location = $("input[name=location]").val();
+
+		// Update dates (some stuff needs to be done here
+		f.to = $("input[name=to]").val();
+		f.from = $("input[name=from]").val();
+
+		// Get stuff from select boxes (how?)
+
+		// Now clear the form
+		clear();
+
+		// Now broadcast
+		radio("filter:add").broadcast(f);
+
+		console.log(f)
+	}
+
 
 	// Clear the form
 	var clear = function() {
@@ -33,8 +59,9 @@ define(["jquery", "radio"], function ($, radio) {
 		// I'll figure that out
 	}
 
-	// Publish a filter
-	var publish = function(filter) {
+
+	// Add a filter to the list
+	var publish = function(filter, index) {
 		// clone filter template
 		var f = $("#filterItemTemplate").clone()
 
@@ -43,20 +70,22 @@ define(["jquery", "radio"], function ($, radio) {
 		f.children("p").append(info);
 
 		// Add id
-		f.attr("id","filter" + filter.id);
+		f.attr("id","filter" + index);
 
 		// now add text and add it
 		$("#filterList").append(f)
 	}
 
+
 	// remove a filter
-	var remove = function(filter) {
+	var remove = function(index) {
 		// Get the filter
-		var f = $("#filter" + filter.id);
+		var f = $("#filter" + index);
 
 		// Now remove
 		f.remove();
 	}
+
 
 	// Edit a filter
 	var edit = function(filter) {
@@ -72,6 +101,7 @@ define(["jquery", "radio"], function ($, radio) {
 
 		// How about we change the color of the edit to something else
 	}
+
 
 	// Create the string used to describe a filter
 	var makeInfo = function(filter) {
