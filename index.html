@@ -228,7 +228,49 @@ curl(
 				</li>
 			</ul>
 		</div>
-		<div id="tab-1"></div>
+
+
+		<div id="tab-1">
+		
+			<form name="filters">
+				<input name="keywords" value="" class="filter"/>
+				<label for="keywords">Search</label>
+				<select multiple="multiple" name="context[]" value="">
+					<option>Title</option>
+					<option>Author</option>
+					<option>Abstract</option>
+					<option>Body</option>
+					<option>References</option>
+				</select>
+				<select name="location">
+					<option>No location</option>
+				</select>
+				<input name="from">
+				<label for="from">From</label>
+				<input name="to">
+				<label for="to">To</label>
+			</form>
+
+			<ul>
+				<li id="listItemTemplate" class="listItem">
+					<a href="#" class="listItemRemove">
+						<img src="img/icons/remove.png" />
+					</a>
+					<a class="listItemPdfLink" href="#" target="_blank">
+					
+						<span class="listItemLabel">
+							<div class="clear" style="height: 8px;"></div>
+							<img src="img/icons/paper.png" />
+							<p class="listItemText">List item</p>
+							<div class="clear" style="height: 8px;"></div>
+						</span>
+					</a>
+					<input type="hidden" name="papers[]" value="" />
+				</li>
+			</ul>
+		
+		</div>
+
 		<div id="tab-3"></div>
 		
 	</div>
