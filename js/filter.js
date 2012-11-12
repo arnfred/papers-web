@@ -1,4 +1,4 @@
-define(["model", "util/merge", "util/array", "util/levenshtein", "util/curry"], 
+define(["models/nodes", "util/merge", "util/array", "util/levenshtein", "util/curry"], 
 	function(model, merge, arr, levenshtein, curry) {
 
 

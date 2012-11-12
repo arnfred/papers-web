@@ -28,32 +28,32 @@ define(["jquery", "radio"], function ($, radio) {
 
 	// Collects data from the form, clears it and broadcasts add
 	var getData = function() {
-		var f = {};
+		var data = {};
 
-		// Update all inputs
-		f.keywords = $("input[name=keywords]").val();
-		f.location = $("input[name=location]").val();
+		// Update all values
+		data.keywords = $("input[name=keywords]").val();
+		data.location = $("select[name=location]").val();
 
 		// Update dates (some stuff needs to be done here
-		f.to = $("input[name=to]").val();
-		f.from = $("input[name=from]").val();
+		data.to = $("input[name=to]").val();
+		data.from = $("input[name=from]").val();
 
 		// Get stuff from select boxes (how?)
+		// TODO: following line is wrong:
+		data.context = [];
 
 		// Now clear the form
 		clear();
 
 		// Now broadcast
-		radio("filter:add").broadcast(f);
-
-		console.log(f)
+		radio("filter:add").broadcast(data);
 	}
 
 
 	// Clear the form
 	var clear = function() {
 		// Clean all input
-		$("form[name=filters] input").val("");
+		$("#filterForm input").val("");
 
 		// Clear selects (how?)
 		// I'll figure that out
@@ -105,15 +105,19 @@ define(["jquery", "radio"], function ($, radio) {
 
 	// Create the string used to describe a filter
 	var makeInfo = function(filter) {
+		console.debug(filter)
 
 		var keywords	= (filter.keywords)	? " containing " + filter.keywords : "";
-		var context		= (filter.context)	? " in " + filter.context.join(", ") : ""; 
+		var context		= (filter.context.length > 0)	? " in " + filter.context.join(", ") : ""; 
 		var present		= (filter.location || (filter.from && filter.to)) ? " with presentation" : "";
 		var location	= (filter.location)	? " at " + filter.location : "";
 		var time		= (filter.from && filter.to) ? " between " + filter.from + " and " + filter.to : "";
 
-		return "Find articles" + keywrods + context + present + loaction + time;
+		return "Find articles" + keywords + context + present + location + time;
 	}
+
+	// Run events
+	search.events();
 	
 	return search;
 

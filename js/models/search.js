@@ -1,4 +1,4 @@
-define(["filter"], function (filter) {
+define(["filter", "radio"], function (filter, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -70,10 +70,10 @@ define(["filter"], function (filter) {
 		});
 
 		// Add location and time
-		f = f.location(data.location).interval(data.time.from, data.time.to);
+		f = f.location(data.location).interval(data.from, data.to);
 
 		// Add filter to list of filters and data to list of data
-		var index = search.filters.push(f);
+		var index = search.filters.push(f) - 1;
 		search.data[index] = data;
 
 		// Set currentIndices to the index we just pushed
@@ -83,7 +83,7 @@ define(["filter"], function (filter) {
 		createCurrent();
 
 		// Draw the update
-		radio("filter:publish").broadcast(f, index)
+		radio("filter:publish").broadcast(data, index)
 		// TODO
 	}
 
@@ -112,13 +112,16 @@ define(["filter"], function (filter) {
 	var createCurrent = function() {
 
 		var c = filter.new();
-		search.curentIndices.forEach(function (i) {
+		search.currentIndices.forEach(function (i) {
 			c = c.or(search.filters[i]);
 		});
 
 		return c;
 	}
 
+
+	// Set events
+	search.events();
 
 	return search;
 })

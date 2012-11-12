@@ -57,8 +57,6 @@ curl(
 
 </script>
 
-<form action="schedule.php" target="_blank" name="schedule" method="post" 
-	onSubmit="return false;">
 
 	<div id="content">
 
@@ -210,6 +208,8 @@ curl(
 				<p class="click" id="sureNo">no</p>
 			</div>
 	
+			<form action="schedule.php" target="_blank" name="schedule" method="post" 
+				onSubmit="return false;">
 			<ul id="sidebar">
 				<li id="listItemTemplate" class="listItem">
 					<a href="#" class="listItemRemove">
@@ -227,12 +227,13 @@ curl(
 					<input type="hidden" name="papers[]" value="" />
 				</li>
 			</ul>
+			</form>
 		</div>
 
 
 		<div id="tab-1">
 		
-			<form name="filters">
+			<form id="filterForm" onSubmit="return false;">
 				<label for="keywords">Search</label>
 				<input name="keywords" value="" class="filter"/>
 				<br/>
@@ -247,7 +248,7 @@ curl(
 				<br/>
 				<label for="location">Location</label>
 				<select name="location">
-					<option>Not Selected</option>
+					<option value="">Not Selected</option>
 				</select>
 				<br/>
 				<label for="from">From</label>
@@ -274,8 +275,6 @@ curl(
 	</div>
 
 </div>
-
-</form>
 
 <!-- <script type="text/javascript" src="js/graph.js"></script> -->
 <script type="text/javascript">
