@@ -136,7 +136,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		 *	the future by looking session
 		 * 	in the DB with Play
 		 */
-		nodes.focused = session.loadFocused();
+		nodes.focused = nodes.getNodeFromId(session.loadFocused());
 		
 		// TODO: save it in session and load it here.
 		nodes.selected = null;
@@ -155,9 +155,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	// Return list of selected nodes (nodes.selected only contains the 
 	// indices, so this function is convenient for when we need to know 
 	// more
-	nodes.getScheduled = function() {
-		return nodes.scheduled.map(function (i) { return nodes.node[i]; });
-	}
 
 
 	// Returns true if the id is selected and false if it isn't

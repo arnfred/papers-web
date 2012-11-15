@@ -54,7 +54,7 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 		 radio("node:select").subscribe(select);
 		// 
 		// // On node deselect, make sure the node is selected in the the graph
-		 radio("node:deselect").subscribe(unselect);
+		 radio("node:deselect").subscribe(deselect);
 		// 
 		 // On node mouseover
 		 radio("node:mouseover").subscribe(hover);
@@ -167,8 +167,8 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 				// Get node
 				var domNode = node.domNode;
 				
-				// Unselected the privous node:
-				if(selected_node_id) unselect(selected_node_id);
+				// deselected the privous node:
+				if(selected_node_id) deselect(selected_node_id);
 				 
 				// Register this node as selected:
 				selected_node_id = node.index;
@@ -194,8 +194,8 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 			
 			}
 			
-			// What happends when we unselect a node
-			var unselect = function(node) {
+			// What happends when we deselect a node
+			var deselect = function(node) {
 				// Get node
 				var domNode = node.domNode;
 		
@@ -209,7 +209,7 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 				node.links.forEach(function(link){
 					if(link.domlink) {
 						var e = d3.event;
-						radio("link:unselected").broadcast(link, e)
+						radio("link:deselect").broadcast(link, e)
 					}
 					
 					//link.domlink.classed("selected", false);
