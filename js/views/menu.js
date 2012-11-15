@@ -1,4 +1,4 @@
-define(["jquery", "radio", "models/nodes"], function($, radio, model) {
+define(["jquery", "radio", "models/nodeList"], function($, radio, nodeList) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -23,7 +23,7 @@ define(["jquery", "radio", "models/nodes"], function($, radio, model) {
 
 		// Make Surprise Me work
 		$("#surprise").click(function () { 
-			radio("node:scheduled").broadcast(model.getRandom());
+			radio("node:scheduled").broadcast(nodeList.getRandom());
 		});
 
 

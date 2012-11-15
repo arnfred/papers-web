@@ -1,5 +1,5 @@
-define(["models/nodes", "models/graph2", "views/infobox", "views/sidebar", "views/selectBox", "views/menu", "views/search", "controllers/search"], 
-	function(model, graph, infobox, sidebar, selectbox, menu, search) {
+define(["models/nodeList", "models/graph2", "views/infobox", "views/sidebar", "views/selectBox", "views/menu", "views/search", "controllers/search"], 
+	function(nodeList, graph, infobox, sidebar, selectbox, menu, search) {
 
 
 	//////////////////////////////////////////////
@@ -18,7 +18,7 @@ define(["models/nodes", "models/graph2", "views/infobox", "views/sidebar", "view
 	//////////////////////////////////////////////
 
 	// Initialize graph
-	graph.init(model.node);
+	graph.init(nodeList.nodes);
 
 
 	// Initialize sidebar

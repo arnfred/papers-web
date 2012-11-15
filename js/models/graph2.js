@@ -150,6 +150,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//////////////////////////////////////////////
 
 
+	// TODO: should be deleted
 	graph.getNodeFromId = function(id) {
 		return graph.nodes[id].domNode;
 	}

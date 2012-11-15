@@ -64,11 +64,11 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 
 
 		 // On node click, we want to try a new interface: focus on the node	
-		 radio("node:click").subscribe(setFocused);
+		 radio("node:click").subscribe(setFocus);
 		 
 		 
 		 // On node click, we want to try a new interface: focus on the node	
-		 radio("node:setfocus").subscribe(setFocused);
+		 radio("node:setfocus").subscribe(setFocus);
 
 		 
 	} // End of events initilization
@@ -107,7 +107,7 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 		
 		
 			// Deselect a particular node
-			var unscheduled = function(node) {
+			var unschedul = function(node) {
 		
 				//var lastEdges	= d3.selectAll("line.current");
 		
@@ -221,7 +221,7 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 			
 			// Focus on a particular node
 			// 
-			var setFocused = function(node) {
+			var setFocus = function(node) {
 					
 					
 					// Dimension

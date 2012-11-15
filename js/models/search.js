@@ -90,6 +90,7 @@ define(["filter", "radio"], function (filter, radio) {
 		// TODO
 	}
 
+
 	// Selects a filter and deselects all currently selected filters
 	var selectOnly = function(index) {
 
@@ -103,6 +104,7 @@ define(["filter", "radio"], function (filter, radio) {
 
 	}
 
+
 	// Selects another filter (doesn't deselect the old filters)
 	var select = function(index) {
 		
@@ -114,6 +116,7 @@ define(["filter", "radio"], function (filter, radio) {
 
 		console.debug(search.current.nodes());
 	}
+
 
 	// Deselects another filter (doesn't deselect the old filters)
 	var deselect = function(index) {

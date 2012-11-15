@@ -1,4 +1,4 @@
-define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-tabs.min.js!order'], function($, radio, model, truncate, arrrr, screen, tabbbb) {
+define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-tabs.min.js!order'], function($, radio, truncate, arrrr, screen, tabbbb) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -224,14 +224,7 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/
 	 */
 	var removeAll = function() {
 
-		// Hide the scheduleselect box
-		//$(".scheduleSelect").slideToggle("fast");
-
-		// Get all selected nodes
-		var scheduled = model.scheduled;
-
-		// Call unscheduled signal for all nodes in the list
-		scheduled.map(function (s) { radio("node:unscheduled").broadcast(s); })
+		radio("node:unscheduleall").broadcast();
 	}
 
 

@@ -1,5 +1,5 @@
-define(["models/nodes", "util/merge", "util/array", "util/levenshtein", "util/curry"], 
-	function(model, merge, arr, levenshtein, curry) {
+define(["util/merge", "util/array", "util/levenshtein", "util/curry"], 
+	function(merge, arr, levenshtein, curry) {
 
 
 	//////////////////////////////////////////////
@@ -17,7 +17,7 @@ define(["models/nodes", "util/merge", "util/array", "util/levenshtein", "util/cu
 	//             Public Functions				//
 	//											//
 	//////////////////////////////////////////////
-	filter.new = function() {
+	filter.new = function(nodes) {
 
 		// These are the functions available for a new filter
 		var f = {	keyword		: keyword,
@@ -26,7 +26,7 @@ define(["models/nodes", "util/merge", "util/array", "util/levenshtein", "util/cu
 					nodes		: nodes,
 					and			: andFilter,
 					or			: orFilter,
-					_nodes		: model.node,
+					_nodes		: nodes,
 					_filter		: t,
 					_options	: {
 						levenshtein	: 1,
@@ -148,7 +148,7 @@ define(["models/nodes", "util/merge", "util/array", "util/levenshtein", "util/cu
 
 		var g		= function(node) {
 			// Check that the node is winthin the to and from date
-			var date	= model.getDate(node.id);
+			var date	= node.getDate();
 			var date_p	= (from == undefined) || (from < date && to > date);
 			return date_p;
 		}

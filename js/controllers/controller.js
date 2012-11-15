@@ -1,4 +1,4 @@
-define(["models/nodes", "models/search", "views/views"], function (nodes, views) {
+define(["models/nodeList", "models/search", "views/views"], function (nodeList, views) {
 
 
 	//////////////////////////////////////////////
@@ -16,7 +16,7 @@ define(["models/nodes", "models/search", "views/views"], function (nodes, views)
 	//////////////////////////////////////////////
 
 	// Add to controller and views
-	controller.model = nodes;
+	controller.model = nodeList;
 	controller.views = views;
 
 	// Add selected and current node(s) from last session

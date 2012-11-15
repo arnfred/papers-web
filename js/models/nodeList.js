@@ -4,7 +4,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 /* TRAILHEAD MODEL
  * ---------------------------------------------------
  *	
- *	this file contain the model for the nodes
+ *	this file contain the model for the nodeList
  *	
  *	
  *	---------------------------------------------------
@@ -42,7 +42,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	//               Interface					//
 	//											//
 	//////////////////////////////////////////////
-	var nodes = {};
+	var nodeList = {};
 
 
 
@@ -52,7 +52,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	//											//
 	//////////////////////////////////////////////
 
-	nodes.events = function() {
+	nodeList.events = function() {
 
 		/**
 		 * Broadcast
@@ -60,8 +60,8 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 
 		// Broadcasts select or deselect based on the id
 		var toggleScheduled = function(node) {
-			if (nodes.isScheduled(node)) radio("node:unscheduled").broadcast(node);
-			else radio("node:scheduled").broadcast(node);
+			if (nodeList.isScheduled(node)) radio("node:unschedule").broadcast(node);
+			else radio("node:schedule").broadcast(node);
 		}
 
 
@@ -69,20 +69,23 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		 * Subscribe
 		 */
 
-		// On node select, make sure the node is selected in the nodes
+		// On node select, make sure the node is selected in the nodeList
 		radio("node:select").subscribe(select);
 
-		// On node scheduled, we add it to the list of scheduled nodes
+		// On node scheduled, we add it to the list of scheduled nodeList
 		// And change its color. 
-		radio("node:scheduled").subscribe(scheduled);
+		radio("node:schedule").subscribe(schedule);
 		
 		// On node unscheduled, we drop it from the scheduled list
 		// and reset the UI.
-		radio("node:unscheduled").subscribe(unscheduled);
+		radio("node:unschedule").subscribe(unschedule);
+
+		// Remove all scheduled nodes
+		radio("node:unscheduleall").subscribe(nodeList.unscheduleAll);
 
 		// On node focused, make sure the node is marked as focused in 
-		// the nodes
-		radio("node:focused").subscribe(setFocused);
+		// the nodeList
+		radio("node:setfocus").subscribe(setFocus);
 
 		// When some code calls toggleSelect, we check if the node is 
 		// selected or not and call the proper event back
@@ -95,24 +98,24 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	//											//
 	//////////////////////////////////////////////
 	
-	nodes.init = function() {
+	nodeList.init = function() {
 		
-		// The init function load the model of nodes
+		// The init function load the model of nodeList
 		// It creates for each node an object with containing
 		// all the related information
 		
-		// Load nodes
-		nodes.node = json.nodes.map(nodeFactory.new);
+		// Load nodeList
+		nodeList.nodes = json.nodes.map(nodeFactory.new);
 		
-		// nodes.node = new Array();
+		// nodeList.nodes = new Array();
 
-		// json.nodes.forEach( function(el, i) {
+		// json.nodeList.forEach( function(el, i) {
 		// 	
 		// 	el.id = i;
 		// 	el.links = new Array();
 		// 	el.domNode = null;
 		// 	el.pos = position[i];
-		// 	nodes.node[i] = el;
+		// 	nodeList.nodes[i] = el;
 		// 	
 		// });
 		
@@ -120,26 +123,26 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load links
 		json.links.forEach( function(link, i) {
 				// TODO: verify it is not already in!
-				nodes.node[link.source].addLink(link,"normal");
-				nodes.node[link.target].addLink(link,"reversed");
-				// nodes.node[link.source].links.push({source: link.source, target: link.target, value: link.value, domlink: null});
-				// nodes.node[link.target].links.push({source: link.target, target: link.source, value: link.value, domlink: null}); 
+				nodeList.nodes[link.source].addLink(link,"normal");
+				nodeList.nodes[link.target].addLink(link,"reversed");
+				// nodeList.nodes[link.source].links.push({source: link.source, target: link.target, value: link.value, domlink: null});
+				// nodeList.nodes[link.target].links.push({source: link.target, target: link.source, value: link.value, domlink: null}); 
 		});
 		
 
 		// Load session
 		// Load the node that are already scheduled
-		//nodes.scheduled = session.loadSelected();
-		nodes.scheduled = session.loadScheduled().map(nodes.getNodeFromId);
+		//nodeList.scheduled = session.loadSelected();
+		nodeList.scheduled = session.loadScheduled().map(nodeList.getNodeFromId);
 		
 		/*  TODO: This loading should be done in 
 		 *	the future by looking session
 		 * 	in the DB with Play
 		 */
-		nodes.focused = nodes.getNodeFromId(session.loadFocused());
+		nodeList.focused = nodeList.getNodeFromId(session.loadFocused());
 		
 		// TODO: save it in session and load it here.
-		nodes.selected = null;
+		nodeList.selected = null;
 
 	}
 
@@ -152,46 +155,57 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	//////////////////////////////////////////////
 
 
-	// Return list of selected nodes (nodes.selected only contains the 
+	// Return list of selected nodeList (nodeList.selected only contains the 
 	// indices, so this function is convenient for when we need to know 
 	// more
 
 
 	// Returns true if the id is selected and false if it isn't
-	nodes.isScheduled = function(node) {
-		return (nodes.scheduled.indexOf(node.index) != -1);
+	nodeList.isScheduled = function(node) {
+		return (nodeList.scheduled.indexOf(node.index) != -1);
 	}
 
 
-	// Broadcasts the selected nodes and the focused nodes. This should 
+	// Broadcasts the selected nodeList and the focused nodeList. This should 
 	// only be called in the initialization of the page, but I've put it 
 	// apart from init() since it relies on the graph being generated
-	nodes.broadcastScheduled = function() {
+	nodeList.broadcastScheduled = function() {
 		// Broadcast session
-		nodes.scheduled.forEach(function(e) { return radio("node:scheduled").broadcast(e); });
-		//radio("node:focused").broadcast(nodes.focused);
+		nodeList.scheduled.forEach(function(e) { return radio("node:schedule").broadcast(e); });
+		//radio("node:focused").broadcast(nodeList.focused);
 	}
 
 
+	// Remove all nodes from the scheduled list
+	nodeList.unscheduleAll = function() {
+		// Broadcast session
+		nodeList.scheduled.forEach(function(e) { return radio("node:unschedule").broadcast(e); });
+	}
+
 	// Depreciated
-	nodes.getDataFromId = function(id) {
-		return nodes.node[id];
+	nodeList.getDataFromId = function(id) {
+		return nodeList.nodes[id];
 	}
 
 
 	// Finally this function is not a hack anymore. Returns the data 
 	// based on an id of a node. Look in graph.js for it's companion 
 	// 'getNodeFromId'
-	nodes.getNodeFromId = function(id) {
-		return nodes.node[id];
+	nodeList.getNodeFromId = function(id) {
+		return nodeList.nodes[id];
 	}
 
 
 	// Get random node
-	nodes.getRandom = function() {
-		return Math.ceil(Math.random()*nodes.node.length)
+	nodeList.getRandom = function() {
+		return Math.ceil(Math.random()*nodeList.nodes.length)
 	}
 
+
+	// Get list of nodes
+	nodeList.getNodes = function() {
+		return nodeList.nodes;
+	}
 
 
 
@@ -202,43 +216,43 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	//											//
 	//////////////////////////////////////////////
 
-	// Adds a new node to the list of selected nodes, but only if it 
+	// Adds a new node to the list of selected nodeList, but only if it 
 	// isn't already in the list
-	var scheduled = function(node) {
+	var schedule = function(node) {
 		// Check if id doesn't already exist
-		if (!nodes.isScheduled(node)) {
+		if (!nodeList.isScheduled(node)) {
 			// Add new item
-			nodes.scheduled.push(node.index)
+			nodeList.scheduled.push(node.index)
 			// Save changes
-			session.saveScheduled(nodes.scheduled);
+			session.saveScheduled(nodeList.scheduled);
 		}
 	}
 
-	// Removes the id from the list of selected nodes
-	var unscheduled = function(node) {
-		nodes.scheduled = nodes.scheduled.filter(function(i) { return (i != node.index); });
-		session.saveScheduled(nodes.scheduled);
+	// Removes the id from the list of selected nodeList
+	var unschedule = function(node) {
+		nodeList.scheduled = nodeList.scheduled.filter(function(i) { return (i != node.index); });
+		session.saveScheduled(nodeList.scheduled);
 	}
 
 	
 	// Load the last focused node
-	var setFocused = function(node) {
-		nodes.focused = node;
+	var setFocus = function(node) {
+		nodeList.focused = node;
 	}
 
 
 	// Select a node (when it is clicked)
 	var select = function(node) {
-		nodes.selected = node;
+		nodeList.selected = node;
 	}
 
 
 	// Initialize. The init is down here to keep the initialization on 
 	// top of the function definitions. The events has to happen after 
 	// the initialization
-	nodes.init();
-	nodes.events();
+	nodeList.init();
+	nodeList.events();
 
 	// Return object
-	return nodes;
+	return nodeList;
 });

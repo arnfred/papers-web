@@ -1,4 +1,4 @@
-define(["jquery", "util/dateFormat", "radio", "models/nodes"], function ($, _, radio, model) {
+define(["jquery", "util/dateFormat", "radio"], function ($, _, radio) {
 
 	//////////////////////////////////////////////
 	//											//

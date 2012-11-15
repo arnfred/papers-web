@@ -1,4 +1,4 @@
-define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
+define(["jquery", "models/nodeList", "radio"], function ($, nodeList, radio) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -28,7 +28,7 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 		)
 
 		// Broadcast when a the select field is clicked
-		$("#select").click(function () { radio("node:toggleScheduled").broadcast(model.selected); });
+		$("#select").click(function () { radio("node:toggleScheduled").broadcast(nodeList.selected); });
 
 
 		/**
@@ -44,8 +44,8 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 		radio("selectBox:mouseout").subscribe(restartAnimation);
 
 		// On select or deselect, change image
-		radio("node:scheduled").subscribe(setUnscheduled);
-		radio("node:unscheduled").subscribe(setScheduled);
+		radio("node:schedule").subscribe(setUnschedule);
+		radio("node:unschedule").subscribe(setSchedule);
 
 	}
 
@@ -80,14 +80,14 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 
 
 	// Sets the image on the selectBox as selected
-	var setScheduled = function() {
+	var setSchedule = function() {
 		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
 		$("#select a").attr("title","Add to Schedule");
 	}
 
 
 	// Sets the image on the selectBox as deselected
-	var setUnscheduled = function() {
+	var setUnschedule = function() {
 		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
 		$("#select a").attr("title","Remove from Schedule");
 	}
