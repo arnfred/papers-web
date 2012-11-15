@@ -76,7 +76,7 @@ define(["jquery", "util/dateFormat", "radio", "models/nodes"], function ($, _, r
 		var abstract = "<img class=\"loading\" src=\"img/ajax-loader_dark.gif\" style=\"margin:3px 0\"/><span class=\"loading-text\">Loading Abstract...</span>";
 
 		// get time, date, room etc
-		var date		= new Date(parseInt(node.date) + (new Date()).getTimezoneOffset()*60000)
+		var date		= node.getDate();
 		var time		= date.format("HH:MM") + " on " + date.format("dddd mmm d, yyyy");
 		var room		= "&nbsp;Room: " + node.room + "";
 		var title		= node.title;

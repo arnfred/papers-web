@@ -43,6 +43,7 @@ define(["data/position", "util/merge"], function(position, merge) {
 					// Methods
 					// isScheduled:	isScheduledFun,
 					getAbstract:	getAbstractFun,
+					getDate:		getDateFun,
 					addLink:		addLinkFun
 				}
 
@@ -82,6 +83,13 @@ define(["data/position", "util/merge"], function(position, merge) {
 				if (callback != undefined) callback(data);
 			});
 		}
+	}
+
+
+	// Get date from node
+	var getDateFun = function() {
+		var date		= new Date(parseInt(this.date) + (new Date()).getTimezoneOffset()*60000)
+		return date;
 	}
 
 
