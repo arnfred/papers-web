@@ -28,13 +28,13 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		 */
 
 		// Current node
-		radio("node:current").subscribe(setCurrent);
+		radio("node:focus").subscribe(setFocus);
 
 		// Select node
-		radio("node:scheduled").subscribe(scheduled);
+		radio("node:schedule").subscribe(schedule);
 
 		// unscheduled node
-		radio("node:unscheduled").subscribe(unscheduled);
+		radio("node:unschedule").subscribe(unschedule);
 
 		// On unscheduled all nodes, we should close "are you sure?"
 		radio("sidebar:removeAll").subscribe(removeAll);
@@ -106,7 +106,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	/**
 	 * Updates the list with the current element
 	 */
-	var setCurrent = function (node) {
+	var setFocus = function (node) {
 
 		// Removes current from last list item
 		$(".listItem.current").removeClass("current");
@@ -120,7 +120,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	/**
 	 * What happens when a node is scheduled
 	 */
-	var scheduled = function(node) {
+	var schedule = function(node) {
 
 		// Clone listItemTemplate
 		var item = $("#listItemTemplate").clone();
@@ -136,7 +136,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		$("#sidebar").append(item);
 
 		// Set it as the current element
-		setCurrent(node);
+		setFocus(node);
 
 		// Fade in
 		$(".info, #" + node.id).fadeIn("fast");
@@ -156,7 +156,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	/**
 	 * What happens when a node is scheduled
 	 */
-	var unscheduled = function(node) {
+	var unschedule = function(node) {
 
 		// Get item
 		var item = $("#" + node.id);
