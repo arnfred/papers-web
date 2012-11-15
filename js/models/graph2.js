@@ -5,7 +5,7 @@
  *
  */
 
-define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/nodes", "controllers/events/links", "models/zoom"], function(d3, screen, radio, levenshtein, events, eventsLinks, zoom) {
+define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/nodes", "controllers/events/links", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, events, eventsLinks, zoom, nodeList) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -44,7 +44,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//											//
 	//////////////////////////////////////////////
 
-	graph.init = function (nodes) {
+	graph.init = function () {
 
 		// Our canvas.
 		// g is just an window that can move...
@@ -65,19 +65,19 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		
 		//graph.zoom.translate([-200, -200]);
 		graph.force = null;
-		graph.nodes = nodes;
+		var nodes = nodeList.getNodes();
 		
 		
 		// Initialize the DOM UI: 
-		graph.nodes.forEach(function(el, j){
+		nodes.forEach(function(el, j){
 				el.links.forEach(function(link, i){
 				if(link.domlink == null ){
 					//console.log(link.target);
 					link.domlink = vis.append('svg:line')
 									  .attr('x1', el.pos.x)
 									  .attr('y1', el.pos.y)
-									  .attr('x2', graph.nodes[link.target].pos.x)
-									  .attr('y2', graph.nodes[link.target].pos.y)
+									  .attr('x2', nodes[link.target].pos.x)
+									  .attr('y2', nodes[link.target].pos.y)
 									  //.attr('source', el.id)
 									  //.attr('target', graph.nodes[link.target].id)
 									  .classed('link', true);
@@ -86,7 +86,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 			});	
 		});
 
-		graph.nodes.forEach(function(el){
+		nodes.forEach(function(el){
 			el.domNode = vis.append('svg:circle')
 										.attr('cx', el.pos.x)
 										.attr('cy', el.pos.y)
@@ -110,6 +110,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 			});
 		});
 
+
 		// Broadcast when the mouse enters a node
 		nodes.forEach(function(node){
 			node.domNode.on("mouseover", function(d, i) { 
@@ -118,6 +119,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 				//radio("node:current").broadcast(node.id, e);
 			});
 		});
+
 		
 		// Broadcast when the mouse exits a node
 		nodes.forEach(function(node){
@@ -136,7 +138,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		
 		// Other stuff to do:
 		// On search
-		radio("search:do").subscribe(search);
+		radio("search:do").subscribe(searchHighlight);
 		
 	}
 
@@ -149,11 +151,6 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//											//
 	//////////////////////////////////////////////
 
-
-	// TODO: should be deleted
-	graph.getNodeFromId = function(id) {
-		return graph.nodes[id].domNode;
-	}
 
 
 
@@ -173,46 +170,10 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	}
 
 
-
-
-	/**
-	 * Searches the graph for a particular title or author
-	 */
-	var search = function(term) {
-
-		if (term == "") term = "qqqqqqqqqqqqqqqq"; // Something that isn't there
-
-		var nodes = d3.selectAll("circle");
-
-		// remove all edges
-		nodes.classed("search", false);
-
-		// Add edges for nodes matching the search
-		var nodefound = graph.nodes.filter(function (d) { return searchFilter(term, d); });
-		nodefound.forEach(function(n){n.domNode.classed("search", true)});
+	// Highlights search results
+	var searchHighlight = function(node) {
+		// Do stuff
 	}
-
-
-	// Preliminary search
-	var searchFilter = function(term, d) {
-		var t = term.toLowerCase();
-		var title = d.title.toLowerCase();
-		var authors = d.authors.replace(',','').toLowerCase();
-
-		// Return if term is part of either title or authors
-		if ((title.indexOf(t) > -1) || (authors.indexOf(t) > -1)) return true
-
-		// Return if term has levenshtein distance 1 or less to any word or name
-		else {
-			var distAuthors = authors.split(' ').map(function (w) { return levenshtein(w,t); })
-			var distTitle = title.split(' ').map(function (w) { return levenshtein(w,t); })
-			var minDistAuthors = Math.min.apply(null,distAuthors);
-			var minDistTitle = Math.min.apply(null,distTitle);
-			return (Math.min(minDistAuthors,minDistTitle) <= 1)
-		}
-	}
-
-
 	
 
 

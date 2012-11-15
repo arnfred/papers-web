@@ -107,7 +107,7 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 		
 		
 			// Deselect a particular node
-			var unschedul = function(node) {
+			var unschedule = function(node) {
 		
 				//var lastEdges	= d3.selectAll("line.current");
 		
@@ -171,7 +171,7 @@ define(["lib/d3", "radio", "util/array", 'util/screen'], function(d3, radio, arr
 				if(selected_node_id) deselect(selected_node_id);
 				 
 				// Register this node as selected:
-				selected_node_id = node.index;
+				selected_node_id = node;
 		
 				// Make node red
 				domNode.classed("selected", true);

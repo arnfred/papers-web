@@ -43,7 +43,7 @@ define(["jquery", "models/nodeList", "radio"], function ($, nodeList, radio) {
 		radio("selectBox:mouseover").subscribe(cancelAnimation);
 		radio("selectBox:mouseout").subscribe(restartAnimation);
 
-		// On select or deselect, change image
+		// On schedule or unschedule, change image
 		radio("node:schedule").subscribe(unschedule);
 		radio("node:unschedule").subscribe(schedule);
 
