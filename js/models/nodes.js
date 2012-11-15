@@ -59,9 +59,9 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		 */
 
 		// Broadcasts select or deselect based on the id
-		var toggleScheduled = function(id) {
-			if (nodes.isScheduled(id)) radio("node:unscheduled").broadcast(id);
-			else radio("node:scheduled").broadcast(id);
+		var toggleScheduled = function(node) {
+			if (nodes.isScheduled(node)) radio("node:unscheduled").broadcast(node);
+			else radio("node:scheduled").broadcast(node);
 		}
 
 
@@ -130,7 +130,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load session
 		// Load the node that are already scheduled
 		//nodes.scheduled = session.loadSelected();
-		nodes.scheduled = session.loadScheduled();
+		nodes.scheduled = session.loadScheduled().map(nodes.getNodeFromId);
 		
 		/*  TODO: This loading should be done in 
 		 *	the future by looking session
@@ -156,15 +156,13 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	// indices, so this function is convenient for when we need to know 
 	// more
 	nodes.getScheduled = function() {
-		var sel = new Object;
-		nodes.scheduled.forEach(function(i) { sel[i] = nodes.node[i]; });
-		return sel;
+		return nodes.scheduled.map(function (i) { return nodes.node[i]; });
 	}
 
 
 	// Returns true if the id is selected and false if it isn't
-	nodes.isScheduled = function(id) {
-		return (nodes.scheduled.indexOf(id) != -1);
+	nodes.isScheduled = function(node) {
+		return (nodes.scheduled.indexOf(node.index) != -1);
 	}
 
 
@@ -178,10 +176,16 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	}
 
 
+	// Depreciated
+	nodes.getDataFromId = function(id) {
+		return nodes.node[id];
+	}
+
+
 	// Finally this function is not a hack anymore. Returns the data 
 	// based on an id of a node. Look in graph.js for it's companion 
 	// 'getNodeFromId'
-	nodes.getDataFromId = function(id) {
+	nodes.getNodeFromId = function(id) {
 		return nodes.node[id];
 	}
 
@@ -191,25 +195,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		return Math.ceil(Math.random()*nodes.node.length)
 	}
 
-
-	// Fetches an abstract with an ajax call and adds it to a node if 
-	// necessary before returning it
-	nodes.getAbstract = function(id, callback) {
-
-		var n = nodes.node[id];
-
-		// If we have an abstract already, call the callback
-		if (n.abstract != undefined) callback(n.abstract)
-
-		// If not, then fetch abstract from server
-		else {
-			$.get("ajax.php", { task: "abstract", id: n.id }, function (data) { 
-				n.abstract = data;
-				if (callback != undefined) callback(data);
-			});
-		}
-	}
-	
 
 
 
@@ -222,34 +207,32 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 
 	// Adds a new node to the list of selected nodes, but only if it 
 	// isn't already in the list
-	var scheduled = function(id) {
-		// Get a map of all the selected nodes
-		var selMap = nodes.getScheduled();
+	var scheduled = function(node) {
 		// Check if id doesn't already exist
-		if (selMap[id] == undefined) {
+		if (!nodes.isScheduled(node)) {
 			// Add new item
-			nodes.scheduled.push(id)
+			nodes.scheduled.push(node.index)
 			// Save changes
 			session.saveScheduled(nodes.scheduled);
 		}
 	}
 
 	// Removes the id from the list of selected nodes
-	var unscheduled = function(id) {
-		nodes.scheduled = nodes.scheduled.filter(function(i) { return (i != id); });
+	var unscheduled = function(node) {
+		nodes.scheduled = nodes.scheduled.filter(function(i) { return (i != node.index); });
 		session.saveScheduled(nodes.scheduled);
 	}
 
 	
 	// Load the last focused node
-	var setFocused = function(id) {
-		nodes.focused = id;
+	var setFocused = function(node) {
+		nodes.focused = node;
 	}
 
 
 	// Select a node (when it is clicked)
-	var select = function(id) {
-		nodes.selected = id;
+	var select = function(node) {
+		nodes.selected = node;
 	}
 
 

@@ -59,17 +59,16 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 
 	// Shows the small box that selectBoxs the graph when you click on a 
 	// node
-	var showselectBox = function(id, e) {
+	var showselectBox = function(node, e) {
 
-		// Get node data
-		var data = model.getDataFromId(id);
+		var index = node.index;
 
 		// set select image
-		if (model.isScheduled(id)) { setUnscheduled(id); }
-		else setScheduled(id);
+		if (model.isScheduled(index)) { setUnscheduled(index); }
+		else setScheduled(index);
 
 		// Set download link
-		$("#download a").attr("href", data.pdf).attr("target", "_blank");
+		$("#download a").attr("href", node.pdf).attr("target", "_blank");
 
 		// Change position of and fade in
 		$("#clickwrap")
@@ -81,7 +80,7 @@ define(["jquery", "models/nodes", "radio"], function ($, model, radio) {
 
 
 	// Sets the image on the selectBox as selected
-	var setScheduled = function(id) {
+	var setScheduled = function() {
 		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
 		$("#select a").attr("title","Add to Schedule");
 	}

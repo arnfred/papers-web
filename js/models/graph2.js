@@ -105,8 +105,8 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		nodes.forEach(function(node){
 			node.domNode.on("click", function(d,i) { 
 				var e = d3.event; 
-				radio("node:click").broadcast(node.index, e) 
-				radio("node:select").broadcast(node.index, e) 
+				radio("node:click").broadcast(node, e) 
+				radio("node:select").broadcast(node, e) 
 			});
 		});
 
@@ -114,7 +114,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		nodes.forEach(function(node){
 			node.domNode.on("mouseover", function(d, i) { 
 				var e = d3.event;
-				radio("node:mouseover").broadcast(node.index, e);
+				radio("node:mouseover").broadcast(node, e);
 				//radio("node:current").broadcast(node.id, e);
 			});
 		});
@@ -123,7 +123,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		nodes.forEach(function(node){
 				node.domNode.on("mouseout", function(d, i) { 
 				var e = d3.event;
-				radio("node:mouseout").broadcast(node.index, e) 
+				radio("node:mouseout").broadcast(node, e) 
 			});
 		});						
 

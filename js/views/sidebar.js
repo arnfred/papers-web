@@ -106,13 +106,13 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/
 	/**
 	 * Updates the list with the current element
 	 */
-	var setCurrent = function (id) {
+	var setCurrent = function (node) {
 
 		// Removes current from last list item
 		$(".listItem.current").removeClass("current");
 
 		// Adds curren to the current list item
-		$("#" + id).addClass("current");
+		$("#" + node.id).addClass("current");
 	}
 
 
@@ -120,38 +120,35 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/
 	/**
 	 * What happens when a node is scheduled
 	 */
-	var scheduled = function(id) {
-
-		// Get data from model
-		var data = model.getDataFromId(id);
-
-		//console.log(data)
+	var scheduled = function(node) {
 
 		// Clone listItemTemplate
-		var item = $("#listItemTemplate").clone().attr("id",id).css("display","none");
+		var item = $("#listItemTemplate").clone();
+		item.css("display","none");
+		item.attr("id", node.id);
 
 		// Add information
-		item.find(".listItemText").html(truncate(data.title, 62));
-		item.find(".listItemPdfLink").attr("href",data.pdf);
-		item.find("input").attr("value", id);
+		item.find(".listItemText").html(truncate(node.title, 62));
+		item.find(".listItemPdfLink").attr("href",node.pdf);
+		item.find("input").attr("value", node.id);
 
 		// Add it to the list
 		$("#sidebar").append(item);
 
 		// Set it as the current element
-		setCurrent(id);
+		setCurrent(node);
 
 		// Fade in
-		$(".info, #" + id).fadeIn("fast");
+		$(".info, #" + node.id).fadeIn("fast");
 
 		// Add mouseover event
 		item.mouseover(function (e) { 
-			radio("sidebar:hover").broadcast(id,e); 
+			radio("sidebar:hover").broadcast(node,e); 
 		});
 
 		// Add remove event
 		item.find(".listItemRemove").click(function (e) { 
-			radio("sidebar:remove").broadcast(id,e); 
+			radio("sidebar:remove").broadcast(node,e); 
 		});
 	}
 
@@ -159,10 +156,10 @@ define(["jquery", "radio", "models/nodes", "util/truncate", "util/array", "util/
 	/**
 	 * What happens when a node is scheduled
 	 */
-	var unscheduled = function(id) {
+	var unscheduled = function(node) {
 
 		// Get item
-		var item = $("#" + id);
+		var item = $("#" + node.id);
 
 		// Fade out and delete
 		item.fadeOut("fast", function() { 
