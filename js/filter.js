@@ -26,7 +26,7 @@ define(["models/nodes", "util/merge", "util/array", "util/levenshtein", "util/cu
 					nodes		: nodes,
 					and			: andFilter,
 					or			: orFilter,
-					_nodes		: model.nodes,
+					_nodes		: model.node,
 					_filter		: t,
 					_options	: {
 						levenshtein	: 1,

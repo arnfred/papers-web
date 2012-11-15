@@ -19,6 +19,9 @@ define(["filter", "radio"], function (filter, radio) {
 		// Listen for adding a new filter
 		radio("filter:add").subscribe(add);
 
+		// Listen for selecting only one filter
+		radio("filter:selectOnly").subscribe(selectOnly);
+
 		// Selecting a filter
 		radio("filter:select").subscribe(select);
 
@@ -87,6 +90,18 @@ define(["filter", "radio"], function (filter, radio) {
 		// TODO
 	}
 
+	// Selects a filter and deselects all currently selected filters
+	var selectOnly = function(index) {
+
+		// Deselect all currently selected filters
+		search.currentIndices.forEach(function(i) {
+			radio("filter:deselect").broadcast(i);
+		});
+
+		// Select the one filter we want
+		radio("filter:select").broadcast(index);
+
+	}
 
 	// Selects another filter (doesn't deselect the old filters)
 	var select = function(index) {
@@ -96,6 +111,8 @@ define(["filter", "radio"], function (filter, radio) {
 
 		// Create current filter
 		search.current = createCurrent();
+
+		console.debug(search.current.nodes());
 	}
 
 	// Deselects another filter (doesn't deselect the old filters)

@@ -1,5 +1,5 @@
-define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie", "data/position"], 
-	   function(json, radio, session, arrrr, cookie, position) {
+define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie", "data/position", "models/nodeFactory"], 
+	   function(json, radio, session, arrrr, cookie, position, nodeFactory) {
 
 /* TRAILHEAD MODEL
  * ---------------------------------------------------
@@ -82,7 +82,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 
 		// On node focused, make sure the node is marked as focused in 
 		// the nodes
-		radio("node:Focused").subscribe(setFocused);
+		radio("node:focused").subscribe(setFocused);
 
 		// When some code calls toggleSelect, we check if the node is 
 		// selected or not and call the proper event back
@@ -101,25 +101,29 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// It creates for each node an object with containing
 		// all the related information
 		
-		
 		// Load nodes
-		nodes.node = new Array();
+		nodes.node = json.nodes.map(nodeFactory.new);
 		
-		json.nodes.forEach( function(el, i){
-			el.id = i;
-			el.links = new Array();
-			el.domNode = null;
-			el.pos = position[i];
-			nodes.node[i] = el;
-			
-		});
+		// nodes.node = new Array();
+
+		// json.nodes.forEach( function(el, i) {
+		// 	
+		// 	el.id = i;
+		// 	el.links = new Array();
+		// 	el.domNode = null;
+		// 	el.pos = position[i];
+		// 	nodes.node[i] = el;
+		// 	
+		// });
 		
 		
 		// Load links
-		json.links.forEach( function(link, i){
+		json.links.forEach( function(link, i) {
 				// TODO: verify it is not already in!
-				nodes.node[link.source].links.push({source: link.source, target: link.target, value: link.value, domlink: null});
-				nodes.node[link.target].links.push({source: link.target, target: link.source, value: link.value, domlink: null}); 
+				nodes.node[link.source].addLink(link,"normal");
+				nodes.node[link.target].addLink(link,"reversed");
+				// nodes.node[link.source].links.push({source: link.source, target: link.target, value: link.value, domlink: null});
+				// nodes.node[link.target].links.push({source: link.target, target: link.source, value: link.value, domlink: null}); 
 		});
 		
 
@@ -137,8 +141,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// TODO: save it in session and load it here.
 		nodes.selected = null;
 
-		// Activate events
-		nodes.events();
 	}
 
 
@@ -255,6 +257,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	// top of the function definitions. The events has to happen after 
 	// the initialization
 	nodes.init();
+	nodes.events();
 
 	// Return object
 	return nodes;

@@ -73,7 +73,7 @@ define(["jquery", "radio"], function ($, radio) {
 		f.attr("id","filter" + index);
 
 		// Make clickable
-		f.click(function(e) { radio("filter:select").broadcast(id,e);
+		f.click(function() { radio("filter:selectOnly").broadcast(index); });
 
 		// now add text and add it
 		$("#filterList").append(f)
@@ -108,7 +108,6 @@ define(["jquery", "radio"], function ($, radio) {
 
 	// Create the string used to describe a filter
 	var makeInfo = function(filter) {
-		console.debug(filter)
 
 		var keywords	= (filter.keywords)	? " containing " + filter.keywords : "";
 		var context		= (filter.context.length > 0)	? " in " + filter.context.join(", ") : ""; 
