@@ -72,6 +72,9 @@ define(["jquery", "radio"], function ($, radio) {
 		// Add id
 		f.attr("id","filter" + index);
 
+		// Make clickable
+		f.click(function(e) { radio("filter:select").broadcast(id,e);
+
 		// now add text and add it
 		$("#filterList").append(f)
 	}
