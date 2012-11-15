@@ -44,8 +44,8 @@ define(["jquery", "models/nodeList", "radio"], function ($, nodeList, radio) {
 		radio("selectBox:mouseout").subscribe(restartAnimation);
 
 		// On select or deselect, change image
-		radio("node:schedule").subscribe(setUnschedule);
-		radio("node:unschedule").subscribe(setSchedule);
+		radio("node:schedule").subscribe(unschedule);
+		radio("node:unschedule").subscribe(schedule);
 
 	}
 
@@ -64,8 +64,8 @@ define(["jquery", "models/nodeList", "radio"], function ($, nodeList, radio) {
 		var index = node.index;
 
 		// set select image
-		if (model.isScheduled(index)) { setUnscheduled(index); }
-		else setScheduled(index);
+		if (nodeList.isScheduled(index)) { unschedule(index); }
+		else schedule(index);
 
 		// Set download link
 		$("#download a").attr("href", node.pdf).attr("target", "_blank");
@@ -80,14 +80,14 @@ define(["jquery", "models/nodeList", "radio"], function ($, nodeList, radio) {
 
 
 	// Sets the image on the selectBox as selected
-	var setSchedule = function() {
+	var schedule = function() {
 		$("#select img").attr("src","img/icons/calendar.png").css("padding-top",0);	
 		$("#select a").attr("title","Add to Schedule");
 	}
 
 
 	// Sets the image on the selectBox as deselected
-	var setUnschedule = function() {
+	var unschedule = function() {
 		$("#select img").attr("src","img/icons/remove.png").css("padding-top","2px");	
 		$("#select a").attr("title","Remove from Schedule");
 	}
