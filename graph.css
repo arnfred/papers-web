@@ -252,8 +252,8 @@ polygon.handle				{ stroke: #eee; position: absolute; z-index: 1000;}
 
 .form-w	label 		{
 							  vertical-align: -4px;
-							  padding-top: 10px;
-							  padding-bottom: 7px;
+							  padding-top: 8px;
+							  padding-bottom: 3px;
 							  float: left;
 							  font-size: 1em;
 							  width: 100%;

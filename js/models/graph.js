@@ -364,15 +364,9 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		
 
 		// Find all edges belinging to current node and update them
-		node.links.forEach(function(link){
-			if(link.domlink) {
-				var e = d3.event;
-				radio("link:deselect").broadcast(link, e)
-			}
+		
+		radio("node:unselect").broadcast(node)
 			
-			//link.domlink.classed("selected", false);
-		});
-	
 	
 	
 	}
