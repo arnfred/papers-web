@@ -23,7 +23,7 @@ define(["util/merge", "util/array", "util/levenshtein", "util/curry"],
 		var f = {	keyword		: keyword,
 					interval	: interval,
 					location	: location,
-					nodes		: nodes,
+					nodes		: nodesfun,
 					and			: andFilter,
 					or			: orFilter,
 					_nodes		: nodes,
@@ -179,7 +179,7 @@ define(["util/merge", "util/array", "util/levenshtein", "util/curry"],
 	/**
 	 * Returns the nodes matching the filter
 	 **/
-	var nodes = function() {
+	var nodesfun = function() {
 
 		// We filter the nodes with each filter that we have
 		this._nodes = this._nodes.filter(this._filter);

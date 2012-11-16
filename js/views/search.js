@@ -40,7 +40,7 @@ define(["jquery", "radio"], function ($, radio) {
 
 		// Get stuff from select boxes (how?)
 		// TODO: following line is wrong:
-		data.context = [];
+		data.context = $("select[name='context[]']").val();
 
 		// Now clear the form
 		clear();
