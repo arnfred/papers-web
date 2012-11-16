@@ -69,10 +69,10 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 					link.domlink = graph.canvas.append('svg:line')
 									  .attr('x1', el.pos.x)
 									  .attr('y1', el.pos.y)
-									  .attr('x2', nodes[link.target].pos.x)
-									  .attr('y2', nodes[link.target].pos.y)
+									  .attr('x2', link.target.pos.x)
+									  .attr('y2', link.target.pos.y)
 									  //.attr('source', el.id)
-									  //.attr('target', graph.nodes[link.target].id)
+									  //.attr('target', graph.link.target.id)
 									  .classed('link', true);
 
 				}
@@ -98,7 +98,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		nodes.forEach(function(node){
 			node.domNode.on("click", function(d,i) { 
 				var e = d3.event; 
-				radio("node:click").broadcast(node.index, e);
+				radio("node:click").broadcast(node, e);
 				radio("node:select").broadcast(node, e);
 			});
 		});
@@ -144,9 +144,8 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 
 	// Focus on a particular node
 	// 
-	graph.setFocus = function(nodeId) {
+	graph.setFocus = function(node) {
 			
-		var node = nodeList.getNodeFromId(nodeId);
 		// Dimension
 		var w = screen.width(),
 			h = screen.height();
@@ -349,23 +348,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		selected_node_id = node;
 
 		// Make node red
-		domNode.classed("selected", true);
-
-		// Find all edges belonging to old current node and update them
-		
-
-		// Find all edges belinging to current node and update them
-		node.links.forEach(function(link){
-			if(link.domlink) {
-				var e = d3.event;
-				radio("link:selected").broadcast(link, e)
-			}
-			
-			
-			//link.domlink.classed("selected", true);
-		});
-	
-	
+		domNode.classed("selected", true);	
 	
 	}
 	

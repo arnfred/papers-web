@@ -64,7 +64,7 @@ define(["jquery", "models/nodeList", "radio"], function ($, nodeList, radio) {
 		var index = node.index;
 
 		// set select image
-		if (nodeList.isScheduled(index)) { unschedule(index); }
+		if (nodeList.isScheduled(node)) { unschedule(index); }
 		else schedule(index);
 
 		// Set download link
