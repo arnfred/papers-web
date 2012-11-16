@@ -231,46 +231,47 @@ curl(
 		</div>
 
 
-		<div id="tab-1">
-		
-			<form id="filterForm" onSubmit="return false;">
-				<label for="keywords">Search</label>
-				<input name="keywords" value="" class="filter"/>
-				<br/>
-				<label for="context">Context</label>
-				<select multiple="multiple" name="context[]" value="">
-					<option value="title">Title</option>
-					<option value="author">Author</option>
-					<option value="abstract">Abstract</option>
-					<option value="body">Body</option>
-					<option value="refs">References</option>
-				</select>
-				<br/>
-				<label for="location">Location</label>
-				<select name="location">
-					<option value="">Not Selected</option>
-				</select>
-				<br/>
-				<label for="from">From</label>
-				<input name="from">
-				<br/>
-				<label for="to">To</label>
-				<input name="to">
-				<br/>
-				<button name="add" id="addFilter">Add</button>
-			</form>
-
-			<hr width="90%"/>
-
-			<ul id="filterList">
-				<li id="filterItemTemplate" class="filterItem">
-					<p class="filterItem"></p>
-				</li>
-			</ul>
+		<div id="tabs-3">
+			<div class="form-w">
+				<form id="filterForm" onSubmit="return false;">
+					<label for="keywords">Search</label>
+					<input type="text" name="keywords" value="" class="filter"/>
+					<br/>
+					<label for="context">Context</label>
+					<select id="context-select" multiple="multiple" name="context[]" value="">
+						<option value="title">Title</option>
+						<option value="author">Author</option>
+						<option value="abstract">Abstract</option>
+						<option value="body">Body</option>
+						<option value="refs">References</option>
+					</select>
+					<br/>
+					<label for="location">Location</label>
+					<select name="location">
+						<option value="">Not Selected</option>
+					</select>
+					<br/>
+					<label for="from">From</label>
+					<input type="text"  name="from">
+					<br/>
+					<label type="text"  for="to">To</label>
+					<input type="text"  name="to">
+					<br/>
+					<button  name="add" id="addFilter">Add</button>
+				</form>
+	
+				<hr width="90%"/>
+	
+				<ul id="filterList">
+					<li id="filterItemTemplate" class="filterItem">
+						<p class="filterItem"></p>
+					</li>
+				</ul>
+			</div>
 		
 		</div>
 
-		<div id="tab-3"></div>
+		<div id="tabs-1"></div>
 		
 	</div>
 

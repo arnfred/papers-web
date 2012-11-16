@@ -2,7 +2,8 @@
  *	This module is in charge to take the nodes and to draw
  *	the graph. It is also concerned by taking care of what
  *	happen when node are selected, and when. (DOM interaction)
- *
+ *	
+ * TODO: Change every event to pass id and not the complete node object!
  */
 
 define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/links", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, eventsLinks, zoom, nodeList) {
@@ -97,8 +98,8 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		nodes.forEach(function(node){
 			node.domNode.on("click", function(d,i) { 
 				var e = d3.event; 
-				radio("node:click").broadcast(node, e) 
-				radio("node:select").broadcast(node, e) 
+				radio("node:click").broadcast(node.index, e);
+				radio("node:select").broadcast(node, e);
 			});
 		});
 
@@ -143,9 +144,9 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 
 	// Focus on a particular node
 	// 
-	graph.setFocus = function(node) {
+	graph.setFocus = function(nodeId) {
 			
-			
+		var node = nodeList.getNodeFromId(nodeId);
 		// Dimension
 		var w = screen.width(),
 			h = screen.height();

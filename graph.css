@@ -219,4 +219,39 @@ polygon.handle				{ stroke: #eee; position: absolute; z-index: 1000;}
 #content .ui-widget-content			{background: #ddd;}
 
 
+/* Forms styling */
+
+.form-w						{ margin: 30px 20px; }	
+.form-w	 input[type=text], textarea 	{
+							  font-size: 1em;
+							  -webkit-transition: border-color .2s ease-out,-webkit-box-shadow .2s ease-out;
+							  -moz-transition: border-color .2s ease-out,-moz-box-shadow .2s ease-out;
+							  background: white;
+							  border: 1px solid #ddd;
+							  -webkit-border-radius: 2px;
+							  -moz-border-radius: 2px;
+							  border-radius: 2px;
+							  border: 1px solid #999;
+							  color: #666;
+							  padding: 8px 5px;
+							  font-size: 13px;
+							  width: 100%; 
+							  }
+
+.form-w	 input[type=text]:focus, textarea:focus {
+							  outline: none;
+							  -webkit-box-shadow: 0 0 6px 0 #4b9de3;
+							  -moz-box-shadow: 0 0 6px 0 #4b9de3;
+							  box-shadow: 0 0 6px 0 #4b9de3;
+							  border: 1px solid #4b9de3 !important; }
+
+.form-w	label 		{
+							  vertical-align: -4px;
+							  padding-top: 5px;
+							  padding-bottom: 4px;
+							  float: left;
+							  font-size: 1em;
+							 }
+
+
 
