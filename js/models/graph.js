@@ -6,7 +6,7 @@
  * TODO: Change every event to pass id and not the complete node object!
  */
 
-define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, eventsLinks, zoom, nodeList) {
+define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, zoom, nodeList) {
 
 	//////////////////////////////////////////////
 	//											//

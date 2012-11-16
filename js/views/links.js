@@ -135,6 +135,6 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	//											//
 	//////////////////////////////////////////////
 
-	events.init();
-	return events;
+	links.init();
+	return links;
 });
