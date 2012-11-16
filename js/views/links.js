@@ -1,30 +1,30 @@
-//////////////////////////////////////////////
-//											//
-//            Events of the links			//
-//											//
-//////////////////////////////////////////////
-
-
 define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], function(d3, radio, arrrr, nodeList, graph) {
 	
-
+	
+	// GLOBAL VARIABLES: 
+	
 	//////////////////////////////////////////////
 	//											//
 	//               Interface					//
 	//											//
 	//////////////////////////////////////////////
-	var links = {};
-	
+	var links = {}
 
 
 	//////////////////////////////////////////////
 	//											//
-	//                Events					//
+	//               Links Init 				//
 	//											//
 	//////////////////////////////////////////////
 
-	links.init = function (_nodes, _canvas) {
+    // Function that subscribe node event the 
+	links.init = function () {
 		
+		
+		/**
+		 * Subscribe
+		 */
+
 		// On link selected, color it	
 		radio("node:select").subscribe(select);
 		
@@ -32,7 +32,7 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		radio("node:unselect").subscribe(unselect);
 		
 		 
-	} // End of events initilization
+	}
 	
 
 
@@ -42,11 +42,15 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	//											//
 	//////////////////////////////////////////////
 	
+
+	//////////////////////////////////////////////
+	//											//
+	//           Private Functions				//
+	//											//
+	//////////////////////////////////////////////
+
 	var select = function(node) {
 	
-		// Find all edges belonging to old current node and update them
-				
-		
 		// Find all edges belinging to current node and update them
 		node.links.forEach(function(link){
 			if(link.domlink) {
@@ -70,24 +74,16 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	// Show a little clikable dom object to go from one node to second. 
 	var showClickable = function(source, link) {
 	
-		
 		 // Compute the direction offset:
-		 
 		 // Get the vector:
 		 var rx  = parseFloat(link.target.pos.x) - parseFloat(source.pos.x), ry  = parseFloat(link.target.pos.y) - parseFloat(source.pos.y);
 		 		 
-		 
-		 
 		 // Normalize it:
 		 rxn = rx / Math.sqrt(rx*rx+ry*ry);
 		 ryn = ry / Math.sqrt(rx*rx+ry*ry);
 		 
-		 //console.log(rxn*rxn+ryn*ryn);
-		 
 		 // Find the angle:
 		 a = 180*Math.atan2(ryn, rxn)/Math.PI+90;
-		 
-		 //console.log(a);
 		 
 		 randomfact =  10+20*Math.random();
 		 
@@ -116,9 +112,7 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 				radio('node:select').broadcast(link.target); 
 				
 		} );
-	
 	}
-
 
 
 	// remove all the clickable item of the old node.
@@ -139,6 +133,15 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	var hoverOut = function() {
 		//TODO
 	}
-	
+
+
+
+	//////////////////////////////////////////////
+	//											//
+	//            Return Interface				//
+	//											//
+	//////////////////////////////////////////////
+
+	links.init();
 	return links;
 });

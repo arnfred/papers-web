@@ -122,17 +122,6 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 			});
 		});						
 
-
-		// Initialize events:
-		// TODO: Move eventsLinks to views/links
-		//eventsLinks.init(nodes, graph.canvas);
-		
-		// On search highlight result
-		//radio("search:add").subscribe(searchHighlight);
-
-		// Remove search highlight from past results
-		//radio("search:remove").subscribe(searchRemove);
-		
 	}
 
 	
@@ -145,7 +134,6 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 	//////////////////////////////////////////////
 
 	// Focus on a particular node
-	// 
 	graph.setFocus = function(node) {
 			
 		// Dimension

@@ -185,6 +185,8 @@ define(["radio"], function(radio) {
 		// Get the domNode
 		var domNode = node.domNode;
 
+		console.debug(node)
+
 		// Add search class to affected node
 		domNode.classed("search",true);
 	}

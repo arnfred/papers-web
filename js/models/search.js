@@ -151,7 +151,7 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 		var oldNodes = search.results;
 
 		// Get the nodes we are searching for
-		search.results = current.nodes(nodeList.nodes);
+		search.results = search.current.nodes(nodeList.nodes);
 
 		// For each of the old nodes, demark it
 		oldNodes.forEach(function(n) { radio("search:remove").broadcast(node); });
