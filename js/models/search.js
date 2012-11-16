@@ -63,13 +63,13 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// Adds a new filter
 	var add = function(data) {
 
-		console.debug(data);
 		// Create new filter and fill in the appropriate details
 		var f = filter.new(nodeList.nodes);
 
 		// for each keyword/context combination, add to filter
 		data.context.forEach(function(c) { 
 			var otherContext = filter.new(nodeList.nodes).keyword(data.keywords, c);
+			console.debug(otherContext.nodes());
 			f = f.or(otherContext);
 		});
 
