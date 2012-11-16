@@ -123,8 +123,8 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load links
 		json.links.forEach( function(link, i) {
 				// TODO: verify it is not already in!
-				nodeList.nodes[link.source].addLink(link,"normal");
-				nodeList.nodes[link.target].addLink(link,"reversed");
+				nodeList.nodes[link.source].addLink(nodeList.nodes[link.target]  , link.value);
+				nodeList.nodes[link.target].addLink(nodeList.nodes[link.source]  , link.value);
 				// nodeList.nodes[link.source].links.push({source: link.source, target: link.target, value: link.value, domlink: null});
 				// nodeList.nodes[link.target].links.push({source: link.target, target: link.source, value: link.value, domlink: null}); 
 		});

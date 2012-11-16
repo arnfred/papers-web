@@ -58,12 +58,12 @@ define(["data/position", "util/merge"], function(position, merge) {
 	//////////////////////////////////////////////
 	
 	// A function to add a link to a node
-	var addLinkFun = function(link, order) {
+	var addLinkFun = function(targetNode, value) {
 
 		var l = {
-			source:		(order == "reversed") ? link.target : link.source,
-			target:		(order == "reversed") ? link.source : link.target,
-			value:		link.value,
+			source:		this,
+			target:		targetNode,
+			value:		value,
 			domLink:	null,
 		}
 
