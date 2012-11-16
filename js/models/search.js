@@ -1,4 +1,4 @@
-define(["filter", "radio"], function (filter, radio) {
+define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -68,8 +68,7 @@ define(["filter", "radio"], function (filter, radio) {
 
 		// for each keyword/context combination, add to filter
 		data.context.forEach(function(c) { 
-			var otherContext = filter.new().keyword(data.keywords, c);
-			f = f.or(otherContext);
+			f = f.keyword(data.keywords, c);
 		});
 
 		// Add location and time
@@ -83,7 +82,7 @@ define(["filter", "radio"], function (filter, radio) {
 		search.currentIndices.push(index);
 
 		// Update current filter
-		createCurrent();
+		search.current = createCurrent();
 
 		// Draw the update
 		radio("filter:publish").broadcast(data, index)
@@ -101,7 +100,6 @@ define(["filter", "radio"], function (filter, radio) {
 
 		// Select the one filter we want
 		radio("filter:select").broadcast(index);
-
 	}
 
 
@@ -113,8 +111,6 @@ define(["filter", "radio"], function (filter, radio) {
 
 		// Create current filter
 		search.current = createCurrent();
-
-		console.debug(search.current.nodes());
 	}
 
 
@@ -128,13 +124,15 @@ define(["filter", "radio"], function (filter, radio) {
 		search.current = createCurrent();
 	}
 
+
 	// Creates a filter which is a combination of the selected filters
 	var createCurrent = function() {
 
-		var c = filter.new();
+		var c = filter.none();
 		search.currentIndices.forEach(function (i) {
 			c = c.or(search.filters[i]);
 		});
+
 
 		return c;
 	}

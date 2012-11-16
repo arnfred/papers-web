@@ -35,12 +35,16 @@ define(["jquery", "radio"], function ($, radio) {
 		data.location = $("select[name=location]").val();
 
 		// Update dates (some stuff needs to be done here
-		data.to = $("input[name=to]").val();
-		data.from = $("input[name=from]").val();
+		data.to = Date.parse($("input[name=to]").val());
+		if (isNaN(data.to)) data.to = undefined;
+		else data.to = new Date(data.to);
+		data.from = Date.parse($("input[name=from]").val());
+		if (isNaN(data.from)) data.from = undefined;
+		else data.from = new Date(data.from);
 
-		// Get stuff from select boxes (how?)
-		// TODO: following line is wrong:
-		data.context = [];
+		// Get stuff from select boxes
+		data.context = $("select[name='context[]']").val();
+		if (!data.context) data.context = [];
 
 		// Now clear the form
 		clear();
