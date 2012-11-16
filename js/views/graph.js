@@ -38,10 +38,10 @@ define(["radio"], function(radio) {
 		radio("node:setfocus").subscribe(graph.setFocus);
 
 		// On search highlight result
-		//radio("search:add").subscribe(searchAdd);
+		radio("search:add").subscribe(searchAdd);
 
 		// Remove search highlight from past results
-		//radio("search:remove").subscribe(searchRemove);
+		radio("search:remove").subscribe(searchRemove);
 	}
 
 

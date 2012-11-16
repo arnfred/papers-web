@@ -34,7 +34,7 @@ define(["jquery", "radio", "util/datepicker"], function ($, radio) {
 		data.keywords = $("input[name=keywords]").val();
 		data.location = $("select[name=location]").val();
 
-		// Update dates (some stuff needs to be done here
+		// Update dates
 		data.to = Date.parse($("input[name=to]").val());
 		if (isNaN(data.to)) data.to = undefined;
 		else data.to = new Date(data.to);
