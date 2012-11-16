@@ -95,7 +95,7 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		 posx = posx+2;
 		 
 		 link.clickable = graph.canvas.insert('svg:polygon', "line:first-child")
-		 						.attr('points', '57.042,22.06 0,-5.159 -57.042,22.06 -57.042,5.159 0,-22.06 57.042,5.159')
+		 						.attr('points', '-33.001,24.991 0,18.687 33,24.991 -0.309,-24.991') //57.042,22.06 0,-5.159 -57.042,22.06 -57.042,5.159 0,-22.06 57.042,5.159
 		 						//.attr('height', 4)
 		 						//.attr('width', 4)
 		 						.attr('fill', '#FF0000')
@@ -118,11 +118,11 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	// remove all the clickable item of the old node.
 	var unselect = function(node) {
 		node.links.forEach(function(link){
-			if(link.domlink) {
+			//if(link.domlink) {
 				var e = d3.event;
 				link.clickable.remove();
 				link.domlink.classed('clickable', false);
-			}
+			//}
 		});
 	}
 		

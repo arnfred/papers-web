@@ -168,14 +168,7 @@ define(["radio"], function(radio) {
 		
 
 		// Find all edges belinging to current node and update them
-		node.links.forEach(function(link){
-			if(link.domlink) {
-				var e = d3.event;
-				radio("link:deselect").broadcast(link, e)
-			}
-			
-			//link.domlink.classed("selected", false);
-		});
+		radio("node:unselect").broadcast(node);
 	}
 
 
