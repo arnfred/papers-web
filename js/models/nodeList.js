@@ -107,19 +107,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load nodeList
 		nodeList.nodes = json.nodes.map(nodeFactory.new);
 		
-		// nodeList.nodes = new Array();
-
-		// json.nodeList.forEach( function(el, i) {
-		// 	
-		// 	el.id = i;
-		// 	el.links = new Array();
-		// 	el.domNode = null;
-		// 	el.pos = position[i];
-		// 	nodeList.nodes[i] = el;
-		// 	
-		// });
-		
-		
 		// Load links
 		json.links.forEach( function(link, i) {
 				// TODO: verify it is not already in!
@@ -133,13 +120,13 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load session
 		// Load the node that are already scheduled
 		//nodeList.scheduled = session.loadSelected();
-		nodeList.scheduled = session.loadScheduled().map(nodeList.getNodeFromId);
+		nodeList.scheduled = session.loadScheduled().map(nodeList.getNodeFromIndex);
 		
 		/*  TODO: This loading should be done in 
 		 *	the future by looking session
 		 * 	in the DB with Play
 		 */
-		nodeList.focused = nodeList.getNodeFromId(session.loadFocused());
+		nodeList.focused = nodeList.getNodeFromIndex(session.loadFocused());
 		
 		// TODO: save it in session and load it here.
 		nodeList.selected = null;
@@ -182,16 +169,11 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		nodeList.scheduled.forEach(function(e) { return radio("node:unschedule").broadcast(e); });
 	}
 
-	// Depreciated
-	nodeList.getDataFromId = function(id) {
-		return nodeList.nodes[id];
-	}
-
 
 	// Finally this function is not a hack anymore. Returns the data 
 	// based on an id of a node. Look in graph.js for it's companion 
 	// 'getNodeFromId'
-	nodeList.getNodeFromId = function(id) {
+	nodeList.getNodeFromIndex = function(id) {
 		return nodeList.nodes[id];
 	}
 

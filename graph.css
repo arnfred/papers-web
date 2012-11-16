@@ -91,7 +91,7 @@ p#infoRoom					{ float:right; font-style:italic; }
 p#infoAbstract				{ margin-top:3px; }
 
 /* List */
-div#tabs					{ position:absolute; left:0px; top:40px; z-index:1; width:310px; margin:0px 0; text-align: left; background: #dddddd; border-right: 1px solid #c3c3c3;
+div#tabs					{ position:absolute; left:0px; top:38px; z-index:1; width:310px; margin:0px 0; text-align: left; background: #dddddd; border-right: 1px solid #c3c3c3;
 }
 div#tabs select	p			{ display:none; }
 div.toolbar					{  margin: 20px; height:25px; width: 260px; border: 1px solid #e2e2e2; box-shadow: 0 0 5px rgba(1,1,1,.5); }

@@ -53,6 +53,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// The currently active filter
 	search.current = filter.new();
 
+	// The currently active results
+	search.results = [];
+
 
 	//////////////////////////////////////////////
 	//											//
@@ -95,7 +98,7 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 		// Deselect all currently selected filters
 		search.currentIndices.forEach(function(i) {
-			radio("filter:deselect").broadcast(i);
+			radio("filter:deselect").broadcast(index);
 		});
 
 		// Select the one filter we want
@@ -111,6 +114,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 		// Create current filter
 		search.current = createCurrent();
+
+		// Update graph
+		updateResults();
 	}
 
 
@@ -118,10 +124,13 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	var deselect = function(index) {
 		
 		// Add index to currentIndices
-		search.currentIndices.filter(function(i) { return (i != index); });
+		search.currentIndices = search.currentIndices.filter(function(i) { return (i != index); });
 
 		// Create current filter
 		search.current = createCurrent();
+
+		// Update graph
+		updateResults();
 	}
 
 
@@ -133,8 +142,24 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 			c = c.or(search.filters[i]);
 		});
 
-
 		return c;
+	}
+
+
+	// Updates the graph with the search results
+	var updateResults = function() {
+
+		// Get the old nodes
+		var oldNodes = search.results;
+
+		// Get the nodes we are searching for
+		search.results = search.current.nodes(nodeList.nodes);
+
+		// For each of the old nodes, demark it
+		oldNodes.forEach(function(node) { radio("search:remove").broadcast(node); });
+
+		// For each of the new nodes, mark it
+		search.results.forEach(function(node) { radio("search:add").broadcast(node); });
 	}
 
 
