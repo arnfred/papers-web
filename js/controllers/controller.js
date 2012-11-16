@@ -1,4 +1,4 @@
-define(["models/nodeList", "models/search", "views/views"], function (nodeList, views) {
+define(["models/nodeList", "models/search", "models/graph", "views/views"], function (nodeList, views) {
 
 
 	//////////////////////////////////////////////
