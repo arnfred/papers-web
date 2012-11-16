@@ -1,4 +1,4 @@
-define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-tabs.min.js!order'], function($, radio, truncate, arrrr, screen, tabbbb) {
+define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-tabs.min.js!order',"js!lib/jquery/multiselect!order"], function($, radio, truncate, arrrr, screen, tabbbb) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -90,6 +90,14 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		
 		// Init the tabs:
 		$('#tabs').tabs();
+		
+		// Set up form handler for the filters:
+		$("#context-select")
+		   .multiselect({
+		      noneSelectedText: 'Add some context to filter',
+		      selectedList: 4
+		   });
+		   //.multiselectfilter();
 		
 		
 	}
