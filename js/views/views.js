@@ -18,7 +18,7 @@ define(["models/nodeList", "models/graph", "views/infobox", "views/sidebar", "vi
 	//////////////////////////////////////////////
 
 	// Initialize graph
-	graph.init(nodeList.nodes);
+	graph.init();
 
 
 	// Initialize sidebar

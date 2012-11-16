@@ -5,7 +5,7 @@
  *
  */
 
-define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/nodes", "controllers/events/links", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, events, eventsLinks, zoom, nodeList) {
+define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/links", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, eventsLinks, zoom, nodeList) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -24,17 +24,8 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 
 		// Dimensions
 	var w = screen.width(),
-		h = screen.height(),
+		h = screen.height();
 
-		// Colors
-		fill 		= d3.rgb(0,50,180),
-		match 		= d3.rgb(20,150,20),
-		current 	= d3.rgb(180,50,80),
-		selected 	= d3.rgb(248, 128, 23),
-		edge 		= d3.rgb(153,153,153),
-		currentEdge = d3.rgb(255,0,0);
-
-	// The zoom and scale of the graph:	
 	graph.zoom = zoom;
 
 
@@ -45,15 +36,13 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//////////////////////////////////////////////
 
 	graph.init = function () {
-
-		// Our canvas.
-		// g is just an window that can move...
 		
-		var vis = d3.select("#graph").append("svg")
+		// Our canvas.
+		graph.canvas = d3.select("#graph").append("svg")
 			.attr("width", "100%")
 			.attr("height", "100%")
 			// Enable zoom feature:
-			.call(	graph.zoom)
+			.call(	graph.zoom )
 			// Add paning g:
 			.append('svg:g') 
 			.attr("pointer-events", "all")
@@ -61,10 +50,13 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		
 		
 		//enable scrolling on the canvas:
-		graph.zoom.init(vis);
+		graph.zoom.init(graph.canvas);
 		
-		//graph.zoom.translate([-200, -200]);
+		
+		
+		// For later Use, switch to force layout:
 		graph.force = null;
+		
 		var nodes = nodeList.getNodes();
 		
 		
@@ -73,7 +65,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 				el.links.forEach(function(link, i){
 				if(link.domlink == null ){
 					//console.log(link.target);
-					link.domlink = vis.append('svg:line')
+					link.domlink = graph.canvas.append('svg:line')
 									  .attr('x1', el.pos.x)
 									  .attr('y1', el.pos.y)
 									  .attr('x2', nodes[link.target].pos.x)
@@ -87,7 +79,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		});
 
 		nodes.forEach(function(el){
-			el.domNode = vis.append('svg:circle')
+			el.domNode = graph.canvas.append('svg:circle')
 										.attr('cx', el.pos.x)
 										.attr('cy', el.pos.y)
 										.attr('r', 4);
@@ -130,11 +122,9 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		});						
 
 
-		// Initialize events
-		// That is subscribe everything. 
-		events.init(nodes, vis, graph.zoom);
-		
-		eventsLinks.init(nodes, vis);
+		// Initialize events:
+		eventsInit();
+		eventsLinks.init(nodes, graph.canvas);
 		
 		// Other stuff to do:
 		// On search
@@ -151,7 +141,30 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	//											//
 	//////////////////////////////////////////////
 
+	// Focus on a particular node
+	// 
+	graph.setFocus = function(node) {
+			
+			
+			// Dimension
+			var w = screen.width(),
+				h = screen.height();
+				
+			
+			
+			//console.log(nextNode.pos.x+ " " + nextNode.pos.y);
+			
+			// What is the scale?
+			var factor = graph.zoom.pos.s;
+			// Compute the translation coeff
+			var transx = factor * node.pos.x - w/2, transy = factor * node.pos.y - h/2;
+			
+			graph.zoom.translate([-transx, -transy]);
+			graph.zoom.scale(factor);
+			graph.canvas.transition().attr('transform', "translate(-"+transx+", -"+transy+") scale("+factor+")");
+			
 
+	}
 
 
 
@@ -175,7 +188,219 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		// Do stuff
 	}
 	
+	
+	//////////////////////////////////////////////
+	//											//
+	//            Events handling				//
+	//											//
+	//////////////////////////////////////////////
+	
+	
+	
+	// Event initialization 
+	var eventsInit = function () {
+			
+			
+		/**
+		 * Subscribe
+		 */
 
+		 /*
+
+		 Event for the nodes:
+
+		 - focused:
+
+		 - scheduled:
+
+		 - matched:
+
+		 - clicked:
+
+		 - mouseover:
+
+		 - mouseout:
+
+		 */
+
+		// On node click, call either the select or the deselect event	
+		// radio("node:click").subscribe(selectToggle);
+
+		// On node select, make sure the node is selected in the the graph
+		 radio("node:select").subscribe(select);
+		// 
+		// // On node deselect, make sure the node is selected in the the graph
+		 radio("node:deselect").subscribe(deselect);
+		// 
+		 // On node mouseover
+		 radio("node:mouseover").subscribe(hover);
+
+		 // On node mouseout
+		 radio("node:mouseout").subscribe(hoverOut);
+
+
+		 // On node click, we want to try a new interface: focus on the node	
+		 radio("node:click").subscribe(graph.setFocus);
+		 
+		 
+		 // On node click, we want to try a new interface: focus on the node	
+		 radio("node:setfocus").subscribe(graph.setFocus);
+	
+			 
+	} // End of events initilization
+
+
+	//////////////////////////////////////////////	
+	// PRIVATE FUNCTION FOR EVENTS:				//
+	//////////////////////////////////////////////
+	
+	
+	// Select a particular node
+	var scheduled = function(node) {
+		var lastNode	= d3.select("circle.current");
+		var lastEdges	= d3.selectAll("line.current");
+		var domNode	= node.domNode;
+
+		// Add paper to list of selected and make current item current
+		// TODO: make sure we have an event in sidebar.js for addlistitem
+		//addListItem(id);
+
+		// TODO: set sidebar node as current
+		// Add which element is current in the list
+		// $("li.current").removeClass("current");
+		// $("li[rel=" + id + "]").addClass("current").click(function() { 
+			//window.open(domNode.property("__data__").pdf); });
+
+		// Update the new current node to selected
+		node.classed("selected", true);
+
+		// Find all edges belonging to current node and update them
+		node.links.forEach(function(link){
+			if(link.domlink != null) link.domlink.classed("selected", true);
+			
+			//link.domlink.on('click', function() { radio("link:click").broadcast(id, link.target); });
+			//d
+			
+			
+		});
+	}
+		
+		
+	// Deselect a particular node
+	var unschedule = function(node) {
+
+		//var lastEdges	= d3.selectAll("line.current");
+
+		// Remove it from list
+		// TODO: make sure node is dropped from list too
+		// dropListItem(id);
+
+		// Deselect it
+		node.domNode.classed("selected", false);
+
+		// Go through all selected edges and deselect all that aren't connect to another selected node
+		node.links.forEach(function(link){
+			link.domlink.classed("selected", false);
+		});
+	}
+
+
+	// What happens when we hover over a node
+	var hoverOut = function(node) {
+		// Get node
+		var domNode = node.domNode;
+
+
+		// Make node red
+		domNode.classed("current", false);
+
+
+		// Find all edges belinging to current node and update them
+		node.links.forEach(function(link){
+			if(link.domlink) link.domlink.classed("current", false);
+		});
+	}
+
+
+	// Sets the node as the current node NON PERSISTANT
+	var hover = function(node) {
+
+		// Get node
+		var domNode = node.domNode;
+
+
+		// Make node red
+		domNode.classed("current", true);
+
+
+		// Find all edges belinging to current node and update them
+		node.links.forEach(function(link){
+			if(link.domlink) link.domlink.classed("current", true);
+		});
+	}
+
+	// General variable to know who is under focus
+	var selected_node_id = null;
+	
+	// What happends when we select a node
+	var select = function(node) {
+		// Get node
+		var domNode = node.domNode;
+		
+		// deselected the privous node:
+		if(selected_node_id) deselect(selected_node_id);
+		 
+		// Register this node as selected:
+		selected_node_id = node;
+
+		// Make node red
+		domNode.classed("selected", true);
+
+		// Find all edges belonging to old current node and update them
+		
+
+		// Find all edges belinging to current node and update them
+		node.links.forEach(function(link){
+			if(link.domlink) {
+				var e = d3.event;
+				radio("link:selected").broadcast(link, e)
+			}
+			
+			
+			//link.domlink.classed("selected", true);
+		});
+	
+	
+	
+	}
+	
+	// What happends when we deselect a node
+	var deselect = function(node) {
+		// Get node
+		var domNode = node.domNode;
+
+		// Make node red
+		domNode.classed("selected", false);
+
+		// Find all edges belonging to old current node and update them
+		
+
+		// Find all edges belinging to current node and update them
+		node.links.forEach(function(link){
+			if(link.domlink) {
+				var e = d3.event;
+				radio("link:deselect").broadcast(link, e)
+			}
+			
+			//link.domlink.classed("selected", false);
+		});
+	
+	
+	
+	}
+	
+	
+			
 
 	//////////////////////////////////////////////
 	//											//
