@@ -127,9 +127,11 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		eventsInit();
 		eventsLinks.init(nodes, graph.canvas);
 		
-		// Other stuff to do:
-		// On search
-		radio("search:do").subscribe(searchHighlight);
+		// On search highlight result
+		//radio("search:add").subscribe(searchHighlight);
+
+		// Remove search highlight from past results
+		//radio("search:remove").subscribe(searchRemove);
 		
 	}
 

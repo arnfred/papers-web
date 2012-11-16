@@ -53,6 +53,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// The currently active filter
 	search.current = filter.new();
 
+	// The currently active results
+	search.results = [];
+
 
 	//////////////////////////////////////////////
 	//											//
@@ -111,6 +114,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 		// Create current filter
 		search.current = createCurrent();
+
+		// Update graph
+		updateResults();
 	}
 
 
@@ -135,6 +141,23 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 
 		return c;
+	}
+
+
+	// Updates the graph with the search results
+	var updateResults = function() {
+
+		// Get the old nodes
+		var oldNodes = search.results;
+
+		// Get the nodes we are searching for
+		search.results = current.nodes(nodeList.nodes);
+
+		// For each of the old nodes, demark it
+		oldNodes.forEach(function(n) { radio("search:remove").broadcast(node); });
+
+		// For each of the new nodes, mark it
+		search.results.forEach(function(n) { radio("search:add").broadcast(node); });
 	}
 
 
