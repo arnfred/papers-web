@@ -146,23 +146,17 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 	graph.setFocus = function(node) {
 			
 			
-			// Dimension
-			var w = screen.width(),
-				h = screen.height();
-				
+		// Dimension
+		var w = screen.width(),
+			h = screen.height();
+						
+		// What is the scale?
+		var factor = graph.zoom.pos.s;
+		// Compute the translation coeff
+		var transx = factor * node.pos.x - w/2, transy = factor * node.pos.y - h/2;
 			
 			
-			//console.log(nextNode.pos.x+ " " + nextNode.pos.y);
-			
-			// What is the scale?
-			var factor = graph.zoom.pos.s;
-			// Compute the translation coeff
-			var transx = factor * node.pos.x - w/2, transy = factor * node.pos.y - h/2;
-			
-			graph.zoom.translate([-transx, -transy]);
-			graph.zoom.scale(factor);
-			graph.canvas.transition().attr('transform', "translate(-"+transx+", -"+transy+") scale("+factor+")");
-			
+		zoom.transitionTo(factor, [-transx, -transy] );
 
 	}
 
