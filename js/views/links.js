@@ -5,37 +5,26 @@
 //////////////////////////////////////////////
 
 
-define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
+define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], function(d3, radio, arrrr, nodeList, graph) {
 	
+
+	//////////////////////////////////////////////
+	//											//
+	//               Interface					//
+	//											//
+	//////////////////////////////////////////////
+	var links = {};
 	
-	// GLOBAL VARIABLES: 
 
-	var nodes = null, // Global variable of the nodes
-		canvas = null,
-	    events = {};
 
-	    
-    // Function that subscribe node event the 
-	events.init = function (_nodes, _canvas) {
+	//////////////////////////////////////////////
+	//											//
+	//                Events					//
+	//											//
+	//////////////////////////////////////////////
+
+	links.init = function (_nodes, _canvas) {
 		
-		
-		// Stupid initializer for nodes:
-		nodes = _nodes;
-		canvas = _canvas;
-		/**
-		 * Subscribe
-		 */
-
-		// On link click, we jump to the next link	
-		//radio("node:click").subscribe(makeLinkclickable);
-
-		// 
-		 // On node mouseover
-		 //radio("link:mouseover").subscribe(hover);
-
-		 // On node mouseout
-		 //radio("link:mouseout").subscribe(hoverOut);
-
 		// On link selected, color it	
 		radio("node:select").subscribe(select);
 		
@@ -45,6 +34,13 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		 
 	} // End of events initilization
 	
+
+
+	//////////////////////////////////////////////
+	//											//
+	//            Private Functions				//
+	//											//
+	//////////////////////////////////////////////
 	
 	var select = function(node) {
 	
@@ -102,7 +98,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		 
 		 posx = posx+2;
 		 
-		 link.clickable = canvas.insert('svg:polygon', "line:first-child")
+		 link.clickable = graph.canvas.insert('svg:polygon', "line:first-child")
 		 						.attr('points', '57.042,22.06 0,-5.159 -57.042,22.06 -57.042,5.159 0,-22.06 57.042,5.159')
 		 						//.attr('height', 4)
 		 						//.attr('width', 4)
@@ -122,6 +118,9 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		} );
 	
 	}
+
+
+
 	// remove all the clickable item of the old node.
 	var unselect = function(node) {
 		node.links.forEach(function(link){
@@ -141,5 +140,5 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 		//TODO
 	}
 	
-	return events;
+	return links;
 });

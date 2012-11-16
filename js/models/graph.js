@@ -6,7 +6,7 @@
  * TODO: Change every event to pass id and not the complete node object!
  */
 
-define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/events/links", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, eventsLinks, zoom, nodeList) {
+define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, zoom, nodeList) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -125,7 +125,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 
 		// Initialize events:
 		// TODO: Move eventsLinks to views/links
-		eventsLinks.init(nodes, graph.canvas);
+		//eventsLinks.init(nodes, graph.canvas);
 		
 		// On search highlight result
 		//radio("search:add").subscribe(searchHighlight);

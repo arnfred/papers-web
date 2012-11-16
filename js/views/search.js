@@ -1,4 +1,4 @@
-define(["jquery", "radio"], function ($, radio) {
+define(["jquery", "radio", "util/datepicker"], function ($, radio) {
 
 	// Init
 	var search = {};
