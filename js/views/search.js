@@ -67,7 +67,7 @@ define(["jquery", "radio"], function ($, radio) {
 
 		// Add info
 		var info = makeInfo(filter);
-		f.children("p").append(info);
+		f.children("p.filterItem").append(info);
 
 		// Add id
 		f.attr("id","filter" + index);
