@@ -128,7 +128,7 @@ define(["lib/d3", "radio", "util/array"], function(d3, radio, arrrr) {
 			if(link.domlink) {
 				var e = d3.event;
 				link.clickable.remove();
-				link.domlink.classed('clikable', false);
+				link.domlink.classed('clickable', false);
 			}
 		});
 	}

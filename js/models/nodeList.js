@@ -107,19 +107,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Load nodeList
 		nodeList.nodes = json.nodes.map(nodeFactory.new);
 		
-		// nodeList.nodes = new Array();
-
-		// json.nodeList.forEach( function(el, i) {
-		// 	
-		// 	el.id = i;
-		// 	el.links = new Array();
-		// 	el.domNode = null;
-		// 	el.pos = position[i];
-		// 	nodeList.nodes[i] = el;
-		// 	
-		// });
-		
-		
 		// Load links
 		json.links.forEach( function(link, i) {
 				// TODO: verify it is not already in!
@@ -180,11 +167,6 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	nodeList.unscheduleAll = function() {
 		// Broadcast session
 		nodeList.scheduled.forEach(function(e) { return radio("node:unschedule").broadcast(e); });
-	}
-
-	// Depreciated
-	nodeList.getDataFromId = function(id) {
-		return nodeList.nodes[id];
 	}
 
 

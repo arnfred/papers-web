@@ -205,17 +205,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 
 		 Event for the nodes:
 
-		 - focused:
-
-		 - scheduled:
-
-		 - matched:
-
-		 - clicked:
-
-		 - mouseover:
-
-		 - mouseout:
+		 - focused, scheduled, matched, clicked, mouseover, mouseout:
 
 		 */
 
@@ -223,24 +213,22 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "controllers/event
 		// radio("node:click").subscribe(selectToggle);
 
 		// On node select, make sure the node is selected in the the graph
-		 radio("node:select").subscribe(select);
-		// 
+		radio("node:select").subscribe(select);
+
 		// // On node deselect, make sure the node is selected in the the graph
-		 radio("node:deselect").subscribe(deselect);
-		// 
-		 // On node mouseover
-		 radio("node:mouseover").subscribe(hover);
+		radio("node:deselect").subscribe(deselect);
 
-		 // On node mouseout
-		 radio("node:mouseout").subscribe(hoverOut);
+		// On node mouseover
+		radio("node:mouseover").subscribe(hover);
 
+		// On node mouseout
+		radio("node:mouseout").subscribe(hoverOut);
 
-		 // On node click, we want to try a new interface: focus on the node	
-		 radio("node:click").subscribe(graph.setFocus);
-		 
-		 
-		 // On node click, we want to try a new interface: focus on the node	
-		 radio("node:setfocus").subscribe(graph.setFocus);
+		// On node click, we want to try a new interface: focus on the node	
+		radio("node:click").subscribe(graph.setFocus);
+
+		// On node click, we want to try a new interface: focus on the node	
+		radio("node:setfocus").subscribe(graph.setFocus);
 	
 			 
 	} // End of events initilization
