@@ -236,35 +236,57 @@ curl(
 				<form id="filterForm" onSubmit="return false;">
 					<label for="keywords">Search</label>
 					<input type="text" name="keywords" value="" class="filter"/>
-					<br/>
-					<label for="context">Context</label>
-					<select id="context-select" multiple="multiple" name="context[]" value="">
-						<option value="title">Title</option>
-						<option value="authors">Author</option>
-						<option value="abstract">Abstract</option>
-						<option value="body">Body</option>
-						<option value="refs">References</option>
-					</select>
-					<br/>
-					<label for="location">Location</label>
-					<select name="room">
-						<option value="">Not Selected</option>
-					</select>
-					<br/>
-					<label for="from">From</label>
-					<input type="text"  name="from">
-					<br/>
-					<label type="text"  for="to">To</label>
-					<input type="text"  name="to">
-					<br/>
-					<button  name="add" id="addFilter">Add</button>
+					<div class="field">
+						<label for="context">Context</label>
+						<select id="context-select" multiple="multiple" name="context[]" value="">
+							<option value="title">Title</option>
+							<option value="authors">Authors</option>
+							<option value="abstract">Abstract</option>
+							<option value="body">Body</option>
+							<option value="refs">References</option>
+						</select>
+					</div>
+					<div class="field">
+						<label for="room">Location</label>
+						<select name="room">
+							<option value="">Not Selected</option>
+						</select>
+					</div>
+					<div class="field">
+						<label for="from">From</label>
+						<input type="text" style="width: 85px;" name="from" class="date_picker2">
+						<label  class="inline_label" for="fromtime">Time: </label>
+						<input type="text"  name="fromtime"  style="width: 70px;">
+					</div>
+					<div class="field">
+						<label  for="to">To</label>
+						<input type="text"  name="to"  style="width:85px;" class="date_picker2">
+						<label  class="inline_label" for="totime">Time: </label>
+						<input type="text"  name="totime"  style="width: 70px;">
+					</div>
+					<div style="height: 30px; margin-top: 10px;">
+						<button  class="submit" name="add" id="addFilter">Add</button>
+					</div>
 				</form>
 	
 				<hr width="90%"/>
 	
+				<div class="clear" style="height: 20px;"></div>
 				<ul id="filterList">
-					<li id="filterItemTemplate" class="filterItem">
-						<p class="filterItem"></p>
+					<li id="filterItemTemplate" class="filterItem listItem">
+						
+						<a href="#" class="listItemRemove">
+							<img src="img/icons/remove.png" />
+						</a>
+						
+						
+							<span class="listItemLabel">
+								<div class="clear" style="height: 8px;"></div>
+								<img src="img/icons/filter?.png" />
+								<p class="filterItem"></p>
+								<div class="clear" style="height: 8px;"></div>
+							</span>
+						
 					</li>
 				</ul>
 			</div>

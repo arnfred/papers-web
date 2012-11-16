@@ -1,4 +1,4 @@
-define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-tabs.min.js!order',"js!lib/jquery/multiselect!order"], function($, radio, truncate, arrrr, screen, tabbbb) {
+define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-1.9.1.custom.min.js!order',"js!lib/jquery/multiselect!order"], function($, radio, truncate, arrrr, screen, tabbbb) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -98,7 +98,16 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		      selectedList: 4
 		   });
 		   //.multiselectfilter();
+		 $('button.ui-multiselect').css('width', '100%');
 		
+		// Set up the calendar:
+		$( ".date_picker2" ).each(function () { 
+					$(this).datepicker({ buttonImage: "./img	/calendar_gray.png", 
+										 buttonImageOnly: true, 
+										 showOn: "button",
+										 constrainInput: false
+									}); 
+					});
 		
 	}
 

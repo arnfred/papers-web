@@ -44,7 +44,8 @@ define(["data/position", "util/merge"], function(position, merge) {
 					// isScheduled:	isScheduledFun,
 					getAbstract:	getAbstractFun,
 					getDate:		getDateFun,
-					addLink:		addLinkFun
+					addLink:		addLinkFun,
+					doeslinkExist:  doeslinkExistFun
 				}
 
 		return merge(n,data);
@@ -59,16 +60,20 @@ define(["data/position", "util/merge"], function(position, merge) {
 	
 	// A function to add a link to a node
 	var addLinkFun = function(targetNode, value) {
-
-		var l = {
-			source:		this,
-			target:		targetNode,
-			value:		value,
-			domLink:	null,
+		
+		// Check this link is not already included:
+		// ! Comment this line if we want double link
+		if(! this.doeslinkExist(targetNode) ){
+			var l = {
+				source:		this,
+				target:		targetNode,
+				value:		value,
+				domLink:	null,
+			}
+			
+			// Add the link to the node
+			this.links.push(l);
 		}
-
-		// Add the link to the node
-		this.links.push(l);
 	}
 
 	// Fetch an abstract per ajax
@@ -92,7 +97,12 @@ define(["data/position", "util/merge"], function(position, merge) {
 		return date;
 	}
 
-
+	
+	var doeslinkExistFun = function(target) {
+		var targets = this.links.map(function(e) { return e.target});
+		//if(this.links != []) console.log(this.links);
+		return targets.indexOf(target) != -1;
+	}
 
 	// Return the nodeFactory
 	return nodeFactory;
