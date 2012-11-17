@@ -92,6 +92,8 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		radio("node:toggleScheduled").subscribe(toggleScheduled);
 	};
 
+
+
 	//////////////////////////////////////////////
 	//											//
 	//              Initialize					//
@@ -130,6 +132,8 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		
 		// TODO: save it in session and load it here.
 		nodeList.selected = null;
+
+		nodeList.stats = undefined;
 
 	}
 
@@ -190,6 +194,26 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	}
 
 
+	// Get a list of values used by the nodes
+	nodeList.getStats = function() {
+
+		if (nodeList.stats == undefined) {
+
+			// Collect the earliest and latest date
+			dates = nodeList.nodes.map(function(n) { return n.getDate(); }); 
+			maxDate = dates.reduce(function(d1,d2) { return (d1 > d2) ? d1 : d2; });
+			minDate = dates.reduce(function(d1,d2) { return (d1 < d2) ? d1 : d2; });
+
+			// Collect all room types
+			rooms = nodeList.nodes.map(function(n) { return n.room; }).unique();
+
+			nodeList.stats = { rooms: rooms, maxDate: maxDate, minDate: minDate };
+		}
+
+		return nodeList.stats;
+	}
+
+
 
 
 	//////////////////////////////////////////////
@@ -229,12 +253,14 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	}
 
 
-	// Initialize. The init is down here to keep the initialization on 
-	// top of the function definitions. The events has to happen after 
-	// the initialization
+
+	//////////////////////////////////////////////
+	//											//
+	//            Return Interface				//
+	//											//
+	//////////////////////////////////////////////
+
 	nodeList.init();
 	nodeList.events();
-
-	// Return object
 	return nodeList;
 });

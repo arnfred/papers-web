@@ -90,25 +90,6 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		
 		// Init the tabs:
 		$('#tabs').tabs();
-		
-		// Set up form handler for the filters:
-		$("#context-select")
-		   .multiselect({
-		      noneSelectedText: 'Add some context to filter',
-		      selectedList: 4
-		   });
-		   //.multiselectfilter();
-		 $('button.ui-multiselect').css('width', '100%');
-		
-		// Set up the calendar:
-		$( ".date_picker2" ).each(function () { 
-					$(this).datepicker({ buttonImage: "./img	/calendar_gray.png", 
-										 buttonImageOnly: true, 
-										 showOn: "button",
-										 constrainInput: false
-									}); 
-					});
-		
 	}
 
 

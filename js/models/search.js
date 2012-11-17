@@ -35,6 +35,8 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 		// radio("filter:action").subscribe(action);
 	}
 
+
+
 	//////////////////////////////////////////////
 	//											//
 	//               Properties					//
@@ -55,6 +57,22 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 	// The currently active results
 	search.results = [];
+
+
+	//////////////////////////////////////////////
+	//											//
+	//            Public Functions				//
+	//											//
+	//////////////////////////////////////////////
+	
+	// Returns the different rooms used in the nodes
+	search.getRooms = function() { return nodeList.getStats().rooms; }
+
+	// Returns the first searchable date
+	search.getMinDate = function() { return nodeList.getStats().minDate; }
+
+	// Returns the last searchable date
+	search.getMaxDate = function() { return nodeList.getStats().maxDate; }
 
 
 	//////////////////////////////////////////////
@@ -163,8 +181,13 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	}
 
 
-	// Set events
-	search.events();
 
+	//////////////////////////////////////////////
+	//											//
+	//            Return Interface				//
+	//											//
+	//////////////////////////////////////////////
+
+	search.events();
 	return search;
 })
