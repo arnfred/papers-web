@@ -25,11 +25,11 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		 * Subscribe
 		 */
 
-		// On link selected, color it	
+		// On link selected, add little clickable	
 		radio("node:select").subscribe(select);
 		
-		// On link selected, color it	
-		radio("node:unselect").subscribe(unselect);
+		// On link unselected, remove every thing
+		radio("node:deselect").subscribe(deselect);
 		
 		 
 	}
@@ -57,7 +57,7 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 				var e = d3.event;
 				
 				var linknode = link.domlink;
-				//console.log(clicked_node)
+				
 				linknode.classed('clikable', true);
 			
 				showClickable(node, link)
@@ -106,17 +106,19 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		
 		link.clickable.on('click', function () { 
 				
-				radio('node:unselect').broadcast(source);
+				var e = d3.event;
+				radio('node:deselect').broadcast(source, e);
 				
-				radio('node:setfocus').broadcast(link.target);
-				radio('node:select').broadcast(link.target); 
+				
+				radio('node:select').broadcast(link.target, e);
+				radio('node:setfocus').broadcast(link.target, e);
 				
 		} );
 	}
 
 
 	// remove all the clickable item of the old node.
-	var unselect = function(node) {
+	var deselect = function(node) {
 		node.links.forEach(function(link){
 			//if(link.domlink) {
 				var e = d3.event;

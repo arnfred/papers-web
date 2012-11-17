@@ -13,6 +13,33 @@ define(["lib/d3", "radio"], function (d3, radio) {
 	zoom.pos.y = -200;
 	zoom.pos.s = 1.5;
 	zoom.canvas = null;
+	
+	
+	
+	// Add a custom transition for the canvas:
+//	d3.interpolators.push(function(a, b) {
+//	    return function(t) {
+//	    
+	      // Interpolation
+//	      var posx = a.x + (b.x-a.x) * t;
+//	      var posy = a.y + (b.y-a.y) * t;
+//	      var s = a.s + (b.s-a.s) * t;
+//	      
+//	      setValue(s, [posx, posy]);
+//
+	      // Update the zoom with new position:
+//	      zoom.translate([posx, posy]);
+//	      zoom.scale(s);
+//	      
+	      // Change canvas:
+//	      goTo();
+//	      
+//	      return [posx, posy, s];
+//	    }
+//	});
+	
+	
+	
 	zoom.init = function(_canvas){
 		
 		zoom.canvas = _canvas;
@@ -28,6 +55,7 @@ define(["lib/d3", "radio"], function (d3, radio) {
 			var scale = e.scale;
 			
 			zoom.moveTo(scale, transform);
+			
 			 
 		});
 		
@@ -62,15 +90,37 @@ define(["lib/d3", "radio"], function (d3, radio) {
 	// Manually move the canvas to the new position:
 	zoom.transitionTo = function(scale, transform){
 		
-		setValue(scale, transform);
+		var transTo = {};
+		transTo.x = transform[0];
+		transTo.y = transform[1];
+		transTo.s = scale;
 		
-		// Update the zoom with new position:
-		zoom.translate(transform);
-		zoom.scale(scale);
+		zoom.canvas.transition().tween('transform', function() {
+			
+			var a = zoom.pos;
+			var b = transTo;
+			
+			return function(t) {
+				    
+				      // Interpolation
+				      var posx = a.x + (b.x-a.x) * t;
+				      var posy = a.y + (b.y-a.y) * t;
+				      var s = a.s + (b.s-a.s) * t;
+				      
+				      setValue(s, [posx, posy]);
+			
+				      // Update the zoom with new position:
+				      zoom.translate([posx, posy]);
+				      zoom.scale(s);
+				      
+				      
+				      // Change canvas:
+				      goTo();
+				      return null; //"translate(" + posx + ", "+posy+") scale(" + s + ")";
+				   }
+		});
 		
-		
-		
-		transitionTo();
+		//transitionTo();
 	
 	}
 	
@@ -88,11 +138,13 @@ define(["lib/d3", "radio"], function (d3, radio) {
 	
 	var goTo = function() {
 		
+		radio("zoom:change").broadcast(zoom);
 		zoom.canvas.attr("transform", "translate(" + zoom.pos.x + ", "+zoom.pos.y+") scale(" + zoom.pos.s + ")");
 		
 	}
 	
 	var transitionTo = function() {
+		
 		
 		// Smooth transition of the canvas to:
 		zoom.canvas.transition().attr('transform', "translate("+zoom.pos.x+", "+zoom.pos.y+") scale("+zoom.pos.s+")");

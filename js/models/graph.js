@@ -6,7 +6,7 @@
  * TODO: Change every event to pass id and not the complete node object!
  */
 
-define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "models/nodeList"], function(d3, screen, radio, levenshtein, zoom, nodeList) {
+define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "models/nodeList", "params"], function(d3, screen, radio, levenshtein, zoom, nodeList, config) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -83,7 +83,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 			el.domNode = graph.canvas.append('svg:circle')
 										.attr('cx', el.pos.x)
 										.attr('cy', el.pos.y)
-										.attr('r', 4);
+										.attr('r', config['radius']);
 		});
 		
 		
@@ -124,31 +124,6 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 
 	}
 
-	
-	
-
-	//////////////////////////////////////////////
-	//											//
-	//            Public Functions				//
-	//											//
-	//////////////////////////////////////////////
-
-	// Focus on a particular node
-	graph.setFocus = function(node) {
-			
-		// Dimension
-		var w = screen.width(),
-			h = screen.height();
-						
-		// What is the scale?
-		var factor = graph.zoom.pos.s;
-		// Compute the translation coeff
-		var transx = factor * node.pos.x - w/2, transy = factor * node.pos.y - h/2;
-			
-			
-		zoom.transitionTo(factor, [-transx, -transy] );
-
-	}
 
 
 
