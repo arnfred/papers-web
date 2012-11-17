@@ -100,7 +100,6 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 
 		// Clean keywords
 		$("input[name=keywords]").val("");
-
 	}
 
 
@@ -117,7 +116,10 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 		f.attr("id","filter" + index);
 
 		// Make clickable
-		f.click(function() { radio("filter:selectOnly").broadcast(index); });
+		f.click(function() { radio("filter:selectToggle").broadcast(index); return false; });
+
+		// Make removable
+		f.find("a.listItemRemove").click(function() { radio("filter:remove").broadcast(index); return false; });
 
 		// now add text and add it
 		$("#filterList").append(f)
@@ -128,6 +130,9 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 	var remove = function(index) {
 		// Get the filter
 		var f = $("#filter" + index);
+
+		// Deselect filter
+		radio("filter:deselect").broadcast(index);
 
 		// Now remove
 		f.remove();
@@ -187,7 +192,7 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 		}
 
 		// Context
-		if (filter.context.length > 0) {
+		if (filter.context.length > 0 && filter.keywords) {
 			if (filter.context.length > 1) {
 				var last = filter.context[filter.context.length - 1];
 				filter.context.pop();

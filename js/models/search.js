@@ -28,6 +28,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 		// Deselecting a filter
 		radio("filter:deselect").subscribe(deselect);
 
+		// Toggling between selecting and deselecting a filter
+		radio("filter:selectToggle").subscribe(selectToggle);
+
 		// Remove a filter (Is this really necessary?)
 		// radio("filter:remove").subscribe(remove);
 
@@ -125,6 +128,13 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 		// Select the one filter we want
 		radio("filter:select").broadcast(index);
+	}
+
+
+	// Toggles between select and deselect
+	var selectToggle = function(index) {
+		if (search.currentIndices.indexOf(index) == -1) radio("filter:select").broadcast(index);
+		else radio("filter:deselect").broadcast(index);
 	}
 
 
