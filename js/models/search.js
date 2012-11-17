@@ -131,7 +131,8 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// Selects another filter (doesn't deselect the old filters)
 	var select = function(index) {
 		
-		// Add index to currentIndices
+		// Add index to currentIndices if it's not already there
+		search.currentIndices = search.currentIndices.filter(function(i) { return (i != index); });
 		search.currentIndices.push(index)
 
 		// Create current filter
@@ -145,11 +146,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// Deselects another filter (doesn't deselect the old filters)
 	var deselect = function(index) {
 		
-		console.debug(index)
 		// Add index to currentIndices
 		search.currentIndices = search.currentIndices.filter(function(i) { return (i != index); });
 
-		console.debug(search.currentIndices);
 		// Create current filter
 		search.current = createCurrent();
 
