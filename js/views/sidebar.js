@@ -43,6 +43,11 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		radio("sidebar:hover").subscribe(function (id, e) { 
 			radio("node:mouseover").broadcast(id, e);
 		});
+		
+		// on mouseout in the sidebar, broadcast node:current
+		radio("sidebar:hoverout").subscribe(function (id, e) { 
+			radio("node:mouseout").broadcast(id, e);
+		});
 
 		// when we click remove in the sidebar, unscheduled the item
 		radio("sidebar:remove").subscribe(function (id, e) { 
@@ -142,6 +147,11 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		// Add mouseover event
 		item.mouseover(function (e) { 
 			radio("sidebar:hover").broadcast(node,e); 
+		});
+		
+		// Add mouseout event
+		item.mouseout(function (e) { 
+			radio("sidebar:hoverout").broadcast(node,e); 
 		});
 
 		// Add remove event

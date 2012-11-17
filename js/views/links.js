@@ -1,4 +1,4 @@
-define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], function(d3, radio, arrrr, nodeList, graph) {
+define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph", "params"], function(d3, radio, arrrr, nodeList, graph, config) {
 	
 	
 	// GLOBAL VARIABLES: 
@@ -28,9 +28,17 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		// On link selected, add little clickable	
 		radio("node:select").subscribe(select);
 		
+		
 		// On link unselected, remove every thing
 		radio("node:deselect").subscribe(deselect);
 		
+		
+		// On link selected, add little clickable	
+		radio("node:mouseover").subscribe(hover);
+		
+		
+		// On link selected, add little clickable	
+		radio("node:mouseout").subscribe(hoverOut);
 		 
 	}
 	
@@ -53,13 +61,13 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	
 		// Find all edges belinging to current node and update them
 		node.links.forEach(function(link){
-			if(link.domlink) {
+			if(link.domLink) {
 				var e = d3.event;
 				
-				var linknode = link.domlink;
+				var linknode = link.domLink;
 				
 				linknode.classed('clikable', true);
-			
+				link.domLink.style("stroke-width", graph.strokeWidth(link, config["edgeSize_hover"]));
 				showClickable(node, link)
 
 			}
@@ -121,20 +129,37 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 	// remove all the clickable item of the old node.
 	var deselect = function(node) {
 		node.links.forEach(function(link){
-			//if(link.domlink) {
+			if(link.domLink) {
 				var e = d3.event;
 				link.clickable.remove();
-				link.domlink.classed('clickable', false);
-			//}
+				link.domLink.style("stroke-width", graph.strokeWidth(link, config["edgeSize"]));
+				link.domLink.classed('clikable', false);
+			}
 		});
 	}
 		
-	var hover = function() {
-		//TODO
+	var hover = function(node) {
+		
+		node.links.forEach(function(link){
+			if(link.domLink) {
+				var e = d3.event;
+				link.domLink.classed('hover', true);
+				link.domLink.style("stroke-width", graph.strokeWidth(link, config["edgeSize_hover"]));
+			}
+		});
 	}
 	
-	var hoverOut = function() {
-		//TODO
+	var hoverOut = function(node) {
+
+		
+		node.links.forEach(function(link){
+			if(link.domLink) {
+				var e = d3.event;
+				// Check if note selected
+				link.domLink.classed('hover', false);
+				link.domLink.style("stroke-width", graph.strokeWidth(link, config["edgeSize"]));
+			}
+		});
 	}
 
 

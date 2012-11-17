@@ -6,6 +6,9 @@ define(function () {
 	config['radius'] = 4;
 	config['radius_selected'] = 6;
 	
+	// Width of a edge:
+	config['edgeSize'] = 0.5;
+	config['edgeSize_hover'] = 2;
 	
 	return config; 
 
