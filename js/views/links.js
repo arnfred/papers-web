@@ -85,7 +85,8 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		 // Find the angle:
 		 a = 180*Math.atan2(ryn, rxn)/Math.PI+90;
 		 
-		 randomfact =  10+20*Math.random();
+		 dst = Math.sqrt(rx*rx+ry*ry);
+		 randomfact =  10+ Math.sqrt(dst) + 10*Math.random();
 		 
 		 var posx  = parseFloat(source.pos.x) + randomfact*rxn-2, posy  = parseFloat(source.pos.y) + randomfact*ryn-2;
 		 
@@ -94,7 +95,7 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph"], fun
 		 
 		 posx = posx+2;
 		 
-		 link.clickable = graph.canvas.insert('svg:polygon', "line:first-child")
+		 link.clickable = graph.canvas.insert('svg:polygon')
 		 						.attr('points', '-33.001,24.991 0,18.687 33,24.991 -0.309,-24.991') //57.042,22.06 0,-5.159 -57.042,22.06 -57.042,5.159 0,-22.06 57.042,5.159
 		 						//.attr('height', 4)
 		 						//.attr('width', 4)
