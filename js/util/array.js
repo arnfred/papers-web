@@ -76,6 +76,26 @@ define(function () {
 			return other;
 		};
 	}
+	if (!('reduce' in Array.prototype)) {
+		Array.prototype.reduce= function(reducer, firstElem /*opt*/) {
+
+			// Initialize return value
+			var r = firstElem;
+			var i = 0;
+
+			if (firstElem == undefined) {
+				if (this.length == 0) throw new Error("TypeError: Reduce of empty array with no initial value");
+				r = this[0];
+				i = 1;
+			}
+			
+			for (var n= this.length; i<n; i++) {
+				r = reducer(r, this[i]);
+			}
+
+			return r;
+		};
+	}
 	if (!('every' in Array.prototype)) {
 		Array.prototype.every= function(tester, that /*opt*/) {
 			for (var i= 0, n= this.length; i<n; i++)
@@ -90,6 +110,11 @@ define(function () {
 				if (i in this && tester.call(that, this[i], i, this))
 					return true;
 			return false;
+		};
+	}
+	if (!('unique' in Array.prototype)) {
+		Array.prototype.unique= function() {
+			return this.reduce(function(e1,e2) { return (e1.indexOf(e2) == -1) ? e1.concat([e2]) : e1; },[])
 		};
 	}
 

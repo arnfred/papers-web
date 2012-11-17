@@ -1,4 +1,4 @@
-define(["jquery", "radio", "util/datepicker"], function ($, radio) {
+define(["jquery", "radio", "util/datepicker", "models/search"], function ($, radio, ui, searchModel) {
 
 	// Init
 	var search = {};
@@ -19,9 +19,22 @@ define(["jquery", "radio", "util/datepicker"], function ($, radio) {
 		radio("filter:edit").subscribe(edit);
 
 		// When the add button is clicked
-		radio("filter:getData").subscribe(getData)
+		radio("filter:getData").subscribe(getData);
 	}
 
+
+
+	//////////////////////////////////////////////
+	//											//
+	//            Initialize Search				//
+	//											//
+	//////////////////////////////////////////////
+
+	search.init = function() {
+
+		// Init form
+		initForm();
+	}
 
 	// Private functions
 
@@ -122,9 +135,61 @@ define(["jquery", "radio", "util/datepicker"], function ($, radio) {
 		return "Find articles" + keywords + context + present + location + time;
 	}
 
-	// Run events
+
+	// Initialize the form
+	var initForm = function(data) {
+
+		// Get stats from model
+		var minDate = searchModel.getMinDate();
+		var maxDate = searchModel.getMaxDate();
+		var rooms = searchModel.getRooms();
+
+		// Initialize the datepicker
+		$(".date_picker2").datepicker({
+			buttonImage: "./img/calendar_gray.png", 
+			buttonImageOnly: true, 
+			showOn: "button",
+			dateFormat: "yy/mm/dd", 
+			minDate: minDate,
+			maxDate: maxDate,
+			constrainInput: false
+		});
+
+		// Set default dates and times
+		$("input[name=from]").val(minDate.format("yyyy/mm/dd"));
+		$("input[name=to]").val(maxDate.format("yyyy/mm/dd"));
+		$("input[name=fromtime]").val("00:00");
+		$("input[name=totime]").val("23:59");
+
+		// Add rooms
+		var roomSelect = $("select[name=room]");
+		var opt;
+		rooms.forEach(function(r) {
+			// Clone option
+			opt = roomSelect.children("option").first().clone();
+			opt.val(r).html(r);
+			roomSelect.append(opt);
+		});
+
+		// Set up form handler for the filters:
+		$("#context-select")
+		   .multiselect({
+		      noneSelectedText: 'Add some context to filter',
+		      selectedList: 4
+		   });
+		 $('button.ui-multiselect').css('width', '100%');
+	}
+
+
+
+	//////////////////////////////////////////////
+	//											//
+	//            Return Interface				//
+	//											//
+	//////////////////////////////////////////////
+
 	search.events();
-	
+	search.init();
 	return search;
 
 });
