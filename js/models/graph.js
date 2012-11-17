@@ -64,15 +64,17 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 		// Initialize the DOM UI: 
 		nodes.forEach(function(el, j){
 				el.links.forEach(function(link, i){
-				if(link.domlink == null ){
+				if(link.domLink == null ){
 					//console.log(link.target);
-					link.domlink = graph.canvas.append('svg:line')
+						
+					link.domLink = graph.canvas.append('svg:line')
 									  .attr('x1', el.pos.x)
 									  .attr('y1', el.pos.y)
 									  .attr('x2', link.target.pos.x)
 									  .attr('y2', link.target.pos.y)
 									  //.attr('source', el.id)
 									  //.attr('target', graph.link.target.id)
+									  .style("stroke-width", graph.strokeWidth(link, config["edgeSize"]))
 									  .classed('link', true);
 
 				}
@@ -124,8 +126,17 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 
 	}
 
-
-
+	
+	//////////////////////////////////////////////
+	//											//
+	//           Public Functions				//
+	//											//
+	//////////////////////////////////////////////
+	
+	graph.strokeWidth = function(d, weight) { 
+		if (weight == undefined) weight = 0.1;
+		return Math.sqrt(d.value/100) * weight; 
+	}
 
 
 	//////////////////////////////////////////////
@@ -135,11 +146,7 @@ define(["lib/d3", "util/screen", "radio", "util/levenshtein", "models/zoom", "mo
 	//////////////////////////////////////////////
 
 
-	// Calculates the stroke width
-	var strokeWidth = function(d, weight) { 
-		if (weight == undefined) weight = 0.1;
-		return Math.log(d.value*weight); 
-	}
+	
 
 
 	// Highlights search results

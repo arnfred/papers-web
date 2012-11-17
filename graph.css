@@ -217,15 +217,22 @@ div.scheduleSelect			{ filter:progid:DXImageTransform.Microsoft.gradient(startCo
 /* Graph style */
 circle						{ cursor: pointer; }
 circle.node 				{ fill: #ffbf44; stroke: #ffd; stroke-width: 1.5px; }
-circle.selected				{ fill: #099; stroke: #dff; }
-circle.current				{ fill: #802b00; stroke: #fdd; }
+circle.hover				{ fill: #D76534; stroke: #fdd; }
+circle.selected				{ fill: #990C00; stroke: #dff; }
 circle.search				{ stroke:yellow; stroke-width:3px; }
-line.link 					{ stroke: #000; stroke-opacity: .05; }
-line.selected				{ stroke: #099; stroke-opacity: .7; }
-line.current				{ stroke: #b21; stroke-opacity: .9; }
-line.clikable				{ position: absolute; z-index: 1000; stroke: #C4854E!important; stroke-opacity: .9!important;}
 
-polygon.handle				{ stroke: #eee; position: absolute; z-index: 1000;}
+/* Line value:*/
+line.v2						{ stroke: #E1E1E1; }
+line.v4						{ stroke: #B6B6B6; }
+line.v6						{ stroke: #9D9D9D; }
+line.v8						{ stroke: #818181; }
+line.v10					{ stroke: #676767; }
+line.link 					{ stroke: #ddd; }
+line.hover					{ stroke: #D76534; }
+/* line.selected				{ stroke: #990C00; } */
+line.clikable				{ stroke: #990C00; }
+
+polygon.handle				{ stroke: #eee; cursor: pointer;}
 
 /* Overright the jquery UI style*/
 #content .ui-widget-content			{background: #ddd;}
