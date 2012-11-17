@@ -21,7 +21,6 @@ define(["util/merge", "util/array", "util/levenshtein", "util/curry"],
 
 
 
-
 	//////////////////////////////////////////////
 	//											//
 	//             Public Functions				//
@@ -38,7 +37,7 @@ define(["util/merge", "util/array", "util/levenshtein", "util/curry"],
 					or			: orFilter,
 					not			: not,
 					_nodes		: undefined,
-					_filter		: t,
+					_filter		: defaultFilter, // Always returns true
 					_options	: {
 						levenshtein	: 1,
 					}
@@ -83,7 +82,7 @@ define(["util/merge", "util/array", "util/levenshtein", "util/curry"],
 
 
 	// A function that always returns true
-	var t = function(n) { return true; }
+	var defaultFilter = function(n) { return true; }
 
 
 	/**

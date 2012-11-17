@@ -45,15 +45,23 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 
 		// Update all values
 		data.keywords = $("input[name=keywords]").val();
-		data.location = $("select[name=location]").val();
+		data.location = $("select[name=room]").val();
+		if (data.location == "") data.location = undefined;
+
+		// Get time
+		var timeTo = $("input[name=totime]").val().split(":");
+		var timeFrom = $("input[name=fromtime]").val().split(":");
 
 		// Update dates
-		data.to = Date.parse($("input[name=to]").val());
-		if (isNaN(data.to)) data.to = undefined;
-		else data.to = new Date(data.to);
-		data.from = Date.parse($("input[name=from]").val());
-		if (isNaN(data.from)) data.from = undefined;
-		else data.from = new Date(data.from);
+		data.from = $("input[name=from]").datepicker("getDate");
+		data.to = $("input[name=to]").datepicker("getDate");
+
+		// If we have hour and minute set, then put those, else use whole day
+		if (timeFrom.length > 1 && timeTo.length > 1) {
+			data.from.setHours(timeFrom[0], timeFrom[1]);
+			data.to.setHours(timeTo[0], timeTo[1]);
+		}
+		else data.to.setHours(23,59);
 
 		// Get stuff from select boxes
 		data.context = $("select[name='context[]']").val();
@@ -70,7 +78,7 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 	// Clear the form
 	var clear = function() {
 		// Clean all input
-		$("#filterForm input").val("");
+		//$("#filterForm input").val("");
 
 		// Clear selects (how?)
 		// I'll figure that out
@@ -90,7 +98,7 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 		f.attr("id","filter" + index);
 
 		// Make clickable
-		f.click(function() { radio("filter:selectOnly").broadcast(index); });
+		f.click(function() { radio("filter:select").broadcast(index); });
 
 		// now add text and add it
 		$("#filterList").append(f)

@@ -280,5 +280,6 @@ polygon.handle				{ stroke: #eee; cursor: pointer;}
 							  margin-left: 5px;
 							  vertical-align: -12px;
 }
+#filteritemtemplate			{ display:none; }
 
 

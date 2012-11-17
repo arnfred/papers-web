@@ -179,7 +179,6 @@ define(["radio", "util/screen", "models/zoom", 'params', 'lib/d3'], function(rad
 		// Get the domNode
 		var domNode = node.domNode;
 
-
 		// Add search class to affected node
 		domNode.classed("search",true);
 	}
