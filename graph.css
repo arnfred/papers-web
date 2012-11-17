@@ -273,5 +273,6 @@ polygon.handle				{ stroke: #eee; position: absolute; z-index: 1000;}
 							  margin-left: 5px;
 							  vertical-align: -12px;
 }
+#filteritemtemplate			{ display:none; }
 
 

@@ -85,15 +85,18 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	var add = function(data) {
 
 		// Create new filter and fill in the appropriate details
-		var f = filter.new();
+		var f = filter.none();
 
 		// for each keyword/context combination, add to filter
+		var new_f;
 		data.context.forEach(function(c) { 
-			f = f.keyword(data.keywords, c);
+			new_f = filter.new().keyword(data.keywords, c);
+			f = f.or(new_f);
 		});
 
 		// Add location and time
-		f = f.location(data.location).interval(data.from, data.to);
+		f = f.interval(data.from, data.to);
+		f = f.location(data.location);
 
 		// Add filter to list of filters and data to list of data
 		var index = search.filters.push(f) - 1;
@@ -106,7 +109,8 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 		search.current = createCurrent();
 
 		// Draw the update
-		radio("filter:publish").broadcast(data, index)
+		radio("filter:publish").broadcast(data, index);
+		radio("filter:selectOnly").broadcast(index);
 		// TODO
 	}
 
@@ -116,7 +120,7 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 
 		// Deselect all currently selected filters
 		search.currentIndices.forEach(function(i) {
-			radio("filter:deselect").broadcast(index);
+			radio("filter:deselect").broadcast(i);
 		});
 
 		// Select the one filter we want
@@ -141,9 +145,11 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// Deselects another filter (doesn't deselect the old filters)
 	var deselect = function(index) {
 		
+		console.debug(index)
 		// Add index to currentIndices
 		search.currentIndices = search.currentIndices.filter(function(i) { return (i != index); });
 
+		console.debug(search.currentIndices);
 		// Create current filter
 		search.current = createCurrent();
 
