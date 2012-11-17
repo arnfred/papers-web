@@ -1,4 +1,4 @@
-define(["radio"], function(radio) {
+define(["radio", "util/screen", "models/zoom", 'params', 'lib/d3'], function(radio, screen, zoom, config, d3) {
 
 
 	//////////////////////////////////////////////
@@ -22,7 +22,7 @@ define(["radio"], function(radio) {
 		// On node select, make sure the node is selected in the the graph
 		radio("node:select").subscribe(select);
 
-		// // On node deselect, make sure the node is selected in the the graph
+		// // On node deselect
 		radio("node:deselect").subscribe(deselect);
 
 		// On node mouseover
@@ -32,10 +32,10 @@ define(["radio"], function(radio) {
 		radio("node:mouseout").subscribe(hoverOut);
 
 		// On node click, we want to try a new interface: focus on the node	
-		radio("node:click").subscribe(graph.setFocus);
+		radio("node:click").subscribe(setFocus);
 
 		// On node click, we want to try a new interface: focus on the node	
-		radio("node:setfocus").subscribe(graph.setFocus);
+		radio("node:setfocus").subscribe(setFocus);
 
 		// On search highlight result
 		radio("search:add").subscribe(searchAdd);
@@ -45,6 +45,7 @@ define(["radio"], function(radio) {
 	}
 
 
+	
 
 	//////////////////////////////////////////////	
 	//											//
@@ -55,8 +56,8 @@ define(["radio"], function(radio) {
 	
 	// Select a particular node
 	var scheduled = function(node) {
-		var lastNode	= d3.select("circle.current");
-		var lastEdges	= d3.selectAll("line.current");
+		//var lastNode	= d3.select("circle.current");
+		//var lastEdges	= d3.selectAll("line.current");
 		var domNode	= node.domNode;
 
 		// Add paper to list of selected and make current item current
@@ -70,17 +71,17 @@ define(["radio"], function(radio) {
 			//window.open(domNode.property("__data__").pdf); });
 
 		// Update the new current node to selected
-		node.classed("selected", true);
+		node.classed("scheduled", true);
 
 		// Find all edges belonging to current node and update them
-		node.links.forEach(function(link){
-			if(link.domlink != null) link.domlink.classed("selected", true);
-			
+//		node.links.forEach(function(link){
+//			if(link.domlink != null) link.domlink.classed("selected", true);
+//			
 			//link.domlink.on('click', function() { radio("link:click").broadcast(id, link.target); });
 			//d
-			
-			
-		});
+//			
+//			
+//		});
 	}
 		
 		
@@ -94,12 +95,12 @@ define(["radio"], function(radio) {
 		// dropListItem(id);
 
 		// Deselect it
-		node.domNode.classed("selected", false);
+		node.domNode.classed("scheduled", false);
 
 		// Go through all selected edges and deselect all that aren't connect to another selected node
-		node.links.forEach(function(link){
-			link.domlink.classed("selected", false);
-		});
+//		node.links.forEach(function(link){
+//			link.domlink.classed("selected", false);
+//		});
 	}
 
 
@@ -110,12 +111,12 @@ define(["radio"], function(radio) {
 
 
 		// Make node red
-		domNode.classed("current", false);
+		domNode.classed("hover", false);
 
 
 		// Find all edges belinging to current node and update them
 		node.links.forEach(function(link){
-			if(link.domlink) link.domlink.classed("current", false);
+			if(link.domlink) link.domlink.classed("hover", false);
 		});
 	}
 
@@ -128,12 +129,12 @@ define(["radio"], function(radio) {
 
 
 		// Make node red
-		domNode.classed("current", true);
+		domNode.classed("hover", true);
 
 
 		// Find all edges belinging to current node and update them
 		node.links.forEach(function(link){
-			if(link.domlink) link.domlink.classed("current", true);
+			if(link.domlink) link.domlink.classed("hover", true);
 		});
 	}
 
@@ -145,14 +146,15 @@ define(["radio"], function(radio) {
 		// Get node
 		var domNode = node.domNode;
 		
-		// deselected the privous node:
-		if(selected_node_id) deselect(selected_node_id);
+		// Be sure that we deselected the previous node:
+		if(selected_node_id) radio("node:deselect").broadcast(selected_node_id);
 		 
 		// Register this node as selected:
 		selected_node_id = node;
 
 		// Make node red
-		domNode.classed("selected", true);	
+		domNode.classed("selected", true);
+		domNode.transition().attr('r', config['radius_selected']);
 	
 	}
 	
@@ -163,12 +165,11 @@ define(["radio"], function(radio) {
 
 		// Make node red
 		domNode.classed("selected", false);
-
-		// Find all edges belonging to old current node and update them
+		domNode.transition().attr('r', config['radius']);
 		
-
-		// Find all edges belinging to current node and update them
-		radio("node:unselect").broadcast(node);
+		selected_node_id = null;
+		
+		
 	}
 
 
@@ -192,7 +193,26 @@ define(["radio"], function(radio) {
 		// Add search class to affected node
 		domNode.classed("search",false);
 	}
-
+	
+	
+	// Question: Jonas where do you see setFocus?
+	
+	// Focus on a particular node
+	var setFocus = function(node) {
+				
+		// Dimension
+		var w = screen.width(),
+			h = screen.height();
+						
+		// What is the scale?
+		var factor = zoom.pos.s;
+		// Compute the translation coeff
+		var transx = factor * node.pos.x - w/2, transy = factor * node.pos.y - h/2;
+			
+			
+		zoom.transitionTo(factor, [-transx, -transy] );
+	
+	}
 
 	//////////////////////////////////////////////
 	//											//

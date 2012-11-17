@@ -70,7 +70,7 @@ li.legend.download			{ background: url(img/icons/download.png) no-repeat left ce
 
 /* Graph */
 div#graph					{ height:100%; /*cursor:move;*/ width:100%; position: fixed; left:0; top:0; z-index:1; float: left; text-align:left; }
-div#infowrap				{ width:600px; z-index:3; position:fixed; bottom:10px; left:10px; }
+div#infowrap				{ width:400px; z-index:3; position:fixed; bottom:10px; right:10px; }
 div#info					{ display:none; z-index:3; color:#eee; padding:5px 10px; border-radius:5px; -moz-border-radius:5px; }
 div#info					{ background: rgb(72, 72, 72); background: rgba(72, 72, 72, 0.9);}
 div#info					{ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#C8666666, endColorstr=#C8666666); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#C0F0F0F0, endColorstr=#C0F0F0F0)"; }
