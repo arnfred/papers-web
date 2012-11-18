@@ -1,4 +1,4 @@
-define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-1.9.1.custom.min.js!order',"js!lib/jquery/multiselect!order"], function($, radio, truncate, arrrr, screen, tabbbb) {
+define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib/jquery/jquery-ui-1.9.1.custom.min.js!order',"js!lib/jquery/multiselect!order", 'js!lib/jquery/jquery.transit.min.js!order'], function($, radio, truncate, arrrr, screen, tabbbb) {
 
 	//////////////////////////////////////////////
 	//											//
@@ -7,7 +7,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	//////////////////////////////////////////////
 	var sidebar = {};
 
-
+	var isOpen = true;
 	//////////////////////////////////////////////
 	//											//
 	//                Events					//
@@ -53,6 +53,12 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		radio("sidebar:remove").subscribe(function (id, e) { 
 			radio("node:unschedule").broadcast(id, e);
 		});
+		
+		// Hide the sidebar
+		radio("sidebar:hide").subscribe(hide);
+		
+		// Show the sidebar
+		radio("sidebar:show").subscribe(show);
 
 	}
 
@@ -88,6 +94,9 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		
 		// Init the tabs:
 		$('#tabs').tabs();
+		
+		// Make sidebar open and close working:
+		$("#closeSidebar").click( function() { toggleSidebar(); });
 	}
 
 
@@ -191,9 +200,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	 */
 	var abstractVerify = function() {
 		
-		// Hide downloadType if open
 		var abst = (confirm("Do you want to include abstract of the papers? ")) ? 1: 0 ;
-		
 		withAbstract(abst);
 	}
 
@@ -224,7 +231,40 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		radio("node:unscheduleall").broadcast();
 	}
 
-
+	
+	/**
+	 * Open or close the sidebar
+	 */
+	var toggleSidebar = function() {
+		if(isOpen){
+			radio("sidebar:hide").broadcast();
+			isOpen = false;
+		}else{
+			radio("sidebar:show").broadcast();
+			isOpen = true;
+		}
+	}
+	
+	/**
+	 * Hide the side bar
+	 */
+	
+	var hide = function() {
+		$('#tabs').animate({"left": "-310px"}, 300);
+		$('#closeSidebar').animate({"left": "0px"}, 300);
+		$('#closeSidebar div').transition({ rotate: '0deg' });
+	}
+	
+	/**
+	 * Show the side bar
+	 */
+	 
+	 var show = function() {
+	 	$('#tabs').animate({"left": "0px"}, 300);
+	 	$('#closeSidebar').animate({"left": "310px"}, 300);
+	 	$('#closeSidebar div').transition({ rotate: '180deg' });
+	 }
+	
 
 	// Export the controller
 	sidebar.init();

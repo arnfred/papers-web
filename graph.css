@@ -273,7 +273,7 @@ polygon.handle:hover		{ fill: #C85B3C; cursor: pointer;}
 							  box-shadow: 0 0 6px 0 #4b9de3;
 							  border: 1px solid #4b9de3 !important; }
 
-.form-w	label 		{
+.form-w	label 				{
 							  vertical-align: -4px;
 							  padding-top: 8px;
 							  padding-bottom: 3px;
@@ -298,3 +298,35 @@ polygon.handle:hover		{ fill: #C85B3C; cursor: pointer;}
 }
 
 
+a#closeSidebar{
+	background: #ddd;
+	width: 20px;
+	height: 20px;
+	position:absolute; 
+	left:310px; top:88px;
+	z-index: 1000;
+	border-right: 1px solid #c3c3c3;
+	border-top: 1px solid #c3c3c3;
+	border-bottom: 1px solid #c3c3c3;
+}
+a#closeSidebar div{
+	width:0px; 
+	  height:0px; 
+	  border-bottom:5px solid transparent;  /* left arrow slant */
+	  border-top:5px solid transparent; /* right arrow slant */
+	  border-left:5px solid #2f2f2f; /* bottom, add background color here */
+	  font-size:0px;
+	  line-height:0px;
+	  margin-top: 5px;
+	  margin-left: 7px;
+	  transform:rotate(180deg);
+	  -ms-transform:rotate(180deg); /* IE 9 */
+	  -moz-transform:rotate(180deg); /* Firefox */
+	  -webkit-transform:rotate(180deg); /* Safari and Chrome */
+	  -o-transform:rotate(180deg); /* Opera */
+}
+a#closeSidebar:hover div{
+
+	  border-left:5px solid #A7A7A7; /* bottom, add background color here */
+
+}
