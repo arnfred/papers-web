@@ -96,15 +96,17 @@ div#tabs					{ position:absolute; left:0px; top:38px; z-index:1; width:310px; ma
 div#tabs select	p			{ display:none; }
 div.toolbar					{  margin: 20px; height:25px; width: 260px; border: 1px solid #e2e2e2; box-shadow: 0 0 5px rgba(1,1,1,.5); }
 div.info h2					{ font-size: 17px; text-align: center; background-color: #666; color: #DDD; padding: 5px; border: solid 1px #333; }
-div.toolbar div				{ display: inline; float: left; width: 100px;background-color: #fff;
+div.toolbar div				{ display: inline; float: left; width: 115px;background-color: #fff;
 							  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEyNSAzMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGxpbmVhckdyYWRpZW50IGlkPSJoYXQwIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSItMS40MjEwODU0NzE1MjAyZS0xNCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZGFkYWRhIiBzdG9wLW9wYWNpdHk9IjEiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZjVmNWY1IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgPC9saW5lYXJHcmFkaWVudD4KCjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjUiIGhlaWdodD0iMzEiIGZpbGw9InVybCgjaGF0MCkiIC8+Cjwvc3ZnPg==);
 							  background-image: -moz-linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
 							  background-image: -o-linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
 							  background-image: -webkit-linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
 							  background-image: linear-gradient(bottom, #dadada 0%, #f5f5f5 100%);
-							  padding-top: 5px; padding-left:20px; height: 21px;
-							  padding-right: 14px;
+							  padding-top: 5px; padding-left:9px; height: 21px;
+							  padding-right: 6px;
 							}
+a.smalltool					{ color: #8b8b8b; float: right;}
+a.smalltool	.iconx			{ color: #333; font-weight: bold; font-size: 15px;}
 							
 #tabhead 					{
 								height: 40px;
@@ -145,8 +147,8 @@ div.toolbar div				{ display: inline; float: left; width: 100px;background-color
 div.toolbar a:first-child div{
 							  border-right: 1px solid #AAAAAA;
 							}
-div.toolbar div img			{ vertical-align: -2px; margin-right: 10px; }
-div.toolbar div.downpdf img	{ margin-bottom: -1px;}
+div.toolbar div img			{ vertical-align: -4px; margin-right: 10px; }
+div.toolbar div.downpdf img	{ vertical-align: -3px;}
 div.toolbar div.downpdf		{ padding-top: 4px;height: 22px; padding-right: 5px;}
 	
 select.asmSelect			{ display:none; }
@@ -208,7 +210,7 @@ circle.node 				{ fill: #ffbf44; stroke: #ffd; stroke-width: 1.5px; }
 circle.hover				{ fill: #D76534; stroke: #fdd; }
 circle.selected				{ fill: #990C00; stroke: #dff; }
 circle.search				{ stroke:yellow; stroke-width:3px; }
-circle.scheduled		{ fill: #4A64AB; stroke: #6B85C1; stroke-width: 1px; }
+circle.scheduled		{ fill: #3C6E70; stroke: #86B5B3; stroke-width: 1px; }
 
 /* Line value:*/
 line.v2						{ stroke: #E1E1E1; }
@@ -216,7 +218,7 @@ line.v4						{ stroke: #B6B6B6; }
 line.v6						{ stroke: #9D9D9D; }
 line.v8						{ stroke: #818181; }
 line.v10					{ stroke: #676767; }
-line.link 					{ stroke: #ddd; }
+line.link 					{ stroke: #aaa; }
 line.hover					{ stroke: #D76534; }
 /* line.selected				{ stroke: #990C00; } */
 line.clikable				{ stroke: #990C00; }

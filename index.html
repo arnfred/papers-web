@@ -189,8 +189,8 @@ curl(
 		</ul>
 		<div id="tabs-2">
 			<div class="toolbar">
-				<a href="#"><div class="downpdf"><img alt="Download Paper" src="img/icons/download.png"/>Download</div></a>
-				<a href="#"><div class="removeall"><img alt="Download Paper" src="img/icons/remove.png"/>Remove All</div></a>
+				<a href="#"><div class="downpdf"><img alt="Download Paper" src="img/pdf.png"/>Download .pdf</div></a>
+				<a href="#"><div class="downicn"><img alt="Download Paper" src="img/ical.png"/>Download .icns</div></a>
 			</div>
 	
 			<div id="downloadType" class="scheduleSelect">
@@ -201,13 +201,11 @@ curl(
 				<input type="hidden" name="abstract" value="0"/>
 			</div>
 	
-			<div id="sure" class="scheduleSelect">
-				<p>Are you sure?</p>
-				<p class="click" id="sureYes">Yes</p>
-				<p>/</p>
-				<p class="click" id="sureNo">no</p>
+
+			<div style="margin: 10px 30px; height: 6px;">
+				<a href="#" class="removeall smalltool"><span class="iconx">x</span> Remove all</a>
 			</div>
-	
+			
 			<form action="schedule.php" target="_blank" name="schedule" method="post" 
 				onSubmit="return false;">
 			<ul id="sidebar">

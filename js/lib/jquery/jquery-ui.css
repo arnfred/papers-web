@@ -56,14 +56,14 @@
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1.1em; }
-.ui-widget .ui-widget { font-size: 1em; }
+.ui-widget {  }
+.ui-widget .ui-widget {  }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1em; }
 .ui-widget-content {  background: #eeeeee; color: #333333; }
-.ui-widget-content a { color: #333333; }
+
 .ui-widget-header {  background: transparent; color: #000; font-weight: bold; border-bottom: 1px solid #999;
 }
-.ui-widget-header a { color: #000; }
+
 
 /* Interaction states
 ----------------------------------*/

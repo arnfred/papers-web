@@ -51,7 +51,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 
 		// when we click remove in the sidebar, unscheduled the item
 		radio("sidebar:remove").subscribe(function (id, e) { 
-			radio("node:unscheduled").broadcast(id, e);
+			radio("node:unschedule").broadcast(id, e);
 		});
 
 	}
@@ -74,18 +74,11 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		// Make remove button work
 		$(".removeall").click( function() { removeVerify(); });
 
-		// Close "Are you sure" on click on "No"
-		$("#sureNo").click(function () { $("#sure").slideToggle("fast"); });
-
-		// unscheduled all nodes
-		$("#sureYes").click(function (e) { radio("sidebar:removeAll").broadcast(e); });
-
 		// Make generate schedule button work
 		$(".downpdf").click("click", function () { abstractVerify(); });
-
-		// Bind getSmall link to fetching articles without abstract
-		$("#getSmall").click(function () { withAbstract(0); });
-		$("#getLarge").click(function () { withAbstract(1); });
+		
+		// Make generate schedule button work
+		$(".downicn").click("click", function () { alert('Feature will come soon'); });
 
 		// Call events
 		sidebar.events();
@@ -189,10 +182,7 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	var removeVerify = function() {
 
 		// Hide downloadType if open
-		$("#downloadType").hide();
-
-		// Fade in
-		$("#sure").slideToggle("fast");
+		if(confirm("Are you sure? ")) radio("sidebar:removeAll").broadcast(e);
 	}
 
 
@@ -200,12 +190,11 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 	 * Promps the user if they want to include an abstract with the pdf
 	 */
 	var abstractVerify = function() {
-
-		// Hide sure if open
-		$("#sure").hide();
-
-		// Fade in
-		$("#downloadType").slideToggle("fast");
+		
+		// Hide downloadType if open
+		var abst = (confirm("Do you want to include abstract of the papers? ")) ? 1: 0 ;
+		
+		withAbstract(abst);
 	}
 
 
