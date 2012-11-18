@@ -28,6 +28,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 		// Deselecting a filter
 		radio("filter:deselect").subscribe(deselect);
 
+		// Toggling between selecting and deselecting a filter
+		radio("filter:selectToggle").subscribe(selectToggle);
+
 		// Remove a filter (Is this really necessary?)
 		// radio("filter:remove").subscribe(remove);
 
@@ -128,10 +131,18 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	}
 
 
+	// Toggles between select and deselect
+	var selectToggle = function(index) {
+		if (search.currentIndices.indexOf(index) == -1) radio("filter:select").broadcast(index);
+		else radio("filter:deselect").broadcast(index);
+	}
+
+
 	// Selects another filter (doesn't deselect the old filters)
 	var select = function(index) {
 		
-		// Add index to currentIndices
+		// Add index to currentIndices if it's not already there
+		search.currentIndices = search.currentIndices.filter(function(i) { return (i != index); });
 		search.currentIndices.push(index)
 
 		// Create current filter
@@ -145,11 +156,9 @@ define(["filter", "radio", "models/nodeList"], function (filter, radio, nodeList
 	// Deselects another filter (doesn't deselect the old filters)
 	var deselect = function(index) {
 		
-		console.debug(index)
 		// Add index to currentIndices
 		search.currentIndices = search.currentIndices.filter(function(i) { return (i != index); });
 
-		console.debug(search.currentIndices);
 		// Create current filter
 		search.current = createCurrent();
 

@@ -144,10 +144,13 @@ define(["util/merge", "util/array", "util/levenshtein", "util/curry"],
 	/**
 	 * Returns a new filter that filters for word
 	 *
-	 * arg words	: String, 			A string of words that are searched for
+	 * arg terms	: String, 			A string of words that are searched for
 	 * arg context	: List[String], 	Where in the paper the word should be looked for
 	 **/
 	var keyword = function(terms, context) {
+
+		// If keyword is nothing "", skip
+		if (terms == "") return merge(this, {});
 
 		// Catch scope
 		var scope = this;

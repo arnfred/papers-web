@@ -20,6 +20,12 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 
 		// When the add button is clicked
 		radio("filter:getData").subscribe(getData);
+
+		// When a filter is selected
+		radio("filter:select").subscribe(select);
+
+		// When a filter is deselected
+		radio("filter:deselect").subscribe(deselect);
 	}
 
 
@@ -68,7 +74,7 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 		if (!data.context) data.context = [];
 
 		// Now clear the form
-		clear();
+		resetToDefault();
 
 		// Now broadcast
 		radio("filter:add").broadcast(data);
@@ -76,12 +82,24 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 
 
 	// Clear the form
-	var clear = function() {
-		// Clean all input
-		//$("#filterForm input").val("");
+	var resetToDefault = function() {
 
-		// Clear selects (how?)
-		// I'll figure that out
+		// Get stats from model
+		var minDate = searchModel.getMinDate();
+		var maxDate = searchModel.getMaxDate();
+		var rooms = searchModel.getRooms();
+
+		// Set default dates and times
+		$("input[name=from]").val(minDate.format("yyyy/mm/dd"));
+		$("input[name=to]").val(maxDate.format("yyyy/mm/dd"));
+		$("input[name=fromtime]").val("00:00");
+		$("input[name=totime]").val("23:59");
+
+		// Set default room value
+		$("select[name=room]").val("");
+
+		// Clean keywords
+		$("input[name=keywords]").val("");
 	}
 
 
@@ -92,13 +110,16 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 
 		// Add info
 		var info = makeInfo(filter);
-		f.children("p.filterItem").append(info);
+		f.find("p.filterItem").append(info);
 
 		// Add id
 		f.attr("id","filter" + index);
 
 		// Make clickable
-		f.click(function() { radio("filter:select").broadcast(index); });
+		f.click(function() { radio("filter:selectToggle").broadcast(index); return false; });
+
+		// Make removable
+		f.find("a.listItemRemove").click(function() { radio("filter:remove").broadcast(index); return false; });
 
 		// now add text and add it
 		$("#filterList").append(f)
@@ -109,6 +130,9 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 	var remove = function(index) {
 		// Get the filter
 		var f = $("#filter" + index);
+
+		// Deselect filter
+		radio("filter:deselect").broadcast(index);
 
 		// Now remove
 		f.remove();
@@ -131,21 +155,76 @@ define(["jquery", "radio", "util/datepicker", "models/search"], function ($, rad
 	}
 
 
+	// Select a filter: Add the current class to the filter panel so it changes
+	// color
+	var select = function(index) {
+		// get panel
+		var f = $("#filter" + index);
+
+		// Add class
+		f.addClass("current");
+	}
+
+
+	// Deselect a filter: Remove the current class from the filter panel so it
+	// changes color
+	var deselect = function(index) {
+		// get panel
+		var f = $("#filter" + index);
+
+		// Remove class
+		f.removeClass("current");
+	}
+
+
 	// Create the string used to describe a filter
 	var makeInfo = function(filter) {
 
-		var keywords	= (filter.keywords)	? " containing " + filter.keywords : "";
-		var context		= (filter.context.length > 0)	? " in " + filter.context.join(", ") : ""; 
-		var present		= (filter.location || (filter.from && filter.to)) ? " with presentation" : "";
-		var location	= (filter.location)	? " at " + filter.location : "";
-		var time		= (filter.from && filter.to) ? " between " + filter.from + " and " + filter.to : "";
+		var keywords	= "";
+        var context		= "";
+        var present		= "";
+        var location	= "";
+        var time		= "";
 
-		return "Find articles" + keywords + context + present + location + time;
+		// Keywords
+		if (filter.keywords) {
+			keywords = " containing <span class=\"boldText\">" + filter.keywords + "</span>";
+		}
+
+		// Context
+		if (filter.context.length > 0 && filter.keywords) {
+			if (filter.context.length > 1) {
+				var last = filter.context[filter.context.length - 1];
+				filter.context.pop();
+				context = " in <span class=\"italicText\">" + filter.context.join(", ") + "</span> and <span class=\"italicText\">" + last + "</span>";
+			}
+
+			else context = filter.context[0];
+		}
+
+		if (filter.location || (filter.from && filter.to)) {
+	   		present = " with presentation";
+		}
+
+		// Interval
+		if (filter.location) {
+			location = " at <span class=\"italicText\">" + filter.location + "</span>";
+		}
+
+		// Location
+		if (filter.from && filter.to) {
+			time		= " between <span class=\"italicText\">" + filter.from.format("mmmm dS (HH:MM)") + "</span> and <span class=\"italicText\">" + filter.to.format("mmmm dS (HH:MM)") + "</span>";
+		}
+
+		return "Articles" + keywords + context + location + time;
 	}
 
 
 	// Initialize the form
 	var initForm = function(data) {
+
+		// Set default values to fields
+		resetToDefault();
 
 		// Get stats from model
 		var minDate = searchModel.getMinDate();
