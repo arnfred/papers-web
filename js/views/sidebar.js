@@ -90,7 +90,10 @@ define(["jquery", "radio", "util/truncate", "util/array", "util/screen", 'js!lib
 		sidebar.events();
 		
 		// Set the UI height:
-		$('#tabs').css('height', screen.height()-40);
+		$('#tabs').css('height', screen.height()-38);
+		$('#tabs .scrollable').css('height', screen.height()-150);
+		$('#tabs-1 .scrollable').css('height', screen.height()-150);
+		$('#tabs-3 .scrollable').css('height', screen.height()-430);
 		
 		// Init the tabs:
 		$('#tabs').tabs();

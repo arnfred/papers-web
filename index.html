@@ -193,40 +193,36 @@ curl(
 				<a href="#"><div class="downpdf"><img alt="Download Paper" src="img/pdf.png"/>Download .pdf</div></a>
 				<a href="#"><div class="downicn"><img alt="Download Paper" src="img/ical.png"/>Download .icns</div></a>
 			</div>
-	
-			<div id="downloadType" class="scheduleSelect">
-				<p>Include Abstract?</p>
-				<p class="click" id="getLarge">Yes</p>
-				<p>/</p>
-				<p class="click" id="getSmall">no</p>
-				<input type="hidden" name="abstract" value="0"/>
-			</div>
+			<div class="scrolltop"></div>
+			<div class="scrollable">
 	
 
-			<div style="margin: 10px 30px; height: 6px;">
-				<a href="#" class="removeall smalltool"><span class="iconx">x</span> Remove all</a>
+				<div style="margin: 10px 30px; height: 6px;">
+					<a href="#" class="removeall smalltool"><span class="iconx">x</span> Remove all</a>
+				</div>
+				
+				<form action="schedule.php" target="_blank" name="schedule" method="post" 
+					onSubmit="return false;">
+				<ul id="sidebar">
+					<li id="listItemTemplate" class="listItem">
+						
+						<a class="listItemPdfLink" href="#" target="_blank">
+							<a href="#" class="listItemRemove">
+								<img src="img/icons/remove.png" />
+							</a>
+							<span class="listItemLabel">
+								<div class="clear" style="height: 8px;"></div>
+								<img src="img/icons/paper.png" />
+								<p class="listItemText">List item</p>
+								<div class="clear" style="height: 8px;"></div>
+							</span>
+							<div class="clear"></div>
+						</a>
+						<input type="hidden" name="papers[]" value="" />
+					</li>
+				</ul>
+				</form>
 			</div>
-			
-			<form action="schedule.php" target="_blank" name="schedule" method="post" 
-				onSubmit="return false;">
-			<ul id="sidebar">
-				<li id="listItemTemplate" class="listItem">
-					<a href="#" class="listItemRemove">
-						<img src="img/icons/remove.png" />
-					</a>
-					<a class="listItemPdfLink" href="#" target="_blank">
-					
-						<span class="listItemLabel">
-							<div class="clear" style="height: 8px;"></div>
-							<img src="img/icons/paper.png" />
-							<p class="listItemText">List item</p>
-							<div class="clear" style="height: 8px;"></div>
-						</span>
-					</a>
-					<input type="hidden" name="papers[]" value="" />
-				</li>
-			</ul>
-			</form>
 		</div>
 
 
@@ -269,25 +265,29 @@ curl(
 				</form>
 	
 				<hr width="90%"/>
-	
+
+				<div class="scrolltop" style="width: 280px;"></div>
+				
+				<div class="scrollable" style="width: 270px; padding-right: 20px;">
 				<div class="clear" style="height: 20px;"></div>
-				<ul id="filterList">
-					<li id="filterItemTemplate" class="filterItem listItem">
-						
-						<a href="#" class="listItemRemove">
-							<img src="img/icons/remove.png" />
-						</a>
-						
-						
-							<span class="listItemLabel">
-								<div class="clear" style="height: 8px;"></div>
-								<img src="img/icons/filter?.png" />
-								<p class="filterItem"></p>
-								<div class="clear" style="height: 8px;"></div>
-							</span>
-						
-					</li>
-				</ul>
+					<ul id="filterList">
+						<li id="filterItemTemplate" class="filterItem listItem">
+							
+							<a href="#" class="listItemRemove">
+								<img src="img/icons/remove.png" />
+							</a>
+							
+							
+								<span class="listItemLabel">
+									<div class="clear" style="height: 8px;"></div>
+									<img src="img/filter.png" />
+									<p class="filterItem"></p>
+									<div class="clear" style="height: 8px;"></div>
+								</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</div>
 			</div>
 		
 		</div>
