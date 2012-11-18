@@ -113,7 +113,8 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph", "par
 		 						//.attr('y', );
 		
 		
-		link.clickable.on('mouseover', function() {link.clickable.transition().attr('transform', "translate("+posx+", "+posy+") scale("+0.12+") rotate("+a+")" );}); 
+		link.clickable.on('mouseover', function() {
+		link.clickable.transition().attr('transform', "translate("+posx+", "+posy+") scale("+0.12+") rotate("+a+")" );}); 
 		link.clickable.on('mouseout', function() {  link.clickable.transition().attr('transform', "translate("+posx+", "+posy+") scale("+0.1+") rotate("+a+")" );});
 		
 		link.clickable.on('click', function () { 

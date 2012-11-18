@@ -1,7 +1,7 @@
 // To be use along radio to avoid passing its reference from object ot object
 
 
-define(["lib/d3", "radio"], function (d3, radio) {
+define(["lib/d3", "radio", 'params'], function (d3, radio, config) {
 	
 	
 	// Create a zoom behavior:
@@ -80,11 +80,13 @@ define(["lib/d3", "radio"], function (d3, radio) {
 	
 	// Move the canvas to the new position:
 	zoom.moveTo = function(scale, transform){
-	
 		
 		
-		setValue(scale, transform);
-		goTo();
+		// Avoid weird behavior
+		//if( scale < config['zoomMax'] && scale > config['zoomMin'] ) {
+			setValueManually(scale, transform);
+			goTo();
+		//}
 	} 
 	
 	// Manually move the canvas to the new position:
@@ -107,12 +109,8 @@ define(["lib/d3", "radio"], function (d3, radio) {
 				      var posy = a.y + (b.y-a.y) * t;
 				      var s = a.s + (b.s-a.s) * t;
 				      
-				      setValue(s, [posx, posy]);
-			
-				      // Update the zoom with new position:
-				      zoom.translate([posx, posy]);
-				      zoom.scale(s);
 				      
+				      setValueManually(s, [posx, posy]);
 				      
 				      // Change canvas:
 				      goTo();
@@ -132,9 +130,27 @@ define(["lib/d3", "radio"], function (d3, radio) {
 	var setValue = function(scale, transform) {
 		zoom.pos.x = transform[0];
 		zoom.pos.y = transform[1];
-		zoom.pos.s = scale;
+		zoom.pos.s = clipScale(scale);
 	}
 	
+	var setValueManually = function(scale, transform) {
+		
+		var scale = clipScale(scale);
+		
+		setValue(scale, [transform[0], transform[1]]);
+		
+       // Update the zoom with new position:
+       zoom.translate(transform);
+       zoom.scale(scale);
+	}
+	
+	var clipScale = function(s){
+		var s = s > config['zoomMax'] ? config['zoomMax'] : s;
+		s = s < config['zoomMin'] ? config['zoomMin'] : s;
+		
+		
+		return s;
+	}
 	
 	var goTo = function() {
 		

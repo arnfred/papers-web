@@ -344,3 +344,48 @@ a#closeSidebar:hover div{
 	  border-left:5px solid #A7A7A7; /* bottom, add background color here */
 
 }
+/* ZOOMER FEATURE STYLE*/
+#zoomer{
+	position: absolute;
+	right: 10px;
+	top: 50px;
+	font-size: 17px;
+	font-weight: bold;
+	z-index: 1000;
+}
+#zoomer .plus, #zoomer .moins{
+	position:relative;
+	background: #ddd;
+	height: 20px;
+	width: 20px;
+	line-height: 20px;
+	text-align: center;
+	border-radius: 3px;
+	box-shadow: 0px 0px 3px #444;
+	border: 1px solid #eee;
+	display: block;
+	text-decoration: none;
+}
+#zoomer .plus:hover, #zoomer .moins:hover{
+	text-decoration: none;
+}
+#zoomer #scale{
+	width: 1px;
+	height: 150px;
+	background: #ddd;
+	box-shadow: 0px 0px 3px #444;
+	border: 1px solid #eee;
+	margin-top: -3px;
+	margin-left: 9px;
+	display: block;
+}
+#zoomer #indicator{
+	width: 20px;
+	height: 5px;
+	border-radius: 3px;
+	background: #ddd;
+	box-shadow: 0px 0px 3px #444;
+	border: 1px solid #eee;
+	margin-left: -10px;
+	display: block;
+}
