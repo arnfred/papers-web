@@ -65,7 +65,7 @@ define(["lib/d3", "radio"], function (d3, radio) {
 		zoom.translate([zoom.pos.x, zoom.pos.y]);
 		zoom.scale(zoom.pos.s);
 		
-		transitionTo();
+		goTo();
 		
 		// Prototype style!
 		return zoom;
