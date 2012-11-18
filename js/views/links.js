@@ -91,7 +91,7 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph", "par
 		 ryn = ry / Math.sqrt(rx*rx+ry*ry);
 		 
 		 // Find the angle:
-		 a = 180*Math.atan2(ryn, rxn)/Math.PI+90;
+		 var a = 180*Math.atan2(ryn, rxn)/Math.PI+90;
 		 
 		 dst = Math.sqrt(rx*rx+ry*ry);
 		 randomfact =  10+ Math.sqrt(dst) + 10*Math.random();
@@ -107,11 +107,14 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph", "par
 		 						.attr('points', '-33.001,24.991 0,18.687 33,24.991 -0.309,-24.991') //57.042,22.06 0,-5.159 -57.042,22.06 -57.042,5.159 0,-22.06 57.042,5.159
 		 						//.attr('height', 4)
 		 						//.attr('width', 4)
-		 						.attr('fill', '#FF0000')
+		 						.attr('fill', '#990C00')
 		 						.classed('handle', true)
 		 						.attr('transform', "translate("+posx+", "+posy+") scale("+0.1+") rotate("+a+")" );
 		 						//.attr('y', );
 		
+		
+		link.clickable.on('mouseover', function() {link.clickable.transition().attr('transform', "translate("+posx+", "+posy+") scale("+0.12+") rotate("+a+")" );}); 
+		link.clickable.on('mouseout', function() {  link.clickable.transition().attr('transform', "translate("+posx+", "+posy+") scale("+0.1+") rotate("+a+")" );});
 		
 		link.clickable.on('click', function () { 
 				
@@ -150,16 +153,18 @@ define(["lib/d3", "radio", "util/array", "models/nodeList", "models/graph", "par
 	}
 	
 	var hoverOut = function(node) {
-
 		
-		node.links.forEach(function(link){
-			if(link.domLink) {
-				var e = d3.event;
-				// Check if note selected
-				link.domLink.classed('hover', false);
-				link.domLink.style("stroke-width", graph.strokeWidth(link, config["edgeSize"]));
-			}
-		});
+		if( nodeList.selected == null || nodeList.selected.index != node.index){
+			
+			node.links.forEach(function(link){
+				if(link.domLink) {
+					var e = d3.event;
+					// Check if note selected
+					link.domLink.classed('hover', false);
+					link.domLink.style("stroke-width", graph.strokeWidth(link, config["edgeSize"]));
+				}
+			});
+		}
 	}
 
 

@@ -1,4 +1,4 @@
-define(["radio", "util/screen", "models/zoom", 'params', 'lib/d3'], function(radio, screen, zoom, config, d3) {
+define(["radio", "util/screen", "models/zoom", 'params', 'lib/d3', "models/nodeList"], function(radio, screen, zoom, config, d3, nodes) {
 
 
 	//////////////////////////////////////////////
@@ -138,19 +138,18 @@ define(["radio", "util/screen", "models/zoom", 'params', 'lib/d3'], function(rad
 		});
 	}
 
-	// General variable to know who is under focus
-	var selected_node_id = null;
+
 	
 	// What happends when we select a node
 	var select = function(node) {
 		// Get node
 		var domNode = node.domNode;
-		
+
 		// Be sure that we deselected the previous node:
-		if(selected_node_id) radio("node:deselect").broadcast(selected_node_id);
-		 
+		if(nodes.selected) radio("node:deselect").broadcast(nodes.selected);
+
 		// Register this node as selected:
-		selected_node_id = node;
+		nodes.selected = node;
 
 		// Make node red
 		domNode.classed("selected", true);
@@ -167,7 +166,7 @@ define(["radio", "util/screen", "models/zoom", 'params', 'lib/d3'], function(rad
 		domNode.classed("selected", false);
 		domNode.transition().attr('r', config['radius']);
 		
-		selected_node_id = null;
+		nodes.selected = null;
 		
 		
 	}

@@ -208,6 +208,7 @@ circle.node 				{ fill: #ffbf44; stroke: #ffd; stroke-width: 1.5px; }
 circle.hover				{ fill: #D76534; stroke: #fdd; }
 circle.selected				{ fill: #990C00; stroke: #dff; }
 circle.search				{ stroke:yellow; stroke-width:3px; }
+circle.scheduled		{ fill: #4A64AB; stroke: #6B85C1; stroke-width: 1px; }
 
 /* Line value:*/
 line.v2						{ stroke: #E1E1E1; }
@@ -220,7 +221,8 @@ line.hover					{ stroke: #D76534; }
 /* line.selected				{ stroke: #990C00; } */
 line.clikable				{ stroke: #990C00; }
 
-polygon.handle				{ stroke: #eee; cursor: pointer;}
+polygon.handle				{ fill: #990C00; cursor: pointer;}
+polygon.handle:hover		{ fill: #C85B3C; cursor: pointer;}
 
 /* Overright the jquery UI style*/
 #content .ui-widget-content			{background: #ddd;}

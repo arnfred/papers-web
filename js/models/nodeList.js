@@ -228,7 +228,9 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 		// Check if id doesn't already exist
 		if (!nodeList.isScheduled(node)) {
 			// Add new item
-			nodeList.scheduled.push(node.index)
+			nodeList.scheduled.push(node.index);
+			// Add a class name:
+			node.domNode.classed('scheduled', true);
 			// Save changes
 			session.saveScheduled(nodeList.scheduled);
 		}
@@ -237,6 +239,7 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 	// Removes the id from the list of selected nodeList
 	var unschedule = function(node) {
 		nodeList.scheduled = nodeList.scheduled.filter(function(i) { return (i != node.index); });
+		node.domNode.classed('scheduled', false);
 		session.saveScheduled(nodeList.scheduled);
 	}
 
@@ -248,9 +251,9 @@ define(["data/graph", "radio", "controllers/session", "util/array", "util/cookie
 
 
 	// Select a node (when it is clicked)
-	var select = function(node) {
-		nodeList.selected = node;
-	}
+//	var select = function(node) {
+//		nodeList.selected = node;
+//	}
 
 
 
