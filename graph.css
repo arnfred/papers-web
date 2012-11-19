@@ -12,7 +12,7 @@ br.clear					{ clear:both; }
 .hidden						{display: none;}
 
 .leftMargin					{ padding-left: 230px; }
-.leftCol					{ width: 30%; min-width: 300px; position: relative; float: left; }
+.leftCol					{ width: 30%; min-width: 500px; position: relative; float: left; }
 .rightCol					{ width: 33%; min-width: 530px; position: relative; float: left; }
 .loading					{ float:left; padding:3px; }
 .loading-text				{ padding:7px; margin-top:3px; margin-left: 20px; display:block; }
